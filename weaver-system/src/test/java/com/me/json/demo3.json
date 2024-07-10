@@ -1,0 +1,23 @@
+[
+  {
+    "tableDBName":
+    "formtable_main_1356_dt1",
+    "deleteAll": "1",
+    "deleteKeys": "12,13",
+    "workflowRequestTableRecords": [
+      {
+        "recordOrder": 0,
+        "workflowRequestTableFields": [
+          {
+            "fieldName": "drl",
+            "fieldValue": "2978"
+          },
+          {
+            "fieldName": "xlk",
+            "fieldValue": "0"
+          }
+        ]
+      }
+    ]
+  }
+]

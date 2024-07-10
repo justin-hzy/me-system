@@ -1,0 +1,33 @@
+[
+  {
+    "id": "61e443bd-aacd-4ad2-9d78-31e40d4164e9",
+    "params": {
+      "submit": true,
+      "detailobjs": {
+        "reftables": [
+          688
+        ],
+        "refobjs": [
+          {
+            "addList": [
+              {
+                "QTY": "3630",
+                "M_PRODUCT_ID__NAME": "9000000000018"
+              }
+            ],
+            "table": 12984
+          }
+        ]
+      },
+      "masterobj": {
+        "DESCRIPTION": "台湾采购申请流程-入库",
+        "BILLDATE": "20240619",
+        "C_OTHER_INOUTTYPE_ID__NAME": "采购入库",
+        "id": "-1",
+        "C_STORE_ID__NAME": "A1",
+        "table": "12983"
+      }
+    },
+    "command": "ProcessOrder"
+  }
+]

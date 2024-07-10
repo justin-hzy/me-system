@@ -1,0 +1,13 @@
+{
+  "thzt": "ZT030",
+  "sender_name": "测试",
+  "token": "DMSTW04-2024040201",
+  "products": [
+    {
+      "storage_type": "B1",
+      "identifier": "6",
+      "quantity": "1",
+      "sku": "4711401210962-11111"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://www.example.org/Ec/">
+    <SOAP-ENV:Body>
+        <ns1:callService>
+            <paramsJson>{"page":1,"pageSize":1000}</paramsJson>
+            <userName>ZZJ</userName>
+            <userPass>Winona2023</userPass>
+            <apiType>1</apiType>
+            <serviceTypeCode>JYY</serviceTypeCode>
+            <serviceToken>JYYWMSECOPENAPI</serviceToken>
+            <service>rmaReturnList</service>
+        </ns1:callService>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

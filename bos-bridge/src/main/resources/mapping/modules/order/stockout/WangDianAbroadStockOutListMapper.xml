@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.me.modules.order.stockout.mapper.WangDianAbroadStockOutListMapper">
+    <select id="queryCount" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT COUNT(1) FROM WANGDIAN_ABROAD_STOCKOUT_LIST a WHERE a.stockoutid = to_char(#{stockOutId})
+    </select>
+
+    <select id="querySku" resultType="java.lang.String" parameterType="java.lang.String">
+        SELECT listagg(to_char(a.specno), ',') within GROUP(ORDER BY a.specno)
+        FROM wangdian_stockout_list a
+        WHERE NOT EXISTS (SELECT 1
+        FROM m_product_alias b
+        WHERE upper(a.specno) = b.no)
+        AND a.stockoutid = to_char(#{stockOutId})
+    </select>
+
+</mapper>

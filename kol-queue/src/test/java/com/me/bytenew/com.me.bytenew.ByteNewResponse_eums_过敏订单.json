@@ -1,0 +1,393 @@
+{
+  "response": {
+    "total_results": null,
+    "page_no": null,
+    "page_size": null,
+    "code": 0,
+    "has_next": null,
+    "error_msg": null,
+    "map": {
+      "result": [
+        {
+          "column_id": 567,
+          "column_type": null,
+          "name": "店铺",
+          "type": "SELECT",
+          "behavior_type": 4,
+          "is_inside": true,
+          "options": [
+            {
+              "id": 559,
+              "title": "za-快手"
+            },
+            {
+              "id": 560,
+              "title": "za-拼多多专卖店"
+            },
+            {
+              "id": 561,
+              "title": "za-唯品会"
+            },
+            {
+              "id": 562,
+              "title": "za-爱库存"
+            },
+            {
+              "id": 2385,
+              "title": "za-小红书店"
+            },
+            {
+              "id": 563,
+              "title": "泊美-快手"
+            },
+            {
+              "id": 564,
+              "title": "泊美-京东厂直"
+            },
+            {
+              "id": 565,
+              "title": "泊美-唯品会"
+            },
+            {
+              "id": 566,
+              "title": "泊美-爱库存"
+            },
+            {
+              "id": 2115,
+              "title": "姿生-泊美-有赞"
+            },
+            {
+              "id": 2116,
+              "title": "悦江海南-za-有赞商城"
+            },
+            {
+              "id": 2386,
+              "title": "泊美-小红书店"
+            }
+          ],
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 568,
+          "column_type": null,
+          "name": "订单号",
+          "type": "STRING",
+          "behavior_type": 1,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 569,
+          "column_type": null,
+          "name": "买家昵称",
+          "type": "STRING",
+          "behavior_type": 1,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 571,
+          "column_type": null,
+          "name": "付款时间",
+          "type": "DATETIME",
+          "behavior_type": 7,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 640,
+          "column_type": null,
+          "name": "商品信息表",
+          "type": "CHILDFORMS",
+          "behavior_type": 13,
+          "is_inside": true,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": [
+            {
+              "column_id": 627,
+              "column_type": null,
+              "name": "货品名称",
+              "type": "STRING",
+              "behavior_type": 1,
+              "is_inside": false,
+              "options": null,
+              "relation_options": null,
+              "son_column_bos": null
+            },
+            {
+              "column_id": 628,
+              "column_type": null,
+              "name": "品牌",
+              "type": "STRING",
+              "behavior_type": 1,
+              "is_inside": false,
+              "options": null,
+              "relation_options": null,
+              "son_column_bos": null
+            },
+            {
+              "column_id": 626,
+              "column_type": null,
+              "name": "商家编码/国际条码",
+              "type": "STRING",
+              "behavior_type": 1,
+              "is_inside": false,
+              "options": null,
+              "relation_options": null,
+              "son_column_bos": null
+            }
+          ]
+        },
+        {
+          "column_id": 655,
+          "column_type": null,
+          "name": "过敏症状",
+          "type": "CHECKBOX",
+          "behavior_type": 5,
+          "is_inside": true,
+          "options": [
+            {
+              "id": 641,
+              "title": "丘疹"
+            },
+            {
+              "id": 642,
+              "title": "红疹"
+            },
+            {
+              "id": 643,
+              "title": "泛红"
+            },
+            {
+              "id": 644,
+              "title": "红肿"
+            },
+            {
+              "id": 645,
+              "title": "刺痛"
+            },
+            {
+              "id": 646,
+              "title": "灼热"
+            },
+            {
+              "id": 647,
+              "title": "脱皮"
+            },
+            {
+              "id": 648,
+              "title": "红斑"
+            },
+            {
+              "id": 649,
+              "title": "水疱"
+            },
+            {
+              "id": 650,
+              "title": "痒"
+            }
+          ],
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 657,
+          "column_type": null,
+          "name": "异常问题备注",
+          "type": "STRING",
+          "behavior_type": 1,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 656,
+          "column_type": null,
+          "name": "处理结果",
+          "type": "RADIO",
+          "behavior_type": 3,
+          "is_inside": true,
+          "options": [
+            {
+              "id": 651,
+              "title": "补偿"
+            },
+            {
+              "id": 652,
+              "title": "仅退款"
+            },
+            {
+              "id": 653,
+              "title": "退货退款"
+            },
+            {
+              "id": 654,
+              "title": "换货"
+            }
+          ],
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1915,
+          "column_type": null,
+          "name": "补偿金额",
+          "type": "NUMBER",
+          "behavior_type": 2,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 658,
+          "column_type": null,
+          "name": "过敏图片",
+          "type": "FILE",
+          "behavior_type": 10,
+          "is_inside": true,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 3,
+          "column_type": null,
+          "name": "创建时间",
+          "type": "DATETIME",
+          "behavior_type": 7,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1,
+          "column_type": null,
+          "name": "创建人",
+          "type": "SELECT",
+          "behavior_type": 4,
+          "is_inside": true,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 2,
+          "column_type": null,
+          "name": "执行人",
+          "type": "SELECT",
+          "behavior_type": 4,
+          "is_inside": true,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 4,
+          "column_type": null,
+          "name": "修改时间",
+          "type": "DATETIME",
+          "behavior_type": 7,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 5,
+          "column_type": null,
+          "name": "任务状态",
+          "type": "SELECT",
+          "behavior_type": 4,
+          "is_inside": true,
+          "options": [
+            {
+              "id": 0,
+              "title": "待检查"
+            },
+            {
+              "id": 1,
+              "title": "已检查"
+            },
+            {
+              "id": 2,
+              "title": "待跟进"
+            },
+            {
+              "id": 3,
+              "title": "暂停中"
+            }
+          ],
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 6,
+          "column_type": null,
+          "name": "标题",
+          "type": "STRING",
+          "behavior_type": 1,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 7,
+          "column_type": null,
+          "name": "截止时间",
+          "type": "DATETIME",
+          "behavior_type": 7,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 8,
+          "column_type": null,
+          "name": "任务完结人",
+          "type": "SELECT",
+          "behavior_type": 4,
+          "is_inside": true,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 9,
+          "column_type": null,
+          "name": "任务完结时间",
+          "type": "DATETIME",
+          "behavior_type": 7,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 570,
+          "column_type": null,
+          "name": "买家编码",
+          "type": "STRING",
+          "behavior_type": 1,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        }
+      ]
+    },
+    "isSuccess": null
+  }
+}

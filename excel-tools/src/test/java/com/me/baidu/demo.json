@@ -1,0 +1,43 @@
+{
+  "status": 0,
+  "address": "北京市海淀区信息路甲九号",
+  "result": {
+    "province": "北京市",
+    "province_code": "110000",
+    "city": "北京市",
+    "city_code": "110100",
+    "county": "海淀区",
+    "county_code": "110108",
+    "town": "上地街道",
+    "town_code": "110108022",
+    "road": "信息路",
+    "road_code": "004014ba01afe8b63a221c4e",
+    "section": "信息路(上地六街到上地五街)",
+    "section_code": "ebc13ff6a4ddcd370b1cc7ca",
+    "poi": "奎科科技大厦",
+    "poi_code": "1a30c5f8cbb55eff71210b02",
+    "name": "",
+    "tel": ""
+  },
+  "detail": {
+    "poi_xy": [
+      12948022.0,
+      4845130.0
+    ],
+    "poi_tag": "房地产;写字楼",
+    "aoi_id": "1a30c5f8cbb55eff71210b02",
+    "aoi_name": "奎科科技大厦",
+    "aoi_tag": "房地产;写字楼",
+    "address_precise": 1,
+    "address_confidence": 80,
+    "address_comprehension": 100,
+    "address_level": "门址",
+    "address_poi": "",
+    "address_xy": [
+      12948093.13,
+      4845125.42
+    ],
+    "address_detail": "信息路甲九号",
+    "format_address": "北京市北京市海淀区上地街道信息路"
+  }
+}

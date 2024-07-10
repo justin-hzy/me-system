@@ -1,0 +1,18 @@
+[
+  {
+    "callback_url": "http://58.63.47.138:8084/weaverSystem/dms/getTrfOrderCallBack;",
+    "title": "DMSTW05-2024042902",
+    "items": [
+      {
+        "storage_type": "FL003",
+        "modified_storage_type": "FL003",
+        "quantity": "1",
+        "sku": "4711401210962-11111",
+        "expiration_date": "2024-04-29",
+        "modified_batch": "1"
+      }
+    ]
+  }
+]
+
+

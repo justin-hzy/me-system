@@ -1,0 +1,14 @@
+{
+  "callback_url": "http://58.63.47.138:8084/weaverSystem/dms/getTrfOrderCallBack;",
+  "title": "DMSTW05-2024040803",
+  "items": [
+    {
+      "storage_type": "B1",
+      "modified_storage_type": "I1",
+      "quantity": "1",
+      "sku": "4711401210962-11111",
+      "expiration_date": "111"
+    }
+  ],
+  "dbxz1": "4"
+}

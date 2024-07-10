@@ -1,0 +1,770 @@
+{
+  "response": {
+    "total_results": null,
+    "page_no": null,
+    "page_size": null,
+    "code": 0,
+    "has_next": null,
+    "error_msg": null,
+    "map": {
+      "result": [
+        {
+          "column_id": 1,
+          "column_type": null,
+          "name": "创建人",
+          "type": "SELECT",
+          "behavior_type": 4,
+          "is_inside": true,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1354,
+          "column_type": null,
+          "name": "店铺【自动获取】",
+          "type": "SELECT",
+          "behavior_type": 4,
+          "is_inside": true,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1456,
+          "column_type": null,
+          "name": "店铺【旺店通】",
+          "type": "SELECT",
+          "behavior_type": 4,
+          "is_inside": true,
+          "options": [
+            {
+              "id": 1457,
+              "title": "姿生-泊美-天猫官方旗舰店"
+            },
+            {
+              "id": 1458,
+              "title": "姿生-泊美-京东自营（厂直）"
+            },
+            {
+              "id": 1459,
+              "title": "姿生-泊美-京东旗舰店（POP）"
+            },
+            {
+              "id": 1460,
+              "title": "姿生-泊美-拼多多旗舰店"
+            },
+            {
+              "id": 1461,
+              "title": "姿生-泊美-抖音小店"
+            },
+            {
+              "id": 1462,
+              "title": "姿生-泊美-快手旗舰店"
+            },
+            {
+              "id": 1463,
+              "title": "微卖通-泊美-爱库存"
+            },
+            {
+              "id": 1464,
+              "title": "姿生-泊美-小红书旗舰店"
+            },
+            {
+              "id": 1465,
+              "title": "悦江海南-ZA-抖音"
+            },
+            {
+              "id": 1466,
+              "title": "悦江海南-ZA-天猫旗舰店"
+            },
+            {
+              "id": 1467,
+              "title": "悦江海南-za-京东pop店"
+            },
+            {
+              "id": 1468,
+              "title": "悦江海南-ZA-拼多多专卖店"
+            },
+            {
+              "id": 1469,
+              "title": "悦江海南-za-姬芮快手旗舰店"
+            },
+            {
+              "id": 1470,
+              "title": "悦江海南-ZA-拼多多旗舰店"
+            },
+            {
+              "id": 1471,
+              "title": "姿生-泊美-京东自营旗舰店"
+            },
+            {
+              "id": 1472,
+              "title": "悦江海南-za-京东自营旗舰店"
+            },
+            {
+              "id": 2379,
+              "title": "悦江海南-za-小红书旗舰店"
+            }
+          ],
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1356,
+          "column_type": null,
+          "name": "原始单号",
+          "type": "STRING",
+          "behavior_type": 1,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1357,
+          "column_type": null,
+          "name": "收寄信息",
+          "type": "POST_MSG",
+          "behavior_type": 15,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1375,
+          "column_type": null,
+          "name": "仓库名称",
+          "type": "RADIO",
+          "behavior_type": 3,
+          "is_inside": true,
+          "options": [
+            {
+              "id": 1363,
+              "title": "ZA昆山中通仓"
+            },
+            {
+              "id": 1364,
+              "title": "ZA-广州花都花山仓"
+            },
+            {
+              "id": 2585,
+              "title": "ZA武汉仓"
+            },
+            {
+              "id": 1361,
+              "title": "泊美中通昆山仓"
+            },
+            {
+              "id": 1362,
+              "title": "泊美广州花都花山仓"
+            },
+            {
+              "id": 2586,
+              "title": "泊美武汉仓"
+            }
+          ],
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1376,
+          "column_type": null,
+          "name": "物流公司",
+          "type": "RADIO",
+          "behavior_type": 3,
+          "is_inside": true,
+          "options": [
+            {
+              "id": 1365,
+              "title": "菜鸟中通（昆山仓）"
+            },
+            {
+              "id": 1366,
+              "title": "中通（广州仓）"
+            }
+          ],
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1608,
+          "column_type": null,
+          "name": "补发原因",
+          "type": "RELATION",
+          "behavior_type": 6,
+          "is_inside": true,
+          "options": null,
+          "relation_options": [
+            {
+              "id": 1630,
+              "title": "仓库问题",
+              "parent_id": 0
+            },
+            {
+              "id": 1654,
+              "title": "漏发正装",
+              "parent_id": 1630
+            },
+            {
+              "id": 1655,
+              "title": "漏发赠品",
+              "parent_id": 1630
+            },
+            {
+              "id": 1656,
+              "title": "错发正装",
+              "parent_id": 1630
+            },
+            {
+              "id": 1657,
+              "title": "错发赠品",
+              "parent_id": 1630
+            },
+            {
+              "id": 2033,
+              "title": "超时揽收",
+              "parent_id": 1630
+            },
+            {
+              "id": 2156,
+              "title": "套盒内务少件",
+              "parent_id": 1630
+            },
+            {
+              "id": 2157,
+              "title": "发货质检不合格",
+              "parent_id": 1630
+            },
+            {
+              "id": 2382,
+              "title": "错发临期产品",
+              "parent_id": 1630
+            },
+            {
+              "id": 1629,
+              "title": "快递问题",
+              "parent_id": 0
+            },
+            {
+              "id": 1650,
+              "title": "丢件",
+              "parent_id": 1629
+            },
+            {
+              "id": 1847,
+              "title": "被退回",
+              "parent_id": 1629
+            },
+            {
+              "id": 2159,
+              "title": "双面单",
+              "parent_id": 1629
+            },
+            {
+              "id": 1651,
+              "title": "快递少件",
+              "parent_id": 1629
+            },
+            {
+              "id": 1997,
+              "title": "物流停滞",
+              "parent_id": 1629
+            },
+            {
+              "id": 1652,
+              "title": "商品破损",
+              "parent_id": 1629
+            },
+            {
+              "id": 1653,
+              "title": "包裹破损",
+              "parent_id": 1629
+            },
+            {
+              "id": 1658,
+              "title": "商品漏液",
+              "parent_id": 1629
+            },
+            {
+              "id": 2160,
+              "title": "外盒破损",
+              "parent_id": 1629
+            },
+            {
+              "id": 1659,
+              "title": "客户问题",
+              "parent_id": 0
+            },
+            {
+              "id": 1660,
+              "title": "核实无错漏发-特殊处理",
+              "parent_id": 1659
+            },
+            {
+              "id": 2089,
+              "title": "客户体验-特殊处理",
+              "parent_id": 1659
+            },
+            {
+              "id": 1661,
+              "title": "不符合赠品政策-特殊处理",
+              "parent_id": 1659
+            },
+            {
+              "id": 1852,
+              "title": "客户地址异常",
+              "parent_id": 1659
+            },
+            {
+              "id": 1932,
+              "title": "售后通道关闭",
+              "parent_id": 1659
+            },
+            {
+              "id": 1998,
+              "title": "规格选择错误",
+              "parent_id": 1659
+            },
+            {
+              "id": 1846,
+              "title": "运营问题",
+              "parent_id": 0
+            },
+            {
+              "id": 3006,
+              "title": "赠品促销失效",
+              "parent_id": 1846
+            },
+            {
+              "id": 1849,
+              "title": "赠品策略错误",
+              "parent_id": 1846
+            },
+            {
+              "id": 1850,
+              "title": "活动页面不符",
+              "parent_id": 1846
+            },
+            {
+              "id": 2162,
+              "title": "主播介绍错误",
+              "parent_id": 1846
+            },
+            {
+              "id": 2163,
+              "title": "主播漏备注",
+              "parent_id": 1846
+            },
+            {
+              "id": 2588,
+              "title": "直播间满赠",
+              "parent_id": 1846
+            },
+            {
+              "id": 3010,
+              "title": "活动奖品",
+              "parent_id": 1846
+            },
+            {
+              "id": 1986,
+              "title": "客服问题",
+              "parent_id": 0
+            },
+            {
+              "id": 1987,
+              "title": "未操作加赠",
+              "parent_id": 1986
+            },
+            {
+              "id": 1994,
+              "title": "加赠未反馈",
+              "parent_id": 1986
+            },
+            {
+              "id": 2085,
+              "title": "截单失误",
+              "parent_id": 1986
+            },
+            {
+              "id": 2164,
+              "title": "补发错误",
+              "parent_id": 1986
+            },
+            {
+              "id": 1991,
+              "title": "地址登记错误",
+              "parent_id": 1986
+            },
+            {
+              "id": 1992,
+              "title": "产品登记错误",
+              "parent_id": 1986
+            },
+            {
+              "id": 2165,
+              "title": "接待解答错误",
+              "parent_id": 1986
+            },
+            {
+              "id": 2393,
+              "title": "订单处理错误",
+              "parent_id": 1986
+            },
+            {
+              "id": 1628,
+              "title": "品质问题",
+              "parent_id": 0
+            },
+            {
+              "id": 1641,
+              "title": "掉漆",
+              "parent_id": 1628
+            },
+            {
+              "id": 1646,
+              "title": "变质",
+              "parent_id": 1628
+            },
+            {
+              "id": 2167,
+              "title": "划痕",
+              "parent_id": 1628
+            },
+            {
+              "id": 2172,
+              "title": "脏污",
+              "parent_id": 1628
+            },
+            {
+              "id": 1647,
+              "title": "商品异味",
+              "parent_id": 1628
+            },
+            {
+              "id": 2170,
+              "title": "容量不足",
+              "parent_id": 1628
+            },
+            {
+              "id": 2142,
+              "title": "尾管裂开",
+              "parent_id": 1628
+            },
+            {
+              "id": 2169,
+              "title": "出厂问题",
+              "parent_id": 1628
+            },
+            {
+              "id": 1645,
+              "title": "内容物有异物",
+              "parent_id": 1628
+            },
+            {
+              "id": 1649,
+              "title": "膏体结块/结晶",
+              "parent_id": 1628
+            },
+            {
+              "id": 1995,
+              "title": "盖子拧不开",
+              "parent_id": 1628
+            },
+            {
+              "id": 1626,
+              "title": "选项1级标题",
+              "parent_id": -1
+            },
+            {
+              "id": 1631,
+              "title": "选项2级标题",
+              "parent_id": -1
+            }
+          ],
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1929,
+          "column_type": null,
+          "name": "订单备注",
+          "type": "STRING",
+          "behavior_type": 1,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1379,
+          "column_type": null,
+          "name": "客服备注",
+          "type": "STRING",
+          "behavior_type": 1,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1392,
+          "column_type": null,
+          "name": "商品信息",
+          "type": "CHILDFORMS",
+          "behavior_type": 13,
+          "is_inside": true,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": [
+            {
+              "column_id": 1387,
+              "column_type": null,
+              "name": "货品名称",
+              "type": "STRING",
+              "behavior_type": 1,
+              "is_inside": false,
+              "options": null,
+              "relation_options": null,
+              "son_column_bos": null
+            },
+            {
+              "column_id": 1393,
+              "column_type": null,
+              "name": "商家编码",
+              "type": "STRING",
+              "behavior_type": 1,
+              "is_inside": false,
+              "options": null,
+              "relation_options": null,
+              "son_column_bos": null
+            },
+            {
+              "column_id": 1449,
+              "column_type": null,
+              "name": "补发数量",
+              "type": "NUMBER",
+              "behavior_type": 2,
+              "is_inside": false,
+              "options": null,
+              "relation_options": null,
+              "son_column_bos": null
+            },
+            {
+              "column_id": 1388,
+              "column_type": null,
+              "name": "品牌",
+              "type": "STRING",
+              "behavior_type": 1,
+              "is_inside": false,
+              "options": null,
+              "relation_options": null,
+              "son_column_bos": null
+            }
+          ]
+        },
+        {
+          "column_id": 1371,
+          "column_type": null,
+          "name": "发货条件",
+          "type": "RADIO",
+          "behavior_type": 3,
+          "is_inside": true,
+          "options": [
+            {
+              "id": 1358,
+              "title": "款到发货"
+            }
+          ],
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1372,
+          "column_type": null,
+          "name": "应收合计",
+          "type": "NUMBER",
+          "behavior_type": 2,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1355,
+          "column_type": null,
+          "name": "网名",
+          "type": "STRING",
+          "behavior_type": 1,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1373,
+          "column_type": null,
+          "name": "邮费",
+          "type": "NUMBER",
+          "behavior_type": 2,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1374,
+          "column_type": null,
+          "name": "优惠金额",
+          "type": "NUMBER",
+          "behavior_type": 2,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1377,
+          "column_type": null,
+          "name": "货品总价",
+          "type": "NUMBER",
+          "behavior_type": 2,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 1378,
+          "column_type": null,
+          "name": "订单类别",
+          "type": "RADIO",
+          "behavior_type": 3,
+          "is_inside": true,
+          "options": [
+            {
+              "id": 1368,
+              "title": "订单补发"
+            },
+            {
+              "id": 1369,
+              "title": "线下零售"
+            }
+          ],
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 2,
+          "column_type": null,
+          "name": "执行人",
+          "type": "SELECT",
+          "behavior_type": 4,
+          "is_inside": true,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 3,
+          "column_type": null,
+          "name": "创建时间",
+          "type": "DATETIME",
+          "behavior_type": 7,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 4,
+          "column_type": null,
+          "name": "修改时间",
+          "type": "DATETIME",
+          "behavior_type": 7,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 5,
+          "column_type": null,
+          "name": "任务状态",
+          "type": "SELECT",
+          "behavior_type": 4,
+          "is_inside": true,
+          "options": [
+            {
+              "id": 0,
+              "title": "待处理"
+            },
+            {
+              "id": 1,
+              "title": "已完成"
+            },
+            {
+              "id": 2,
+              "title": "处理中"
+            },
+            {
+              "id": 3,
+              "title": "暂停中"
+            },
+            {
+              "id": 4,
+              "title": "已关闭"
+            }
+          ],
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 6,
+          "column_type": null,
+          "name": "标题",
+          "type": "STRING",
+          "behavior_type": 1,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 7,
+          "column_type": null,
+          "name": "截止时间",
+          "type": "DATETIME",
+          "behavior_type": 7,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 9,
+          "column_type": null,
+          "name": "任务完结时间",
+          "type": "DATETIME",
+          "behavior_type": 7,
+          "is_inside": false,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        },
+        {
+          "column_id": 8,
+          "column_type": null,
+          "name": "任务完结人",
+          "type": "SELECT",
+          "behavior_type": 4,
+          "is_inside": true,
+          "options": null,
+          "relation_options": null,
+          "son_column_bos": null
+        }
+      ]
+    },
+    "isSuccess": null
+  }
+}

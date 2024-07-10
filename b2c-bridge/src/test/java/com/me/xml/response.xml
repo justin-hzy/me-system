@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://www.example.org/Ec/">
+    <SOAP-ENV:Body>
+        <ns1:callServiceResponse>
+            <response>
+                {"code":100,"message":"\u7cfb\u7edf\u4e0d\u652f\u6301\u65b9\u6cd5rmaReturnList","service":"rmaReturnList","responseTime":"2024-04-17
+                14:38:49"}
+            </response>
+        </ns1:callServiceResponse>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

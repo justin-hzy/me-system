@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.me.modules.fl.mapper.FlOrderFormTableMainMapper">
+    <select id="getSale" parameterType="java.lang.String" resultType="com.me.modules.k3.pojo.Owner">
+        select dt1.po,dt1.tm,spk.szzz from formtable_main_151 main
+            inner join formtable_main_151_dt1 dt1
+                on main.id = dt1.mainid
+            inner join uf_spk spk
+                on dt1.tm = spk.txm
+        where date(main.djrq)>= '2024-06-03' and spk.szzz is not null and
+    </select>
+</mapper>

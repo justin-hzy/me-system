@@ -1,0 +1,66 @@
+{
+  "mainData": [   
+    {
+      "fieldName": "wldh",
+      "fieldValue": "测试数据"
+    },
+    {
+      "fieldName": "wlgs",
+      "fieldValue": "测试数据"
+    },
+    {
+      "fieldName": "xsckdh",
+      "fieldValue": "测试数据"
+    }
+  ],
+  "requestId": 138139,
+  "detailData": [
+    {
+      "tableDBName": "formtable_main_151_dt2",
+      "workflowRequestTableRecords": [
+        {
+          "workflowRequestTableFields": [
+            {
+              "fieldName": "cksl",
+              "fieldValue": 1
+            },
+            {
+              "fieldName": "xsckdh",
+              "fieldValue": "POTEST022"
+            },
+            {
+              "fieldName": "chrq",
+              "fieldValue": "2024-03-36"
+            },
+            {
+              "fieldName": "hpbh",
+              "fieldValue": "4711401210641"
+            }
+          ],
+          "recordOrder": 0
+        },
+        {
+          "workflowRequestTableFields": [
+            {
+              "fieldName": "cksl",
+              "fieldValue": 1
+            },
+            {
+              "fieldName": "xsckdh",
+              "fieldValue": "POTEST022"
+            },
+            {
+              "fieldName": "chrq",
+              "fieldValue": "2024-03-36"
+            },
+            {
+              "fieldName": "hpbh",
+              "fieldValue": "4711401210641"
+            }
+          ],
+          "recordOrder": 0
+        }
+      ]
+    }
+  ]
+}

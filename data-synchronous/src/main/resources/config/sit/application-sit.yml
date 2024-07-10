@@ -1,0 +1,19 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /dataSynchronous
+
+spring:
+  application:
+    name: dataSynchronous
+
+# ====================Log4j2=========================
+logging:
+  config: classpath:log4j2-sit.xml
+  level:
+    #打印sql时改为debug
+    druid.sql: info
+    de.codecentric: error
+    com.alibaba.excel.analysis.v03.handlers.FormulaRecordHandler: error
+log4j2:
+  threadContextMap: com.alibaba.ttl.log4j2.TtlThreadContextMap

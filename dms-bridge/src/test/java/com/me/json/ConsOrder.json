@@ -1,0 +1,17 @@
+{
+  "callback_url": "http://58.63.47.138:8084/weaverSystem/dms/getOrderCallBack",
+  "address": "测试地址",
+  "phone": "13316001823",
+  "name": "DMSTW05-2024043007",
+  "shipping_type": "hct",
+  "customer_name": "测试人",
+  "products": [
+    {
+      "storage_type": "FL003",
+      "quantity": "1",
+      "expiration_deadline": "2024-04-30",
+      "batch": "1",
+      "sku": "4711401210962-11111"
+    }
+  ]
+}

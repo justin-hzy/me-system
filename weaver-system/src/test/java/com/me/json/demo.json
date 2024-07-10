@@ -1,0 +1,16 @@
+{
+  "callback_url": "http://58.63.47.138:8084/weaverSystem/dms/getCallBack",
+  "delivery_date": "2024-03-29",
+  "address": "桃園市平鎮區南東路57-1號",
+  "phone": "034399888",
+  "name": "2024032903",
+  "shipping_type": "hct",
+  "customer_name": "大潤發平鎮",
+  "products": [
+    {
+      "storage_type": "B1",
+      "quantity": "1",
+      "sku": "4711401210962-11111"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.me.modules.order.mretail.mapper.MRetailPayItemMapper">
+
+    <select id="queryMRetailPayItem" parameterType="java.lang.Integer" resultType="com.me.modules.order.dto.QryMRetailPayItemRespDto">
+        SELECT
+            (SELECT id
+             FROM c_payway c
+             WHERE c.name = '现金') c_payway_id, m.tot_amt_actual
+        FROM m_retail m
+        WHERE m.id = #{v_retail_id}
+    </select>
+
+</mapper>

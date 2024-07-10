@@ -1,0 +1,25 @@
+{
+  "callback_url": "http://58.63.47.138:8090/dmsBridge/dms/getSetDismantleCB",
+  "note": "拆卸流程(台湾)-出库",
+  "target_items": [
+    {
+      "storage_type": "A1",
+      "quantity": "4",
+      "sku": "4711401210962-22222"
+    },
+    {
+      "storage_type": "A1",
+      "quantity": "2",
+      "sku": "4711401210962-33333"
+    }
+  ],
+  "name": "DMSTW12-2024070527",
+  "shipping_type": "hct",
+  "source_items": [
+    {
+      "storage_type": "A1",
+      "quantity": "2",
+      "sku": "4711401210962-11111"
+    }
+  ]
+}

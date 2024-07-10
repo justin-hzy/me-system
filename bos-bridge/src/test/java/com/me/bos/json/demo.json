@@ -1,0 +1,45 @@
+{
+  "checkTime":"2023-12-05 15:27:55",
+  "created":"2023-12-05 15:27:54",
+  "operatorName":"林国宝",
+  "orderStatus":80,
+  "shopId":1,
+  "shopName":"ZAShopee.vn",
+  "srcOrderNo":"TK202312050001",
+  "srcOrderType":3,
+  "stockInOrderDetailsVOList":[
+    {
+      "baseUnitId":0,
+      "baseUnitName":"无",
+      "categoryName":"无",
+      "costPrice":0.0000,
+      "defect":0,
+      "isProcess":0,
+      "num":1.0000,
+      "positionId":0,
+      "specId":97,
+      "specName":"姬芮 新焕真皙润色隔离霜 02柔光紫 R",
+      "specNo":"6926799657529",
+      "unitRatio":1.0000
+    },
+    {
+      "baseUnitId":0,
+      "baseUnitName":"无",
+      "categoryName":"无",
+      "costPrice":0.0000,
+      "defect":0,
+      "isProcess":0,
+      "num":2.0000,
+      "positionId":0,
+      "specId":102,
+      "specName":"姬芮 新焕真皙润色隔离霜 02柔光紫 R 中样",
+      "specNo":"74384037801",
+      "unitRatio":1.0000
+    }
+  ],
+  "stockinId":240,
+  "stockinNo":"RK2312050013",
+  "warehouseId":7,
+  "warehouseName":"悦江",
+  "warehouseNo":"7"
+}

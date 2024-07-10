@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.me.modules.order.mtransfer.mapper.MTransferItemMapper">
+    <select id="queryStockOutMTransferItemData" resultType="com.me.modules.order.mtransfer.dto.QryStockOutMTransferItemDataRespDto" parameterType="java.lang.String">
+        SELECT
+            b.m_product_id, b.m_attributesetinstance_id,nvl(SUM(a.num), 0) qtyout , nvl(SUM(a.num), 0) qtyin, nvl(SUM(a.num), 0) qty ,
+            max(p.m_dim4_id) m_dim4_id,max(p.precost) precost,max(p.pricelist) pricelist
+        FROM WANGDIAN_ABROAD_STOCKOUT_LIST a, m_product_alias b,m_product p
+        WHERE upper(a.specno) = b.no
+          And b.m_product_id = p.id
+          AND a.stockoutid = to_char(#{stockOutId})
+        GROUP BY b.m_product_id, b.m_attributesetinstance_id
+    </select>
+
+    <select id="queryStockInMTransferItemData" parameterType="java.lang.String" resultType="com.me.modules.order.mtransfer.dto.QryStockInMTransferItemDataRespDto">
+        SELECT b.m_product_id, b.m_attributesetinstance_id,
+               nvl(SUM(a.num), 0) qtyout, nvl(SUM(a.num), 0) qtyin, nvl(SUM(a.num), 0) qty
+        FROM wangdian_abroad_stockin_list a, m_product_alias b
+                 WHERE upper(a.specno) = b.no
+                       AND a.stockinid = #{stockInId}
+                 GROUP BY b.m_product_id, b.m_attributesetinstance_id
+    </select>
+    
+    <update id="updateMTransferItem" parameterType="java.lang.Integer">
+        UPDATE m_transferitem
+        SET qtydiff = nvl(qtyout, 0) - nvl(qtyin, 0),
+        tot_amtqty_list = nvl(qty, 0) * nvl(pricelist, 0),
+        tot_amt_precost = nvl(qty, 0) * nvl(precost, 0),
+        tot_amtout_list = nvl(qtyout, 0) * nvl(pricelist, 0),
+        tot_amtin_list = nvl(qtyin, 0) * nvl(pricelist, 0),
+        tot_fw_amtqty_list = (case when m_dim4_id = 97 then nvl(qty, 0) * nvl(pricelist, 0) else 0 end),
+        tot_gift_amtqty_list = (case when nvl(m_dim4_id,0) <![CDATA[<>]]> 97 then nvl(qty, 0) * nvl(pricelist, 0) else 0 end)
+        WHERE m_transfer_id = #{v_m_transfer_id}
+    </update>
+
+    <select id="mTransferItemAcm" statementType="CALLABLE" parameterType="java.lang.Integer">
+        {call m_transferitem_acm
+            (
+                #{p_id, mode=IN, jdbcType=NUMERIC}
+            )
+        }
+    </select>
+
+</mapper>

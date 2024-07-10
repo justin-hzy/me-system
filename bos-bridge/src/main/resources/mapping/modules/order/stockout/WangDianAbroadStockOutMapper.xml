@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.me.modules.order.stockout.mapper.WangDianAbroadStockOutMapper">
+    <select id="queryUnTransWangDianAbroadStockOut" resultType="com.me.modules.order.stockout.entity.WangDianAbroadStockOut">
+        SELECT *
+        FROM WANGDIAN_ABROAD_STOCKOUT t
+        WHERE t.ediflag = 80
+        AND t.warehouseno &lt;&gt; '999'
+        AND nvl(t.fenxiaonick,' ') not in (select name from c_customer  where isactive = 'Y')
+        AND to_char(to_date(t.consigntime,'yyyy-mm-dd HH24:mi:ss'),'yyyymmdd') >= 20221201
+        --AND t.STOCKOUTID = '47746'
+        -- AND t.STOCKOUTID = '47809'
+        ORDER BY t.writedate
+    </select>
+</mapper>

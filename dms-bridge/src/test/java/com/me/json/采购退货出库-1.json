@@ -1,0 +1,30 @@
+{
+  "command": "ProcessOrder",
+  "id": "8717b331-8dab-49d1-b297-01ae0fe68f81",
+  "params": {
+    "detailobjs": {
+      "reftables": [
+        688
+      ],
+      "refobjs": [
+        {
+          "addList": [
+            {
+              "QTY": "1",
+              "M_PRODUCT_ID__NAME": "4711401210962-11111"
+            }
+          ],
+          "table": 12984
+        }
+      ]
+    },
+    "masterobj": {
+      "DESCRIPTION": "测试",
+      "BILLDATE": "20240516",
+      "C_OTHER_INOUTTYPE_ID__NAME": "采购退货出库",
+      "id": -1,
+      "C_STORE_ID__NAME": "良品仓",
+      "table": 12983
+    }
+  }
+}

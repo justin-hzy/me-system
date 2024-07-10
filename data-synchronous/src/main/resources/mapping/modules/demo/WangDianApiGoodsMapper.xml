@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.me.modules.demo.mapper.WangDianApiGoodsMapper">
+    <insert id="insertWangDianApiGoodsBySql" parameterType="com.me.modules.demo.entity.WangDianApiGoods" >
+        INSERT INTO WANGDIAN_APIGOOGS_DEMO2
+        (ID, PLATFORMID, SHOPNO, EDIFLAG, RESULTS, CREATETIME,UPDATETIME, M_PRODUCT_ID)
+        VALUES
+        (get_sequences ('WANGDIAN_APIGOOGS_DEMO2'),
+         #{platFormId}, #{shopNo}, #{EdiFlag}, #{results}, #{createTime},#{updateTime}, #{MProductId})
+    </insert>
+
+    <select id="queryWangDianApiGoodsById" resultType="com.me.modules.demo.entity.WangDianApiGoods" parameterType="string">
+        select * from  WANGDIAN_APIGOOGS where ID = #{id}
+    </select>
+</mapper>

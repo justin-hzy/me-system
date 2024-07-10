@@ -1,0 +1,49 @@
+{
+  "requestId": "144145",
+  "detailData": [
+    {
+      "tableDBName": "formtable_main_242_dt3",
+      "workflowRequestTableRecords": [
+        {
+          "workflowRequestTableFields": [
+            {
+              "fieldName": "spbm",
+              "fieldValue": "4711401210962-11111"
+            },
+            {
+              "fieldName": "sjrksl",
+              "fieldValue": "10"
+            }
+          ],
+          "recordOrder": 0
+        },
+        {
+          "workflowRequestTableFields": [
+            {
+              "fieldName": "spbm",
+              "fieldValue": "4711401210962-22222"
+            },
+            {
+              "fieldName": "sjcksl",
+              "fieldValue": "20"
+            }
+          ],
+          "recordOrder": 0
+        },
+        {
+          "workflowRequestTableFields": [
+            {
+              "fieldName": "spbm",
+              "fieldValue": "4711401210962-33333"
+            },
+            {
+              "fieldName": "sjcksl",
+              "fieldValue": "10"
+            }
+          ],
+          "recordOrder": 0
+        }
+      ]
+    }
+  ]
+}

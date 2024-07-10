@@ -1,0 +1,185 @@
+{
+'Creator': 'demo',
+'NeedUpDateFields': [],
+'NeedReturnFields': [],
+'IsDeleteEntry': 'True',
+'SubSystemId': '0',
+'IsVerifyBaseDataField': 'true',
+'IsAutoSubmitAndAudit': 'true',
+'IsEntryBatchFill': 'True',
+'InterationFlags': 'STK_InvCheckResult',
+'Model': {
+  'FID': '0',
+  'FBillTypeID': {
+    'FNumber': 'XSCKD01_SYS'
+  },
+  'FBillNo': 'RE2403050026755',
+  'FDate': '2024-03-05',
+  'FStockOrgId': {
+    'FNumber': 'ZT025'
+  },
+  'FSaleOrgId': {
+    'FNumber': 'ZT002'
+  },
+  'FOwnerTypeIdHead': '业务组织',
+  'FSaleDeptID': {
+    'FNumber': ''
+  },
+  'SubHeadEntity': {
+    'FSettleOrgID': {
+      'FNumber': 'ZT002'
+    },
+    'FThirdBillNo': 'CK2024030521522'
+  },
+  'FCUSTOMERID': {
+    'FNumber': 'za001'
+  },
+  'FPDORDERNO': '',
+  'F_zjm_Amount_JFXF': 0,
+  'F_zjm_Amount_CSJF': 0,
+  'F_zjm_Amount_GWQ': 0,
+  'F_zjm_Amount_SCQ': 0,
+  'F_zjm_Decimal': 0,
+  'F_zjm_Assistant_HuiYuan': {
+    'FNumber': ''
+  },
+  'F_DSG_FL': {
+    'FNumber': ''
+  },
+  'F_DSG_FLLX': '线下零售',
+  'F_DSG_Text1': '',
+  'FEntity': [
+    {
+      'FEntryID': '0',
+      'FMaterialId': {
+        'FNumber': 'A02TY00601'
+      },
+      'FEntryTaxRate': '13',
+      'FRealQty': '1',
+      'FStockId': {
+        'FNumber': '20'
+      },
+      'FTaxPrice': '0',
+      'FDiscountRate': 0,
+      'FisFree': 'true',
+      'FDiscount': 0,
+      'FSoorDerno': '15099960796-3-5',
+      'F_RLIZ_JDCGDH': '',
+      'F_RLIZ_WPHXSDDH': '',
+      'F_PP': {
+        'FNumber': '10'
+      },
+      'F_DSG_srcoid': 'AD2024030530361'
+    },
+    {
+      'FEntryID': '0',
+      'FMaterialId': {
+        'FNumber': 'A02ZA211011'
+      },
+      'FEntryTaxRate': '13',
+      'FRealQty': '1',
+      'FStockId': {
+        'FNumber': '20'
+      },
+      'FTaxPrice': '0',
+      'FDiscountRate': 0,
+      'FisFree': 'true',
+      'FDiscount': 0,
+      'FSoorDerno': '15099960796-3-5',
+      'F_RLIZ_JDCGDH': '',
+      'F_RLIZ_WPHXSDDH': '',
+      'F_PP': {
+        'FNumber': '006'
+      },
+      'F_DSG_srcoid': 'AD2024030530364'
+    },
+    {
+      'FEntryID': '0',
+      'FMaterialId': {
+        'FNumber': 'A02TY00701'
+      },
+      'FEntryTaxRate': '13',
+      'FRealQty': '1',
+      'FStockId': {
+        'FNumber': '20'
+      },
+      'FTaxPrice': '0',
+      'FDiscountRate': 0,
+      'FisFree': 'true',
+      'FDiscount': 0,
+      'FSoorDerno': '15099960796-3-5',
+      'F_RLIZ_JDCGDH': '',
+      'F_RLIZ_WPHXSDDH': '',
+      'F_PP': {
+        'FNumber': '006'
+      },
+      'F_DSG_srcoid': 'AD2024030530362'
+    },
+    {
+      'FEntryID': '0',
+      'FMaterialId': {
+        'FNumber': 'A02TY00801'
+      },
+      'FEntryTaxRate': '13',
+      'FRealQty': '1',
+      'FStockId': {
+        'FNumber': '20'
+      },
+      'FTaxPrice': '0',
+      'FDiscountRate': 0,
+      'FisFree': 'true',
+      'FDiscount': 0,
+      'FSoorDerno': '15099960796-3-5',
+      'F_RLIZ_JDCGDH': '',
+      'F_RLIZ_WPHXSDDH': '',
+      'F_PP': {
+        'FNumber': '006'
+      },
+      'F_DSG_srcoid': 'AD2024030530363'
+    },
+    {
+      'FEntryID': '0',
+      'FMaterialId': {
+        'FNumber': 'A02ZA00101'
+      },
+      'FEntryTaxRate': '13',
+      'FRealQty': '1',
+      'FStockId': {
+        'FNumber': '20'
+      },
+      'FTaxPrice': '0',
+      'FDiscountRate': 0,
+      'FisFree': 'true',
+      'FDiscount': 0,
+      'FSoorDerno': '15099960796-3-5',
+      'F_RLIZ_JDCGDH': '',
+      'F_RLIZ_WPHXSDDH': '',
+      'F_PP': {
+        'FNumber': '006'
+      },
+      'F_DSG_srcoid': 'AD2024030530367'
+    },
+    {
+      'FEntryID': '0',
+      'FMaterialId': {
+        'FNumber': 'A02ZA211815'
+      },
+      'FEntryTaxRate': '13',
+      'FRealQty': '1',
+      'FStockId': {
+        'FNumber': '20'
+      },
+      'FTaxPrice': '0',
+      'FDiscountRate': 0,
+      'FisFree': 'true',
+      'FDiscount': 0,
+      'FSoorDerno': '15099960796-3-5',
+      'F_RLIZ_JDCGDH': '',
+      'F_RLIZ_WPHXSDDH': '',
+      'F_PP': {
+        'FNumber': '006'
+      },
+      'F_DSG_srcoid': 'AD2024030530365'
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "mainData": [
+    {
+      "fieldName": "wldh",
+      "fieldValue": "测试数据"
+    },
+    {
+      "fieldName": "wlgs",
+      "fieldValue": "测试数据"
+    },
+    {
+      "fieldName": "xsckdh",
+      "fieldValue": "测试数据"
+    }
+  ],
+  "requestId": 136138,
+  "detailData": [
+    {
+      "tableDBName": "formtable_main_151_dt2",
+      "workflowRequestTableRecords": [
+        {
+          "workflowRequestTableFields": [
+            {
+              "fieldName": "xsckdh",
+              "fieldValue": "测试数据"
+            },
+            {
+              "fieldName": "chrq",
+              "fieldValue": "20240101"
+            },
+            {
+              "fieldName": "hpbh",
+              "fieldValue": "测试数据"
+            },
+            {
+              "fieldName": "cksl",
+              "fieldValue": 1
+            }
+          ],
+          "recordOrder": 0
+        }
+      ]
+    }
+  ]
+}

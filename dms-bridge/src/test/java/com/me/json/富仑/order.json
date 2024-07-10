@@ -1,0 +1,16 @@
+{
+  "address": "测试",
+  "phone": "111",
+  "name": "DMS_TLSK-2024062407",
+  "shipping_type": "專車",
+  "customer_name": "测试",
+  "products": [
+    {
+      "storage_type": "A1",
+      "quantity": "1",
+      "expiration_deadline": "2024-06-24",
+      "batch": "1",
+      "sku": "4711401210962-11111"
+    }
+  ]
+}

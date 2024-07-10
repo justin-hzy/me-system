@@ -1,0 +1,36 @@
+{
+  "requestId": "153165",
+  "detailData": [
+    {
+      "tableDBName": "formtable_main_242_dt3",
+      "workflowRequestTableRecords": [
+        {
+          "workflowRequestTableFields": [
+            {
+              "fieldName": "hpbh",
+              "fieldValue": "4711401210962-11111"
+            },
+            {
+              "fieldName": "cksl",
+              "fieldValue": "2"
+            }
+          ],
+          "recordOrder": 0
+        },
+        {
+          "workflowRequestTableFields": [
+            {
+              "fieldName": "spbm",
+              "fieldValue": "4711401210962-22222"
+            },
+            {
+              "fieldName": "rksl",
+              "fieldValue": "2"
+            }
+          ],
+          "recordOrder": 0
+        }
+      ]
+    }
+  ]
+}

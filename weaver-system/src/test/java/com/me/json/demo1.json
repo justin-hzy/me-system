@@ -1,0 +1,22 @@
+{
+  "storage_type": "A1",
+  "callback_url": "http://58.63.47.138:8084/weaverSystem/dms/getCallBack",
+  "delivery_date": "2024-03-22",
+  "address": "台湾省 台中市",
+  "phone": "1234567890",
+  "name": "POTEST021",
+  "shipping_type": "tcat",
+  "customer_name": "台湾收货人2",
+  "products": [
+    {
+      "quantity": "2",
+      "batch": "2",
+      "sku": "4711401211167"
+    },
+    {
+      "quantity": "1",
+      "batch": "1",
+      "sku": "4711401211167"
+    }
+  ]
+}

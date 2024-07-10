@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.me.modules.order.customer.mapper.CustomerMapper">
+
+    <select id="queryIdAndCode" parameterType="string" resultType="com.me.modules.order.customer.dto.QueryIdAndCodeRespDto">
+        SELECT nvl(max(id),0) maxId ,nvl(max(code),'') maxCode FROM c_customer t WHERE t.name = #{remark}
+    </select>
+
+</mapper>

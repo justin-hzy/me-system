@@ -1,0 +1,59 @@
+{
+  "NeedUpDateFields": [],
+  "NeedReturnFields": [],
+  "IsDeleteEntry": "True",
+  "SubSystemId": "",
+  "IsVerifyBaseDataField": "false",
+  "IsEntryBatchFill": "true",
+  "ValidateFlag": "true",
+  "NumberSearch": "true",
+  "IsAutoAdjustField": "false",
+  "InterationFlags": "STK_InvCheckDetailMessage",
+  "IgnoreInterationFlag": "",
+  "IsControlPrecision": "false",
+  "ValidateRepeatJson": "false",
+  "IsAutoSubmitAndAudit": "true",
+  "Model": {
+    "FID": "0",
+    "FBillNo": "HK_DMSTW05-2024062001",
+    "FBillTypeID": {
+      "FNumber": "ZJDB01_SYS"
+    },
+    "FBizType": "NORMAL",
+    "FTransferDirect": "GENERAL",
+    "FTransferBizType": "InnerOrgTransfer",
+    "FStockOutOrgId": {
+      "FNumber": "ZT021"
+    },
+    "FDate": "2024-06-27",
+    "FThirdSrcBillNo": "DMSTW05-2024062001",
+    "FBillEntry": [
+      {
+        "FRowType": "Standard",
+        "FMaterialId": {
+          "FNumber": "4531632408248"
+        },
+        "FQty": "50",
+        "FSrcStockId": {
+          "FNumber": "A1"
+        },
+        "FDestStockId": {
+          "FNumber": "S1"
+        }
+      },
+      {
+        "FRowType": "Standard",
+        "FMaterialId": {
+          "FNumber": "4531632457529"
+        },
+        "FQty": "150",
+        "FSrcStockId": {
+          "FNumber": "A1"
+        },
+        "FDestStockId": {
+          "FNumber": "S1"
+        }
+      }
+    ]
+  }
+}

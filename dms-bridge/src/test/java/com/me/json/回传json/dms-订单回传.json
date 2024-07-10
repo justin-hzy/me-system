@@ -1,0 +1,45 @@
+{
+  "mainData": [
+    {
+      "fieldName": "wldh",
+      "fieldValue": "12345"
+    },
+    {
+      "fieldName": "wlgs",
+      "fieldValue": "新竹物流"
+    },
+    {
+      "fieldName": "xsckdh",
+      "fieldValue": "TW20240529004"
+    }
+  ],
+  "requestId": 166168,
+  "detailData": [
+    {
+      "tableDBName": "formtable_main_151_dt2",
+      "workflowRequestTableRecords": [
+        {
+          "workflowRequestTableFields": [
+            {
+              "fieldName": "cksl",
+              "fieldValue": 1
+            },
+            {
+              "fieldName": "xsckdh",
+              "fieldValue": "TW20240529004"
+            },
+            {
+              "fieldName": "chrq",
+              "fieldValue": "2024-05-29"
+            },
+            {
+              "fieldName": "hpbh",
+              "fieldValue": "4711401210962-22222"
+            }
+          ],
+          "recordOrder": 0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.me.modules.order.mretail.mapper.MRetailItemMapper">
+
+    <select id="queryMRetailItem" parameterType="java.lang.String" resultType="com.me.modules.order.mretail.dto.QryMRetailItemRespDto">
+        SELECT
+            b.id, b.m_product_id, b.m_attributesetinstance_id, a.num,
+            c.pricelist,a.sellprice,a.srctid,a.srcoid,sharepost
+        FROM wangdian_abroad_stockout_list a, m_product_alias b, m_product c
+        WHERE upper(a.specno) = b.no
+          AND b.m_product_id = c.id
+          AND a.stockoutid = #{stockOutId}
+    </select>
+    
+    <update id="updateMRetailItem" parameterType="java.lang.Integer">
+        UPDATE m_retailitem
+        SET rcanqty = qty,
+            tot_amt_list = qty * nvl(pricelist, 0),
+            tot_amt_actual = qty * nvl(priceactual, 0),
+            discount = decode(nvl(pricelist, 0), 0, 0,
+                              nvl(priceactual, 0) / pricelist)
+        WHERE m_retail_id = #{v_retail_id}
+    </update>
+</mapper>

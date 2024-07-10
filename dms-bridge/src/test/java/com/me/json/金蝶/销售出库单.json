@@ -1,0 +1,161 @@
+{
+  "NeedUpDateFields": [],
+  "NeedReturnFields": [],
+  "IsDeleteEntry": "true",
+  "SubSystemId": "0",
+  "IsVerifyBaseDataField": "false",
+  "IsEntryBatchFill": "true",
+  "ValidateFlag": "true",
+  "NumberSearch": "true",
+  "IsAutoAdjustField": "false",
+  "InterationFlags": "",
+  "IgnoreInterationFlag": "",
+  "IsControlPrecision": "false",
+  "ValidateRepeatJson": "false",
+  "Model": {
+    "FID": "0",
+    "FBillTypeID": {
+      "FNumber": "XSCKD01_SYS"
+    },
+    "FBillNo": "HK-TWTEST20240605",
+    "FDate": "",
+    "FStockOrgId": {
+      "FNumber": "ZT021"
+    },
+    "FSaleOrgId": {
+      "FNumber": "ZT021"
+    },
+    "FOwnerTypeIdHead": "业务组织",
+    "FCUSTOMERID": {
+      "FNumber": "ZT026"
+    },
+    "F_DSG_Base": {
+      "FNumber": "ZT026"
+    },
+    "F_DSG_FLLX": "留空",
+    "F_DSG_Text1": "",
+    "SubHeadEntity": {
+      "FSettleOrgID": {
+        "FNumber": "ZT021"
+      },
+      "fSettleCurrID": {
+        "FNumber": "PRE005"
+      },
+      "FThirdBillNo": "HK-TWTEST20240605"
+    },
+    "FEntity": [
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632408248"
+        },
+        "FEntryTaxRate": "0",
+        "FRealQty": "3",
+        "FStockId": {
+          "FNumber": ""
+        },
+        "FTaxPrice": "0.00",
+        "FSoorDerno": "HK-TWTEST20240605",
+        "F_DSG_srcoid": "HK-TWTEST20240605"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632421995"
+        },
+        "FEntryTaxRate": "0",
+        "FRealQty": "3",
+        "FStockId": {
+          "FNumber": ""
+        },
+        "FTaxPrice": "0.00",
+        "FSoorDerno": "HK-TWTEST20240605",
+        "F_DSG_srcoid": "HK-TWTEST20240605"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632422190"
+        },
+        "FEntryTaxRate": "0",
+        "FRealQty": "3",
+        "FStockId": {
+          "FNumber": ""
+        },
+        "FTaxPrice": "0.00",
+        "FSoorDerno": "HK-TWTEST20240605",
+        "F_DSG_srcoid": "HK-TWTEST20240605"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632422558"
+        },
+        "FEntryTaxRate": "0",
+        "FRealQty": "3",
+        "FStockId": {
+          "FNumber": ""
+        },
+        "FTaxPrice": "0.00",
+        "FSoorDerno": "HK-TWTEST20240605",
+        "F_DSG_srcoid": "HK-TWTEST20240605"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632460093"
+        },
+        "FEntryTaxRate": "0",
+        "FRealQty": "3",
+        "FStockId": {
+          "FNumber": ""
+        },
+        "FTaxPrice": "0.00",
+        "FSoorDerno": "HK-TWTEST20240605",
+        "F_DSG_srcoid": "HK-TWTEST20240605"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632460123"
+        },
+        "FEntryTaxRate": "0",
+        "FRealQty": "3",
+        "FStockId": {
+          "FNumber": ""
+        },
+        "FTaxPrice": "0.00",
+        "FSoorDerno": "HK-TWTEST20240605",
+        "F_DSG_srcoid": "HK-TWTEST20240605"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4711401210627"
+        },
+        "FEntryTaxRate": "0",
+        "FRealQty": "3",
+        "FStockId": {
+          "FNumber": ""
+        },
+        "FTaxPrice": "0.00",
+        "FSoorDerno": "HK-TWTEST20240605",
+        "F_DSG_srcoid": "HK-TWTEST20240605"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4711401210634"
+        },
+        "FEntryTaxRate": "0",
+        "FRealQty": "3",
+        "FStockId": {
+          "FNumber": ""
+        },
+        "FTaxPrice": "0.00",
+        "FSoorDerno": "HK-TWTEST20240605",
+        "F_DSG_srcoid": "HK-TWTEST20240605"
+      }
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "total": "1",
+  "code": "200",
+  "data": [
+    {
+      "note": "",
+      "reason": "买家平台退款",
+      "out_warehouse": "JYY",
+      "amount_total": "1.000",
+      "buyer_name": "悦江-马",
+      "complete_date": "",
+      "buyer_id": "悦江测试",
+      "order_status": "已发货",
+      "product_sku": "74375977801-",
+      "location_code": "A1-03-05-1",
+      "exception_title": "无异常",
+      "process_type": "退件入库",
+      "currency": "CNY",
+      "create_date": "2024-04-15 10:20:33",
+      "ro_type": "4",
+      "email": "",
+      "ro_status": "待处理",
+      "product_title": "姬芮 新焕真皙润色隔离霜 02柔光紫 中样-姬芮 新焕真皙润色隔离霜 02柔光紫 中样",
+      "refrence_no_warehouse": "SPE24041030028",
+      "tracking_no": "22222",
+      "ro_code": "RMA24041530001",
+      "qty": "1",
+      "confirm_date": "2024-04-15 10:20:33",
+      "in_warehouse": "JYY",
+      "seller_account": "za_shopee_vn",
+      "create_user": "褚政杰",
+      "order_id": "WEC0642404100001"
+    }
+  ],
+  "service": "rmaReturnList",
+  "responseTime": "2024-04-17 15:41:13",
+  "message": "Success."
+}

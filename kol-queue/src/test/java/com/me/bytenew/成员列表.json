@@ -1,0 +1,301 @@
+{
+  "code": "OK",
+  "subCode": null,
+  "msg": "ok",
+  "data": {
+    "total_results": null,
+    "page_no": null,
+    "page_size": null,
+    "code": 0,
+    "has_next": null,
+    "error_msg": null,
+    "map": {
+      "result": [
+        {
+          "nick": "梁进毅",
+          "roleIds": "",
+          "organization": null,
+          "id": 110447757,
+          "roleNames": "",
+          "status": 1
+        },
+        {
+          "nick": "成宏",
+          "roleIds": "1661942153115295747/1661623867282513921/1661623867282513922/1661558247198748674/1661553391151570946/1688806149238022145/1661621274749657090",
+          "organization": "/客服部-EBA组",
+          "id": 110485628,
+          "roleNames": "所有者/系统管理员/成员/管理知识库/客服部/管理员",
+          "status": 0
+        },
+        {
+          "nick": "冯艳欢",
+          "roleIds": "1661623867282513922/1661558247198748674",
+          "organization": "/客服部-EBA组",
+          "id": 191919658,
+          "roleNames": "成员/客服部",
+          "status": 0
+        },
+        {
+          "nick": "姚清兰",
+          "roleIds": "",
+          "organization": null,
+          "id": 191977536,
+          "roleNames": "",
+          "status": 1
+        },
+        {
+          "nick": "Doris",
+          "roleIds": "1661623867282513921/1661592006799323139/1697150079603834883/1663491153169149954/1661553391151570948/1661621274749657090",
+          "organization": "/超级管理员",
+          "id": 191997306,
+          "roleNames": "所有者/超级管理员/管理员",
+          "status": 0
+        },
+        {
+          "nick": "李茜茜",
+          "roleIds": "1679039955658805250/1661623867282513922/1697150079603834881/1661558247198748674/1688806149238022145/1661621274749657090",
+          "organization": "/客服部-后台组",
+          "id": 191997598,
+          "roleNames": "成员/管理知识库/客服部/管理员/售后组",
+          "status": 0
+        },
+        {
+          "nick": "陈潇荣",
+          "roleIds": "1661623867282513922/1661558247198748674",
+          "organization": "/客服部-EBA组",
+          "id": 191997617,
+          "roleNames": "成员/客服部",
+          "status": 0
+        },
+        {
+          "nick": "刘咪",
+          "roleIds": "1679039955658805250/1661623867282513922/1697150079603834881/1661558247198748674/1688806149238022145/1661621274749657090",
+          "organization": "/客服部-后台组",
+          "id": 191997635,
+          "roleNames": "成员/管理知识库/客服部/管理员/售后组",
+          "status": 0
+        },
+        {
+          "nick": "李欣桐",
+          "roleIds": "1679039955658805250/1661623867282513922/1697150079603834881/1661558247198748674/1688806149238022145/1661621274749657090",
+          "organization": "/客服部-后台组",
+          "id": 191997636,
+          "roleNames": "成员/管理知识库/客服部/管理员/售后组",
+          "status": 0
+        },
+        {
+          "nick": "方晓敏",
+          "roleIds": "1661623867282513921/1663491153164955649/1679039955658805250/1661623867282513922/1697150079603834881/1661553391151570946/1688806149238022145/1661621274749657090",
+          "organization": "/客服部-后台组",
+          "id": 191997637,
+          "roleNames": "系统管理员/成员/管理知识库/管理员/售后组",
+          "status": 0
+        },
+        {
+          "nick": "李雪莹",
+          "roleIds": "1722438896824745986/1722438825559326722/1661623867286708225/1722438791870935042/1661553391151570946/1661621274749657092",
+          "organization": "/IT部",
+          "id": 191997638,
+          "roleNames": "所有者/系统管理员",
+          "status": 0
+        },
+        {
+          "nick": "欧子欣",
+          "roleIds": "1661623867282513922/1661558247198748674/1688806149238022145",
+          "organization": "/客服部-EBA组",
+          "id": 191998085,
+          "roleNames": "成员/管理知识库/客服部",
+          "status": 0
+        },
+        {
+          "nick": "邓子伦",
+          "roleIds": "1661623867282513922/1661558247198748674",
+          "organization": "/客服部-EBA组",
+          "id": 191998086,
+          "roleNames": "成员/客服部",
+          "status": 0
+        },
+        {
+          "nick": "黎耀尹",
+          "roleIds": "1661623867282513922/1661558247198748674",
+          "organization": "/客服部-EBA组",
+          "id": 191998087,
+          "roleNames": "成员/客服部",
+          "status": 0
+        },
+        {
+          "nick": "张彩荣",
+          "roleIds": "1661623867282513922/1661558247198748674",
+          "organization": "/客服部-EBA组",
+          "id": 191998088,
+          "roleNames": "成员/客服部",
+          "status": 0
+        },
+        {
+          "nick": "郑丹燕",
+          "roleIds": "",
+          "organization": "/茵曼客服",
+          "id": 191998153,
+          "roleNames": "",
+          "status": 0
+        },
+        {
+          "nick": "杨家荣",
+          "roleIds": "",
+          "organization": null,
+          "id": 191998154,
+          "roleNames": "",
+          "status": 1
+        },
+        {
+          "nick": "莫茂峰",
+          "roleIds": "1663761854324494338",
+          "organization": "/泊美运营部",
+          "id": 191998888,
+          "roleNames": "泊美运营",
+          "status": 0
+        },
+        {
+          "nick": "廖凌华",
+          "roleIds": "1661623867282513922/1661557646854672386",
+          "organization": "/客服部-EBA组",
+          "id": 191999532,
+          "roleNames": "成员/店小蜜",
+          "status": 0
+        },
+        {
+          "nick": "陈奕雄",
+          "roleIds": "",
+          "organization": "/供应链",
+          "id": 192000846,
+          "roleNames": "",
+          "status": 0
+        },
+        {
+          "nick": "方钰滢",
+          "roleIds": "",
+          "organization": null,
+          "id": 192003498,
+          "roleNames": "",
+          "status": 1
+        },
+        {
+          "nick": "梁韵静",
+          "roleIds": "1674258997107220481/1661558589398179842",
+          "organization": "/私域部",
+          "id": 192003500,
+          "roleNames": "私域部",
+          "status": 0
+        },
+        {
+          "nick": "罗子颖",
+          "roleIds": "1674258997107220481/1661558589398179842",
+          "organization": "/私域部",
+          "id": 192003501,
+          "roleNames": "私域部",
+          "status": 0
+        },
+        {
+          "nick": "李寺华",
+          "roleIds": "1663103927529074689",
+          "organization": "/za运营部",
+          "id": 192005631,
+          "roleNames": "za运营",
+          "status": 0
+        },
+        {
+          "nick": "范舒琼",
+          "roleIds": "",
+          "organization": null,
+          "id": 192010053,
+          "roleNames": "",
+          "status": 1
+        },
+        {
+          "nick": "黄柱熙",
+          "roleIds": "",
+          "organization": "/茵曼客服",
+          "id": 192010054,
+          "roleNames": "",
+          "status": 0
+        },
+        {
+          "nick": "施翠菊",
+          "roleIds": "",
+          "organization": null,
+          "id": 192010056,
+          "roleNames": "",
+          "status": 1
+        },
+        {
+          "nick": "孙泳贤",
+          "roleIds": "",
+          "organization": "/品类组",
+          "id": 192016391,
+          "roleNames": "",
+          "status": 0
+        },
+        {
+          "nick": "潘潘",
+          "roleIds": "1701160622757113858/1701444364551290882",
+          "organization": "/销管部",
+          "id": 192016393,
+          "roleNames": "品类组/销管部",
+          "status": 0
+        },
+        {
+          "nick": "杨阳",
+          "roleIds": "",
+          "organization": "/供应链",
+          "id": 192016651,
+          "roleNames": "",
+          "status": 0
+        },
+        {
+          "nick": "黎相越",
+          "roleIds": "",
+          "organization": "/茵曼客服",
+          "id": 192018052,
+          "roleNames": "",
+          "status": 0
+        },
+        {
+          "nick": "陈彬",
+          "roleIds": "",
+          "organization": "/茵曼客服",
+          "id": 192018283,
+          "roleNames": "",
+          "status": 0
+        },
+        {
+          "nick": "戴苡珊",
+          "roleIds": "",
+          "organization": "/茵曼客服",
+          "id": 192038248,
+          "roleNames": "",
+          "status": 0
+        },
+        {
+          "nick": "连泓锐",
+          "roleIds": "",
+          "organization": "/茵曼客服",
+          "id": 192038249,
+          "roleNames": "",
+          "status": 0
+        }
+      ],
+      "page_num": 1,
+      "total": 34,
+      "page_size": 100
+    },
+    "isSuccess": null
+  },
+  "newValue": null,
+  "oldValue": null,
+  "paramError": false,
+  "unrealized": false,
+  "authError": false,
+  "warn": false,
+  "ok": true,
+  "error": false
+}

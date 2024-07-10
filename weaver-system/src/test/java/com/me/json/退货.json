@@ -1,0 +1,25 @@
+{
+  "title": "20200801",
+  "status": "done",
+  "note": "備註",
+  "items": [
+    {
+      "sku": "PRD01",
+      "storage_type": "A1",
+      "expiration_date": "2022-08-1",
+      "batch": "239998187",
+      "quantity": 1200,
+      "received_pcs": 1200,
+      "identifier": "2e33f0d856801a8982c4fbfbf784982b"
+    },
+    {
+      "sku": "PRD02",
+      "storage_type": "A1",
+      "expiration_date": "2022-08-1",
+      "batch": "",
+      "received_pcs": 1500,
+      "quantity": 1500,
+      "identifier": "2e33f0d856801a8982c4fbfbf784982b"
+    }
+  ]
+}

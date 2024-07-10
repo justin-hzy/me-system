@@ -1,0 +1,55 @@
+{
+  "response": {
+    "total_results": null,
+    "page_no": null,
+    "page_size": null,
+    "code": 0,
+    "has_next": null,
+    "error_msg": null,
+    "map": {
+      "result": [
+        {
+          "sellerId": "94234511229",
+          "id": "94234511229",
+          "title": "【拼多多】PURE&MILD泊美旗舰店"
+        },
+        {
+          "sellerId": "3414125737",
+          "id": "3414125737",
+          "title": "【抖音】Za姬芮官方旗舰店"
+        },
+        {
+          "sellerId": "37156527329",
+          "id": "37156527329",
+          "title": "【拼多多】Za姬芮官方旗舰店"
+        },
+        {
+          "sellerId": "651759137",
+          "id": "651759137",
+          "title": "【抖音】泊美官方旗舰店"
+        },
+        {
+          "sellerId": "746195036",
+          "id": "746195036",
+          "title": "【天猫】za姬芮官方旗舰店"
+        },
+        {
+          "sellerId": "1574983217",
+          "id": "1574983217",
+          "title": "【天猫】泊美官方旗舰店"
+        },
+        {
+          "sellerId": "11806430",
+          "id": "11806430",
+          "title": "【京东】Za姬芮旗舰店"
+        },
+        {
+          "sellerId": "10417185",
+          "id": "10417185",
+          "title": "【京东】泊美旗舰店"
+        }
+      ]
+    },
+    "isSuccess": null
+  }
+}
