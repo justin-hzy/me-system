@@ -8,6 +8,8 @@ import java.util.List;
 @Data
 public class PostOtherInDto {
 
+    private String billno;
+
     private String sku;
 
     private String qty;

@@ -6,6 +6,7 @@ import com.me.common.config.BosConfig;
 import com.me.common.utils.Md5Util;
 import com.me.modules.bos.other.dto.PostOtherInDto;
 import com.me.modules.bos.other.dto.PostOtherOutDto;
+import com.me.modules.bos.other.pojo.SubOther;
 import com.me.modules.bos.other.service.OtherService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +47,8 @@ public class OtherServiceImpl implements OtherService {
         String cStoreName = reqDto.getCstore();
         String qty = reqDto.getQty();
 
+        List<SubOther> subOthers = reqDto.getSubOthers();
+
         String appSecret = bosConfig.getAppSecret();
         String sipAppKey = bosConfig.getSipAppKey();
         String url = bosConfig.getUrl();
@@ -78,13 +81,12 @@ public class OtherServiceImpl implements OtherService {
 
         JSONArray addList = new JSONArray();
 
-
-        JSONObject addListElem = new JSONObject();
-
-        addListElem.put("QTY",qty);
-        addListElem.put("M_PRODUCT_ID__NAME",sku);
-
-        addList.add(addListElem);
+        for (SubOther subOther : subOthers){
+            JSONObject addListElem = new JSONObject();
+            addListElem.put("QTY",subOther.getQty());
+            addListElem.put("M_PRODUCT_ID__NAME",subOther.getSku());
+            addList.add(addListElem);
+        }
 
         refobjsElem.put("addList",addList);
         refobjsElem.put("table",12984);
