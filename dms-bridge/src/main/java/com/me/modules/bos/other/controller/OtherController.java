@@ -39,8 +39,8 @@ public class OtherController {
         if("500".equals(code)){
             bosOtherLog.setRequestId(reqDto.getRequestId());
             JSONObject param = new JSONObject();
-            param.put("sku",reqDto.getSku());
-            param.put("qty",reqDto.getQty());
+            /*param.put("sku",reqDto.getSku());
+            param.put("qty",reqDto.getQty());*/
             param.put("description",reqDto.getDescription());
             param.put("billDate",reqDto.getBillDate());
             param.put("cstore",reqDto.getCstore());
@@ -56,8 +56,8 @@ public class OtherController {
         }else if("200".equals(code)){
             bosOtherLog.setRequestId(reqDto.getRequestId());
             JSONObject param = new JSONObject();
-            param.put("sku",reqDto.getSku());
-            param.put("qty",reqDto.getQty());
+            /*param.put("sku",reqDto.getSku());
+            param.put("qty",reqDto.getQty());*/
             param.put("description",reqDto.getDescription());
             param.put("billDate",reqDto.getBillDate());
             param.put("cstore",reqDto.getCstore());
