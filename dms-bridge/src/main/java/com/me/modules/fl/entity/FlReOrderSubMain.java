@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @TableName("formtable_main_263")
-public class FlReOrderMain {
+public class FlReOrderSubMain {
 
     @TableField("id")
     private int id;
