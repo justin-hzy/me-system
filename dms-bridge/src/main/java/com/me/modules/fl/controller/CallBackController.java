@@ -53,7 +53,7 @@ public class CallBackController {
 
     private FlSetTableMainService flSetTableMainService;
 
-    private FlReOrderMainService flReOrderMainService;
+    private FlReOrderSubMainService flReOrderSubMainService;
 
     private FlSetDismantleReqLogService flSetDismantleReqLogService;
 
@@ -369,13 +369,13 @@ public class CallBackController {
         String status = dto.getStatus();
 
         if("stored".equals(status)){
-            QueryWrapper<FlReOrderMain> queryWrapper = new QueryWrapper<>();
+            QueryWrapper<FlReOrderSubMain> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("lcbh",title);
 
-            FlReOrderMain flReOrderMain = flReOrderMainService.getOne(queryWrapper);
+            FlReOrderSubMain flReOrderSubMain = flReOrderSubMainService.getOne(queryWrapper);
 
-            if(flReOrderMain != null){
-                Integer requestId = flReOrderMain.getRequestid();
+            if(flReOrderSubMain != null){
+                Integer requestId = flReOrderSubMain.getRequestid();
                 log.info("requestId="+requestId);
 
                 List<ReturnOrderItem> items = dto.getItems();
@@ -401,6 +401,11 @@ public class CallBackController {
                         resMap.put(sku,receivedNum);
                     }
                 }
+
+                //匹配明细1表数据，查看是否存在漏传的数据
+
+
+
 
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("requestId",requestId);
