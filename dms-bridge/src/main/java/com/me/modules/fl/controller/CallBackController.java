@@ -55,6 +55,8 @@ public class CallBackController {
 
     private FlReOrderSubMainService flReOrderSubMainService;
 
+    private FlReOrderSubDtl1Service flReOrderSubDtl1Service;
+
     private FlSetDismantleReqLogService flSetDismantleReqLogService;
 
     private FlDismantleReqLogService flDismantleReqLogService;
@@ -377,7 +379,7 @@ public class CallBackController {
             if(flReOrderSubMain != null){
                 Integer requestId = flReOrderSubMain.getRequestid();
                 log.info("requestId="+requestId);
-
+                int id = flReOrderSubMain.getId();
                 List<ReturnOrderItem> items = dto.getItems();
 
                 Map<String,Integer> resMap = new HashMap<>();
@@ -403,8 +405,17 @@ public class CallBackController {
                 }
 
                 //匹配明细1表数据，查看是否存在漏传的数据
+                QueryWrapper<FlReOrderSubDtl1> queryWrapper1 = new QueryWrapper<>();
+                queryWrapper1.eq("mainid",id);
 
+                List<FlReOrderSubDtl1> flReOrderSubDtl1s = flReOrderSubDtl1Service.list(queryWrapper1);
+                for (FlReOrderSubDtl1 flReOrderSubDtl1 : flReOrderSubDtl1s){
+                    String hptxm = flReOrderSubDtl1.getHptxm();
 
+                    if (!resMap.containsKey(hptxm)){
+                        resMap.put(hptxm,0);
+                    }
+                }
 
 
                 JSONObject jsonObject = new JSONObject();
