@@ -249,6 +249,35 @@ public class CallBackController {
                     e.printStackTrace();
                 }
             }
+        }else if("canceled".equals(status)){
+            log.info("name="+name+"订单取消");
+            //销售订单，富仑单方面取消，执行以下逻辑
+            QueryWrapper<FlOrderFormTableMain> queryWrapper = new QueryWrapper<>();
+
+            queryWrapper.eq("fddh",name);
+
+            FlOrderFormTableMain FlOrderFormTableMain = flOrderFormTableMainService.getOne(queryWrapper);
+            if(FlOrderFormTableMain != null){
+                /*销售出库单*/
+                String pO = FlOrderFormTableMain.getPO();
+
+                JSONArray mainDataArr = new JSONArray();
+
+                jsonObject.put("requestId", Integer.valueOf(FlOrderFormTableMain.getRequestid()));
+
+                JSONObject mainData1 = new JSONObject();
+                mainData1.put("fieldName","ddsfqx");
+                mainData1.put("fieldValue","1");
+
+                mainDataArr.add(mainData1);
+                jsonObject.put("mainData",mainDataArr);
+
+                log.info(jsonObject.toJSONString());
+
+                DmsUtil.testRegist(dmsConfig.getIp());
+                DmsUtil.testGetoken(dmsConfig.getIp());
+                DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());
+            }
         }
         return "success";
     }
@@ -1008,7 +1037,7 @@ public class CallBackController {
         String status = dto.getStatus();
 
 
-        if("done".equals(status)){
+        /*if("done".equals(status)){
 
             QueryWrapper<FlSetTableMain> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("lcbh",title);
@@ -1039,6 +1068,24 @@ public class CallBackController {
 
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("requestId",requestId);
+
+
+                JSONArray mainDataArr = new JSONArray();
+                JSONObject mainData1 = new JSONObject();
+
+                LocalDate today = LocalDate.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String todayString = today.format(formatter);
+
+
+                mainData1.put("fieldName","sjwcsj");
+                mainData1.put("fieldValue",todayString);
+
+                mainDataArr.add(mainData1);
+
+                jsonObject.put("mainData",mainDataArr);
+
+
                 JSONArray workflowRequestTableRecordsArr = new JSONArray();
                 JSONArray detailDataArr = new JSONArray();
                 JSONObject detailData = new JSONObject();
@@ -1078,7 +1125,7 @@ public class CallBackController {
                 DmsUtil.testGetoken(dmsConfig.getIp());
                 DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());
             }
-        }
+        }*/
         return "success";
     }
 
