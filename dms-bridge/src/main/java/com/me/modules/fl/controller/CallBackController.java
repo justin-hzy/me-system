@@ -1028,7 +1028,7 @@ public class CallBackController {
         return "success";
     }
 
-    /*组套拆卸订单-回传接口*/
+    /*组装拆卸订单-回传接口*/
     @PostMapping("getSetDismantleCB")
     public String getSetDismantleCB(@RequestBody GetProcessCBDto dto){
 
@@ -1037,7 +1037,7 @@ public class CallBackController {
         String status = dto.getStatus();
 
 
-        /*if("done".equals(status)){
+        if("done".equals(status)){
 
             QueryWrapper<FlSetTableMain> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("lcbh",title);
@@ -1125,7 +1125,7 @@ public class CallBackController {
                 DmsUtil.testGetoken(dmsConfig.getIp());
                 DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());
             }
-        }*/
+        }
         return "success";
     }
 
