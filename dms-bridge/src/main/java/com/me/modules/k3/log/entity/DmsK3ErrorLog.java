@@ -1,8 +1,10 @@
 package com.me.modules.k3.log.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+@TableName("dms_k3_error_log")
 @Data
 public class DmsK3ErrorLog {
 
