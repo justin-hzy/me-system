@@ -256,6 +256,7 @@ public class JsonServiceImpl implements JsonService {
         salInJson.setIsDeleteEntry("True");
         salInJson.setSubSystemId("0");
         salInJson.setIsVerifyBaseDataField("true");
+        salInJson.setIsAutoAdjustField("true");
         //测试用false
         salInJson.setIsAutoSubmitAndAudit("true");
         salInJson.setInterationFlags("STK_InvCheckDetailMessage");
@@ -575,6 +576,7 @@ public class JsonServiceImpl implements JsonService {
         retPurJson.setIsAutoSubmitAndAudit("true");
         retPurJson.setIsEntryBatchFill("True");
         retPurJson.setInterationFlags("STK_InvCheckDetailMessage");
+        retPurJson.setIsAutoAdjustField("true");
 
         RePurModelJson rePurModelJson = new RePurModelJson();
 

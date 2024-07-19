@@ -24,5 +24,7 @@ public class SalInJson {
 
     private String InterationFlags;
 
+    private String IsAutoAdjustField;
+
     private SalInModelJson Model;
 }

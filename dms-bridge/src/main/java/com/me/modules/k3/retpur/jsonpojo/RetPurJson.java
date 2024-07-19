@@ -26,5 +26,7 @@ public class RetPurJson {
 
     private String InterationFlags;
 
+    private String IsAutoAdjustField;
+
     private RePurModelJson model;
 }
