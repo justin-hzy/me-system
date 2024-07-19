@@ -12,7 +12,7 @@ public interface TranService {
 
     String tranSaleOrder(PutSaleReqDto dto) throws Exception;
 
-    void tranSaleReOrder(PutReSaleReqDto dto) throws Exception;
+    String tranSaleReOrder(PutReSaleReqDto dto) throws Exception;
 
     String tranPurchase(PutPurReqDto dto) throws Exception;
 

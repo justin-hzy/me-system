@@ -107,7 +107,7 @@ public class TranServiceImpl implements TranService {
 
 
     @Override
-    public void tranSaleReOrder(PutReSaleReqDto dto) throws Exception {
+    public String tranSaleReOrder(PutReSaleReqDto dto) throws Exception {
 
         String param = jsonService.getSaveReSalJsons(dto);
 
@@ -136,9 +136,18 @@ public class TranServiceImpl implements TranService {
         RepoRet repoRet = gson.fromJson(resultJson, RepoRet.class);
         if (repoRet.getResult().getResponseStatus().isIsSuccess()) {
             System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
+            String result = gson.toJson(repoRet.getResult());
+            JSONObject resJson = new JSONObject();
             log.info("同步成功");
+            log.info("result="+result);
+            resJson.put("code",200);
+            return resJson.toJSONString();
         } else {
-            Assert.fail("接口返回结果: " + gson.toJson(repoRet.getResult().getResponseStatus()));
+            log.info("接口返回结果: " + gson.toJson(repoRet.getResult().getResponseStatus()));
+            JSONObject resJson = new JSONObject();
+            resJson.put("code",500);
+            saveErrorLog(repoRet.getResult().getResponseStatus().getErrors(),dto.getFbillno());
+            return resJson.toJSONString();
         }
     }
 

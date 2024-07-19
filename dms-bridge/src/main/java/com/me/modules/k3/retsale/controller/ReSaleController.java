@@ -17,7 +17,7 @@ public class ReSaleController {
 
     @PostMapping("putReSale")
     public String putReSale(@RequestBody PutReSaleReqDto dto) throws Exception {
-        tranService.tranSaleReOrder(dto);
-        return "success";
+        String resJsonStr = tranService.tranSaleReOrder(dto);
+        return resJsonStr;
     }
 }
