@@ -1051,6 +1051,7 @@ public class CallBackController {
 
                 Map<String,Integer> resMap = new HashMap<>();
 
+                //汇总回传数据
                 for(ProcessItem item : items){
                     String sku = item.getSku();
                     Integer receivedPcs = item.getReceived_pcs();
