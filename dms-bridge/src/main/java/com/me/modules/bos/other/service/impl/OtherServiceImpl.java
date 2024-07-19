@@ -307,13 +307,10 @@ public class OtherServiceImpl implements OtherService {
     @Override
     public JSONObject postSetFr(PostOtherInDto reqDto){
 
-        String sku = reqDto.getSku();
+
         String description = reqDto.getDescription();
         String billDate = reqDto.getBillDate();
         String cStoreName = reqDto.getCstore();
-        String qty = reqDto.getQty();
-
-
 
         String appSecret = bosConfig.getAppSecret();
         String sipAppKey = bosConfig.getSipAppKey();
@@ -346,13 +343,14 @@ public class OtherServiceImpl implements OtherService {
 
         JSONArray addList = new JSONArray();
 
+        for (SubOther subOther : reqDto.getSubOthers()){
+            JSONObject addListElem = new JSONObject();
 
-        JSONObject addListElem = new JSONObject();
+            addListElem.put("QTY",subOther.getQty());
+            addListElem.put("M_PRODUCT_ID__NAME",subOther.getSku());
 
-        addListElem.put("QTY",qty);
-        addListElem.put("M_PRODUCT_ID__NAME",sku);
-
-        addList.add(addListElem);
+            addList.add(addListElem);
+        }
 
         refobjsElem.put("addList",addList);
         refobjsElem.put("table",12984);
@@ -477,13 +475,18 @@ public class OtherServiceImpl implements OtherService {
 
         JSONArray addList = new JSONArray();
 
+        List<SubOther> subOthers = reqDto.getSubOthers();
+        for (SubOther subOther : subOthers){
 
-        JSONObject addListElem = new JSONObject();
+            JSONObject addListElem = new JSONObject();
 
-        addListElem.put("QTY",qty);
-        addListElem.put("M_PRODUCT_ID__NAME",sku);
+            addListElem.put("QTY",subOther.getQty());
+            addListElem.put("M_PRODUCT_ID__NAME",subOther.getSku());
 
-        addList.add(addListElem);
+            addList.add(addListElem);
+        }
+
+
 
         refobjsElem.put("addList",addList);
         refobjsElem.put("table",12984);
