@@ -741,13 +741,17 @@ public class OtherServiceImpl implements OtherService {
 
         JSONArray addList = new JSONArray();
 
+        List<SubOther> subOthers = reqDto.getSubOthers();
 
-        JSONObject addListElem = new JSONObject();
+        for (SubOther subOther : subOthers){
+            JSONObject addListElem = new JSONObject();
 
-        addListElem.put("QTY",qty);
-        addListElem.put("M_PRODUCT_ID__NAME",sku);
+            addListElem.put("QTY",subOther.getQty());
+            addListElem.put("M_PRODUCT_ID__NAME",subOther.getSku());
 
-        addList.add(addListElem);
+            addList.add(addListElem);
+        }
+
 
         refobjsElem.put("addList",addList);
         refobjsElem.put("table",12984);

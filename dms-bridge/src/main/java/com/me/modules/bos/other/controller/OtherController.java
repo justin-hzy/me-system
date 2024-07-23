@@ -262,53 +262,53 @@ public class OtherController {
         bosOtherLogService.save(bosOtherLog);
         return retJson;
     }
-//
-//    @PostMapping("postDismantleFr")
-//    public JSONObject postDismantleFr(@RequestBody PostOtherOutDto reqDto){
-//        log.info("reqDto="+reqDto);
-//        log.info("执行 postDismantleFr----------------requestId="+reqDto.getRequestId());
-//        JSONObject retJson = otherService.postDismantleFr(reqDto);
-//
-//        String code = retJson.getString("code");
-//        BosOtherLog bosOtherLog = new BosOtherLog();
-//        if("500".equals(code)){
-//            bosOtherLog.setRequestId(reqDto.getRequestId());
-//            JSONObject param = new JSONObject();
-//            param.put("sku",reqDto.getSku());
-//            param.put("qty",reqDto.getQty());
-//            param.put("description",reqDto.getDescription());
-//            param.put("billDate",reqDto.getBillDate());
-//            param.put("cstore",reqDto.getCstore());
-//
-//            bosOtherLog.setParam(param.toJSONString());
-//
-//            LocalDate today = LocalDate.now();
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//            String todayString = today.format(formatter);
-//            bosOtherLog.setCreateTime(todayString);
-//            bosOtherLog.setStatus("0");
-//            bosOtherLog.setIs_delete("0");
-//        }else if("200".equals(code)){
-//            bosOtherLog.setRequestId(reqDto.getRequestId());
-//            JSONObject param = new JSONObject();
-//            param.put("sku",reqDto.getSku());
-//            param.put("qty",reqDto.getQty());
-//            param.put("description",reqDto.getDescription());
-//            param.put("billDate",reqDto.getBillDate());
-//            param.put("cstore",reqDto.getCstore());
-//
-//            bosOtherLog.setParam(param.toJSONString());
-//
-//            LocalDate today = LocalDate.now();
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//            String todayString = today.format(formatter);
-//            bosOtherLog.setCreateTime(todayString);
-//            bosOtherLog.setStatus("1");
-//            bosOtherLog.setIs_delete("0");
-//        }
-//        bosOtherLogService.save(bosOtherLog);
-//        return retJson;
-//    }
+
+    @PostMapping("postDismantleFr")
+    public JSONObject postDismantleFr(@RequestBody PostOtherOutDto reqDto){
+        log.info("reqDto="+reqDto);
+        log.info("执行 postDismantleFr----------------requestId="+reqDto.getRequestId());
+        JSONObject retJson = otherService.postDismantleFr(reqDto);
+
+        String code = retJson.getString("code");
+        BosOtherLog bosOtherLog = new BosOtherLog();
+        if("500".equals(code)){
+            bosOtherLog.setRequestId(reqDto.getRequestId());
+            JSONObject param = new JSONObject();
+            param.put("sku",reqDto.getSku());
+            param.put("qty",reqDto.getQty());
+            param.put("description",reqDto.getDescription());
+            param.put("billDate",reqDto.getBillDate());
+            param.put("cstore",reqDto.getCstore());
+
+            bosOtherLog.setParam(param.toJSONString());
+
+            LocalDate today = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String todayString = today.format(formatter);
+            bosOtherLog.setCreateTime(todayString);
+            bosOtherLog.setStatus("0");
+            bosOtherLog.setIs_delete("0");
+        }else if("200".equals(code)){
+            bosOtherLog.setRequestId(reqDto.getRequestId());
+            JSONObject param = new JSONObject();
+            param.put("sku",reqDto.getSku());
+            param.put("qty",reqDto.getQty());
+            param.put("description",reqDto.getDescription());
+            param.put("billDate",reqDto.getBillDate());
+            param.put("cstore",reqDto.getCstore());
+
+            bosOtherLog.setParam(param.toJSONString());
+
+            LocalDate today = LocalDate.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String todayString = today.format(formatter);
+            bosOtherLog.setCreateTime(todayString);
+            bosOtherLog.setStatus("1");
+            bosOtherLog.setIs_delete("0");
+        }
+        bosOtherLogService.save(bosOtherLog);
+        return retJson;
+    }
 //
 //    @PostMapping("postTransCodeFr")
 //    public JSONObject postTransCodeFr(@RequestBody PostOtherOutDto reqDto){
