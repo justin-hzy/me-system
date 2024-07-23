@@ -506,9 +506,75 @@ public class CallBackController {
                 DmsUtil.testRegist(dmsConfig.getIp());
                 DmsUtil.testGetoken(dmsConfig.getIp());
                 DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());
-
             }else {
                 log.info("销售退货回传-数据错误");
+            }
+        }else if("canceled".equals(status)) {
+            log.info("取消dms单据，单据编号:"+title);
+            QueryWrapper<FlReOrderSubMain> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("lcbh",title);
+
+            FlReOrderSubMain flReOrderSubMain = flReOrderSubMainService.getOne(queryWrapper);
+
+            if(flReOrderSubMain != null){
+                Integer requestId = flReOrderSubMain.getRequestid();
+                log.info("requestId="+requestId);
+
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("requestId",requestId);
+
+                JSONArray workflowRequestTableRecordsArr = new JSONArray();
+
+                JSONArray detailDataArr = new JSONArray();
+                JSONObject detailData = new JSONObject();
+
+                List<ReturnOrderItem> items = dto.getItems();
+
+                for (ReturnOrderItem item : items){
+                    Integer recordOrder = 0;
+                    JSONArray workflowRequestTableFieldsArr = new JSONArray();
+
+                    JSONObject workflowRequestTableRecords = new JSONObject();
+                    String sku = item.getSku();
+
+                    JSONObject workflowRequestTableFields1 = new JSONObject();
+                    workflowRequestTableFields1.put("fieldName","hptxm");
+                    workflowRequestTableFields1.put("fieldValue",sku);
+
+                    JSONObject workflowRequestTableFields2 = new JSONObject();
+                    workflowRequestTableFields2.put("fieldName","rksl");
+                    workflowRequestTableFields2.put("fieldValue",0);
+
+                    //获取当时日期
+                    LocalDate today = LocalDate.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                    String todayString = today.format(formatter);
+                    JSONObject workflowRequestTableFields3 = new JSONObject();
+                    workflowRequestTableFields3.put("fieldName","rkrq");
+                    workflowRequestTableFields3.put("fieldValue",todayString);
+
+                    workflowRequestTableFieldsArr.add(workflowRequestTableFields1);
+                    workflowRequestTableFieldsArr.add(workflowRequestTableFields2);
+                    workflowRequestTableFieldsArr.add(workflowRequestTableFields3);
+
+                    workflowRequestTableRecords.put("workflowRequestTableFields",workflowRequestTableFieldsArr);
+                    workflowRequestTableRecords.put("recordOrder",recordOrder);
+
+                    workflowRequestTableRecordsArr.add(workflowRequestTableRecords);
+                }
+
+                detailData.put("workflowRequestTableRecords",workflowRequestTableRecordsArr);
+                detailData.put("tableDBName",dmsConfig.getNewReturnOrderDetailTable2());
+
+                detailDataArr.add(detailData);
+
+                jsonObject.put("detailData",detailDataArr);
+
+                log.info(jsonObject.toJSONString());
+
+                DmsUtil.testRegist(dmsConfig.getIp());
+                DmsUtil.testGetoken(dmsConfig.getIp());
+                DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());
             }
 
         }else {
