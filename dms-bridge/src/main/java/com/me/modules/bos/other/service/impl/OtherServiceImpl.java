@@ -873,13 +873,16 @@ public class OtherServiceImpl implements OtherService {
 
         JSONArray addList = new JSONArray();
 
+        List<SubOther> subOthers = reqDto.getSubOthers();
 
-        JSONObject addListElem = new JSONObject();
+        for (SubOther subOther : subOthers){
+            JSONObject addListElem = new JSONObject();
 
-        addListElem.put("QTY",qty);
-        addListElem.put("M_PRODUCT_ID__NAME",sku);
+            addListElem.put("QTY",subOther.getQty());
+            addListElem.put("M_PRODUCT_ID__NAME",subOther.getSku());
 
-        addList.add(addListElem);
+            addList.add(addListElem);
+        }
 
         refobjsElem.put("addList",addList);
         refobjsElem.put("table",12984);
@@ -1002,12 +1005,17 @@ public class OtherServiceImpl implements OtherService {
         JSONArray addList = new JSONArray();
 
 
-        JSONObject addListElem = new JSONObject();
+        List<SubOther> subOthers = reqDto.getSubOthers();
 
-        addListElem.put("QTY",qty);
-        addListElem.put("M_PRODUCT_ID__NAME",sku);
+        for (SubOther subOther : subOthers){
+            JSONObject addListElem = new JSONObject();
 
-        addList.add(addListElem);
+            addListElem.put("QTY",subOther.getQty());
+            addListElem.put("M_PRODUCT_ID__NAME",subOther.getSku());
+
+            addList.add(addListElem);
+        }
+
 
         refobjsElem.put("addList",addList);
         refobjsElem.put("table",12984);
