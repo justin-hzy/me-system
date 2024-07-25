@@ -33,6 +33,8 @@ public class AssyJson {
 
     private String ValidateRepeatJson;
 
+    private String IsAutoSubmitAndAudit;
+
     private AssyModelJson Model;
 
 

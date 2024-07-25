@@ -18,8 +18,6 @@ public class AssemblyController {
     @PostMapping("putAssembly")
     public String putAssembly(@RequestBody PutAssemblyDto dto) throws Exception {
 
-        tranService.tranAssembly(dto);
-
-        return "success";
+        return tranService.tranAssembly(dto);
     }
 }

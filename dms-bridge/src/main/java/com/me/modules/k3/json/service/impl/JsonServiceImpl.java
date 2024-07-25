@@ -731,9 +731,10 @@ public class JsonServiceImpl implements JsonService {
         assyJson.setIsEntryBatchFill("true");
         assyJson.setValidateFlag("true");
         assyJson.setNumberSearch("true");
-        assyJson.setIsAutoAdjustField("false");
+        assyJson.setIsAutoAdjustField("true");
         assyJson.setInterationFlags("");
         assyJson.setInterationFlags("");
+        assyJson.setIsAutoSubmitAndAudit("true");
         assyJson.setIsControlPrecision("false");
         assyJson.setValidateRepeatJson("false");
 
