@@ -401,186 +401,40 @@ public class OrderSendTest {
     public void transCodeSend(){
         log.info("转码单-请求发送开始!");
 
-        QueryWrapper<FlTransCodeReqLog> queryFrWrapper = new QueryWrapper<>();
-        queryFrWrapper.eq("fr_status","0");
-        queryFrWrapper.isNotNull("fr_params").isNull("son_params");
+        QueryWrapper<FlTransCodeReqLog> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("status","0");
 
+        List<FlTransCodeReqLog> logs = flTransCodeReqLogService.list(queryWrapper);
 
-        List<FlTransCodeReqLog> frReqLogs = flTransCodeReqLogService.list(queryFrWrapper);
+        for (FlTransCodeReqLog reqLog : logs){
+            String requestId = reqLog.getRequestId();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String apiId = reqLog.getApiId();
 
-        String str = dateFormat.format(new Date()).toString();
+            String params = reqLog.getParams();
+            JSONObject apiRes = fuLunHttpService.doAction(apiId,params);
 
-        for(FlTransCodeReqLog frReqLog : frReqLogs){
+            //处理加工单入库返回信息
+            String code = apiRes.getString("code");
 
-            String requestId = frReqLog.getRequestId();
-            String apiId = frReqLog.getApiId();
-            String frParams = frReqLog.getFrParams();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String timeStr = dateFormat.format(new Date()).toString();
+            if("0".equals(code)){
 
-
-
-            JSONObject frParamsJson = JSONObject.parseObject(frParams);
-            JSONArray products = frParamsJson.getJSONArray("products");
-
-            String note = frParamsJson.getString("note");
-
-            for(int i =0;i<products.size();i++){
-                JSONObject productJson = products.getJSONObject(i);
-
-                String productNote = productJson.getString("note");
-
-                note = ",明细备注"+productNote;
-            }
-            frParamsJson.put("note",note);
-
-            frParams = frParamsJson.toJSONString();
-
-            log.info("开始调用apiId为" + apiId + "的父件参数：" + frParams);
-            log.info("转码单-发送父项单据");
-            JSONObject apiSonRes = fuLunHttpService.doAction(apiId,frParams);
-
-            //处理父件出库返回信息
-            String frCode = apiSonRes.getString("code");
-
-            if("0".equals(frCode)){
-                UpdateWrapper<FlTransCodeReqLog> frUpdateWrapper = new UpdateWrapper<>();
-                frUpdateWrapper.eq("requestId",requestId);
-                //status  0: 未请求  1:请求成功 2:请求失败 3: 三次执行失败，需要人工干预 (组装拆卸/转码 4:提交流程 5:提交流程失败)
-                frUpdateWrapper.set("fr_status","1");
-                frUpdateWrapper.isNotNull("fr_params").isNull("son_params");
-                frUpdateWrapper.set("fr_message","转码父项订单执行成功");
-                frUpdateWrapper.set("updateTime",str);
-
-                flTransCodeReqLogService.update(frUpdateWrapper);
-                log.info("组套子件订单执行成功!");
-            }else {
-
-
-                String message = apiSonRes.getString(("message"));
-                UpdateWrapper<FlTransCodeReqLog> updateWrapper = new UpdateWrapper<>();
+                UpdateWrapper<FlSetDismantleReqLog> updateWrapper = new UpdateWrapper<>();
                 updateWrapper.eq("requestId",requestId);
                 //status  0: 未请求  1:请求成功 2:请求失败 3: 三次执行失败，需要人工干预 (组装拆卸/转码 4:提交流程 5:提交流程失败)
-                updateWrapper.set("fr_status","3");
-                updateWrapper.isNotNull("fr_params").isNull("son_params");
-                updateWrapper.set("fr_message",message);
+                updateWrapper.set("status","1");
+                updateWrapper.set("message","执行成功");
+                updateWrapper.set("updateTime",timeStr);
 
-                /*Integer frFailCount = frReqLog.getFrFailCount();
+                flSetDismantleReqLogService.update(updateWrapper);
 
-                if(frFailCount == null){
-                    frFailCount = 1;
-                }{
-                    frFailCount = frFailCount + 1;
-                }
-
-                if(frFailCount==3){
-                    String message = apiSonRes.getString(("message"));
-                    UpdateWrapper<FlTransCodeReqLog> updateWrapper = new UpdateWrapper<>();
-                    updateWrapper.eq("requestId",requestId);
-                    //status  0: 未请求  1:请求成功 2:请求失败 3: 三次执行失败，需要人工干预 (组装拆卸/转码 4:提交流程 5:提交流程失败)
-                    updateWrapper.set("fr_status","3");
-                    updateWrapper.set("fr_message",message);
-                    updateWrapper.set("fr_fail_count",frFailCount);
-
-
-                    updateWrapper.set("updateTime",str);
-
-                    flTransCodeReqLogService.update(updateWrapper);
-                }
-                if(frFailCount<3){
-                    String message = apiSonRes.getString(("message"));
-                    UpdateWrapper<FlTransCodeReqLog> updateWrapper = new UpdateWrapper<>();
-                    updateWrapper.eq("requestId",requestId);
-                    //status  0: 未请求  1:请求成功 2:请求失败 3: 三次执行失败，需要人工干预 (组装拆卸/转码 4:提交流程 5:提交流程失败)
-                    updateWrapper.set("fr_status","2");
-                    updateWrapper.set("fr_message",message);
-                    updateWrapper.set("fr_fail_count",frFailCount);
-
-
-                    updateWrapper.set("updateTime",str);
-
-                    flTransCodeReqLogService.update(updateWrapper);
-                }*/
+                log.info("执行成功!");
             }
         }
 
-        //处理，子项进仓单
 
-        QueryWrapper<FlTransCodeReqLog> querySonWrapper = new QueryWrapper<>();
-        querySonWrapper.eq("son_status","0");
-        querySonWrapper.isNotNull("son_params").isNull("fr_params");
-        List<FlTransCodeReqLog> flTransCodeReqLogs = flTransCodeReqLogService.list(querySonWrapper);
-
-        //log.info("flTransCodeReqLogs="+flTransCodeReqLogs.toString());
-
-        for (FlTransCodeReqLog sonReqLog : flTransCodeReqLogs){
-            String requestId = sonReqLog.getRequestId();
-            String apiId = sonReqLog.getApiId();
-            String sonParams = sonReqLog.getSonParams();
-
-            log.info("开始调用apiId为" + apiId + "的子件参数：" + sonParams);
-            log.info("转码单-发送子项单据");
-
-            JSONObject apiSonRes = fuLunHttpService.doAction(apiId,sonParams);
-
-            String sonCode = apiSonRes.getString("code");
-
-            if ("0".equals(sonCode)){
-
-                UpdateWrapper<FlTransCodeReqLog> updateWrapper = new UpdateWrapper<>();
-                updateWrapper.eq("requestId",requestId);
-                //status  0: 未请求  1:请求成功 2:请求失败 3: 三次执行失败，需要人工干预 (组装拆卸/转码 4:提交流程 5:提交流程失败)
-                updateWrapper.set("son_status","1");
-                updateWrapper.isNotNull("son_params").isNull("fr_params");
-                updateWrapper.set("son_message","拆卸子件订单执行成功");
-                updateWrapper.set("updateTime",str);
-
-                flTransCodeReqLogService.update(updateWrapper);
-                log.info("子件入库单执行成功!");
-            }else {
-
-                String message = apiSonRes.getString(("message"));
-                UpdateWrapper<FlTransCodeReqLog> updateWrapper = new UpdateWrapper<>();
-                updateWrapper.eq("requestId",requestId);
-                //status  0: 未请求  1:请求成功 2:请求失败 3: 三次执行失败，需要人工干预 (组装拆卸/转码 4:提交流程 5:提交流程失败)
-                updateWrapper.set("son_status","3");
-                updateWrapper.isNotNull("son_params").isNull("fr_params");
-                updateWrapper.set("son_message",message);
-                updateWrapper.set("updateTime",updateWrapper.set("updateTime",str));
-                flTransCodeReqLogService.update(updateWrapper);
-
-                /*Integer sonFailCount = sonReqLog.getSonFailCount();
-                if(sonFailCount == null){
-                    sonFailCount = 1;
-                }{
-                    sonFailCount = sonFailCount + 1;
-                }
-
-                if(sonFailCount==3){
-                    String message = apiSonRes.getString(("message"));
-                    UpdateWrapper<FlTransCodeReqLog> updateWrapper = new UpdateWrapper<>();
-                    updateWrapper.eq("requestId",requestId);
-                    //status  0: 未请求  1:请求成功 2:请求失败 3: 三次执行失败，需要人工干预 (组装拆卸/转码 4:提交流程 5:提交流程失败)
-                    updateWrapper.set("son_status","3");
-                    updateWrapper.set("son_message",message);
-                    updateWrapper.set("son_fail_count",sonFailCount);
-                    updateWrapper.set("updateTime",str);
-                    flTransCodeReqLogService.update(updateWrapper);
-                }
-
-                if(sonFailCount<3){
-                    String message = apiSonRes.getString(("message"));
-                    UpdateWrapper<FlTransCodeReqLog> updateWrapper = new UpdateWrapper<>();
-                    updateWrapper.eq("requestId",requestId);
-                    //status  0: 未请求  1:请求成功 2:请求失败 3: 三次执行失败，需要人工干预 (组装拆卸/转码 4:提交流程 5:提交流程失败)
-                    updateWrapper.set("son_status","2");
-                    updateWrapper.set("son_message",message);
-                    updateWrapper.set("son_fail_count",sonFailCount);
-                    updateWrapper.set("updateTime",updateWrapper.set("updateTime",str));
-                    flTransCodeReqLogService.update(updateWrapper);
-                }*/
-            }
-        }
     }
 
 
