@@ -14,41 +14,20 @@ public class FlTransCodeReqLog {
     @TableField("apiId")
     private String apiId;
 
-    @TableField("son_params")
-    private String sonParams;
+    @TableField("params")
+    private String params;
 
-    @TableField("fr_params")
-    private String frParams;
+    @TableField("message")
+    private String message;
 
-    @TableField("son_ret_params")
-    private String sonRetParams;
+    @TableField("error")
+    private String error;
 
-    @TableField("fr_ret_params")
-    private String frRetParams;
+    @TableField("status")
+    private String status;
 
-    @TableField("fr_message")
-    private String frMessage;
-
-    @TableField("son_message")
-    private String sonMessage;
-
-    @TableField("fr_error")
-    private String frerror;
-
-    @TableField("son_error")
-    private String sonError;
-
-    @TableField("fr_status")
-    private String frStatus;
-
-    @TableField("son_status")
-    private String sonStatus;
-
-    @TableField("fr_fail_count")
-    private Integer frFailCount;
-
-    @TableField("son_fail_count")
-    private Integer sonFailCount;
+    @TableField("fail_count")
+    private Integer failCount;
 
     @TableField("createTime")
     private String createTime;
