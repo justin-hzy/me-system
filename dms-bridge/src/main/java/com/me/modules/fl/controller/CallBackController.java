@@ -1102,7 +1102,6 @@ public class CallBackController {
 
         String status = dto.getStatus();
 
-
         if("done".equals(status)){
 
             QueryWrapper<FlSetTableMain> queryWrapper = new QueryWrapper<>();
@@ -1197,6 +1196,88 @@ public class CallBackController {
     }
 
 
+    /*转码订单-回传接口*/
+    @PostMapping("getTransCodeCB")
+    public String getTransCodeCB(@RequestBody GetProcessCBDto dto){
+
+        String title = dto.getTitle();
+
+        String status = dto.getStatus();
+
+        if("done".equals(status)){
+            QueryWrapper<FlTransCodeMain> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("lcbh",title);
+            FlTransCodeMain flTransCodeMain = flTransCodeMainService.getOne(queryWrapper);
+
+            if (flTransCodeMain != null){
+                String requestId = flTransCodeMain.getRequestid();
+                log.info("requestId="+requestId);
+
+                List<ProcessItem> items = dto.getItems();
+
+                Map<String,Integer> resMap = new HashMap<>();
+
+                //汇总回传数据
+                for(ProcessItem item : items){
+                    String sku = item.getSku();
+                    Integer receivedPcs = item.getReceived_pcs();
+
+                    if(resMap.containsKey(sku)){
+                        Integer currentReceive = resMap.get(sku);
+
+                        currentReceive = currentReceive + receivedPcs;
+
+                        resMap.put(sku,currentReceive);
+                    }else {
+                        resMap.put(sku,receivedPcs);
+                    }
+                }
+
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("requestId",requestId);
+
+                JSONArray workflowRequestTableRecordsArr = new JSONArray();
+                JSONArray detailDataArr = new JSONArray();
+                JSONObject detailData = new JSONObject();
+
+                for (String sku : resMap.keySet()){
+                    Integer receivedPcs = resMap.get(sku);
+
+                    JSONObject workflowRequestTableRecords0 = new JSONObject();
+                    JSONArray workflowRequestTableFieldsArr0 = new JSONArray();
+                    Integer recordOrder = 0;
+
+                    JSONObject workflowRequestTableFields0_1 = new JSONObject();
+
+                    workflowRequestTableFields0_1.put("fieldName","hpbhtw");
+                    workflowRequestTableFields0_1.put("fieldValue",sku);
+
+                    JSONObject workflowRequestTableFields0_2 = new JSONObject();
+                    workflowRequestTableFields0_2.put("fieldName","fhcrksl");
+                    workflowRequestTableFields0_2.put("fieldValue",receivedPcs);
+
+                    workflowRequestTableFieldsArr0.add(workflowRequestTableFields0_1);
+                    workflowRequestTableFieldsArr0.add(workflowRequestTableFields0_2);
+
+                    workflowRequestTableRecords0.put("workflowRequestTableFields",workflowRequestTableFieldsArr0);
+                    workflowRequestTableRecords0.put("recordOrder",recordOrder);
+
+                    workflowRequestTableRecordsArr.add(workflowRequestTableRecords0);
+                }
+                detailData.put("workflowRequestTableRecords",workflowRequestTableRecordsArr);
+                detailData.put("tableDBName",dmsConfig.getTranCodeDtlTable2());
+                detailDataArr.add(detailData);
+
+                jsonObject.put("detailData",detailDataArr);
+                log.info(jsonObject.toJSONString());
+
+                DmsUtil.testRegist(dmsConfig.getIp());
+                DmsUtil.testGetoken(dmsConfig.getIp());
+                DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());
+            }
+        }
+        return "success";
+    }
 
 
 
