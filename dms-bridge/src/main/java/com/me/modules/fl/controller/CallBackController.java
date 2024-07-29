@@ -1236,6 +1236,22 @@ public class CallBackController {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("requestId",requestId);
 
+
+                JSONArray mainDataArr = new JSONArray();
+                JSONObject mainData1 = new JSONObject();
+
+                LocalDate today = LocalDate.now();
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                String todayString = today.format(formatter);
+
+
+                mainData1.put("fieldName","rkrq");
+                mainData1.put("fieldValue",todayString);
+
+                mainDataArr.add(mainData1);
+
+                jsonObject.put("mainData",mainDataArr);
+
                 JSONArray workflowRequestTableRecordsArr = new JSONArray();
                 JSONArray detailDataArr = new JSONArray();
                 JSONObject detailData = new JSONObject();
