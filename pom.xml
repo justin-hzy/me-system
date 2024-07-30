@@ -16,6 +16,7 @@
         <module>b2c-bridge</module>
         <module>dms-bridge</module>
         <module>dms-data-job</module>
+        <module>nascent-bridge</module>
     </modules>
     <groupId>com.me</groupId>
     <artifactId>me-system</artifactId>
