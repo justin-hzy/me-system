@@ -8,9 +8,9 @@ spring:
     name: dmsBridge
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://39.108.125.165:33306/ecology?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
-    username: ecology
-    password: ecology123
+    url: jdbc:mysql://39.108.173.42:3306/ME_member?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
+    username: root
+    password: nascent@ecrp
 
 # ====================Log4j2=========================
 logging:
@@ -45,3 +45,10 @@ mybatis-plus:
     jdbc-type-for-null: 'null'
     #需要测试SQL时再打开
     log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
+
+
+nascent:
+  serverUrl: https://sandbox-open.vecrp.com
+  appKey: NS81000091115
+  appSerect: 8C0E680049958ED52EC856BDADBCD829
+  groupID: 81000091

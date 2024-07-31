@@ -1,0 +1,21 @@
+package com.me.nascent.common.config;
+
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+@Data
+@Configuration
+public class NascentConfig {
+
+    @Value("${nascent.serverUrl}")
+    private String serverUrl;
+
+    @Value("${nascent.appKey}")
+    private String appKey;
+
+    @Value("${nascent.appSerect}")
+    private String appSerect;
+
+    @Value("${nascent.groupID}")
+    private Long groupID;
+}
