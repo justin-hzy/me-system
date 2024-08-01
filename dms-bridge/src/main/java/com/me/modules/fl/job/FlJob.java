@@ -19,7 +19,6 @@ import java.util.Date;
 import java.util.List;
 
 @Configuration
-@EnableScheduling
 @Slf4j
 @AllArgsConstructor
 public class FlJob {
