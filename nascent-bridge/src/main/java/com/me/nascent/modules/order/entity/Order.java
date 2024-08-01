@@ -11,8 +11,11 @@ import java.util.Date;
 @TableName("nascent_order")
 public class Order {
 
-    @TableField("sysTradeId")
-    private Long sysTradeId;
+    @TableField("mainid")
+    private Long mainid;
+
+    @TableField("skuOuterId")
+    private String skuOuterId;
 
     @TableField("outOrderId")
     private String outOrderId;
@@ -23,29 +26,23 @@ public class Order {
     @TableField("shopId")
     private Long shopId;
 
-    @TableField("shopName")
-    private String shopName;
-
     @TableField("orderPrice")
     private String orderPrice;
 
     @TableField("orderNum")
-    private BigDecimal orderNum;
+    private Integer orderNum;
 
     @TableField("orderPayment")
-    private BigDecimal orderPayment;
+    private Integer orderPayment;
 
     @TableField("orderDivideFee")
-    private BigDecimal orderDivideFee;
+    private Integer orderDivideFee;
 
     @TableField("picPath")
     private String picPath;
 
     @TableField("skuId")
     private String skuId;
-
-    @TableField("skuOuterId")
-    private String skuOuterId;
 
     @TableField("skuProperties")
     private String skuProperties;
@@ -56,20 +53,20 @@ public class Order {
     @TableField("refundId")
     private String refundId;
 
-    @TableField("orderRefundStatus")
-    private String orderRefundStatus;
-
     @TableField("orderRefundNum")
-    private BigDecimal orderRefundNum;
+    private Integer orderRefundNum;
 
     @TableField("orderRefundFee")
-    private BigDecimal orderRefundFee;
+    private String orderRefundFee;
+
+    @TableField("orderRefundStatus")
+    private String orderRefundStatus;
 
     @TableField("orderShippingType")
     private String orderShippingType;
 
     @TableField("orderConsignTime")
-    private Date orderConsignTime;
+    private String orderConsignTime;
 
     @TableField("orderLogisticsCompany")
     private String orderLogisticsCompany;
@@ -87,37 +84,37 @@ public class Order {
     private Integer refundTimes;
 
     @TableField("goodsLibId")
-    private Long goodsLibId;
+    private Integer goodsLibId;
 
     @TableField("warehouseId")
-    private Long warehouseId;
+    private Integer warehouseId;
 
     @TableField("outerId")
     private String outerId;
 
     @TableField("orderDiscountFee")
-    private BigDecimal orderDiscountFee;
+    private Integer orderDiscountFee;
 
     @TableField("orderAdjustFee")
-    private BigDecimal orderAdjustFee;
+    private Integer orderAdjustFee;
 
     @TableField("orderTotalFee")
-    private BigDecimal orderTotalFee;
+    private Integer orderTotalFee;
 
     @TableField("orderPayTime")
-    private Date orderPayTime;
+    private String orderPayTime;
 
     @TableField("orderCreated")
-    private Date orderCreated;
+    private String orderCreated;
 
     @TableField("orderFrom")
     private String orderFrom;
 
     @TableField("orderExclusiveGuideId")
-    private Integer orderExclusiveGuideId;
+    private Long orderExclusiveGuideId;
 
     @TableField("orderHandleGuideId")
-    private Integer orderHandleGuideId;
+    private Long orderHandleGuideId;
 
     @TableField("orderExclusiveShopId")
     private Long orderExclusiveShopId;

@@ -13,17 +13,23 @@ public class Trade {
     @TableField("id")
     private Long id;
 
+    @TableField("availableConfirmFee")
+    private Integer availableConfirmFee;
+
+    @TableField("discountFee")
+    private Integer discountFee;
+
+    @TableField("receiverPhone")
+    private String receiverPhone;
+
+    @TableField("stepPaidFee")
+    private Integer stepPaidFee;
+
     @TableField("outTradeId")
     private String outTradeId;
 
     @TableField("sysTradeId")
     private Long sysTradeId;
-
-    @TableField("modifyTime")
-    private Date modifyTime;
-
-    @TableField("updateTime")
-    private Date updateTime;
 
     @TableField("platform")
     private Integer platform;
@@ -62,37 +68,43 @@ public class Trade {
     private String tradeType;
 
     @TableField("created")
-    private Date created;
+    private String created;
+
+    @TableField("modifyTime")
+    private String modifyTime;
+
+    @TableField("updateTime")
+    private String updateTime;
 
     @TableField("totalFee")
-    private BigDecimal totalFee;
+    private Integer totalFee;
 
     @TableField("num")
-    private BigDecimal num;
+    private Integer num;
 
     @TableField("payTime")
-    private Date payTime;
+    private String payTime;
 
     @TableField("payType")
     private Integer payType;
 
     @TableField("payment")
-    private BigDecimal payment;
-
-    @TableField("svPayment")
-    private BigDecimal svPayment;
+    private Integer payment;
 
     @TableField("postFee")
-    private BigDecimal postFee;
+    private Integer postFee;
 
     @TableField("adjustFee")
-    private BigDecimal adjustFee;
+    private Integer adjustFee;
+
+    @TableField("svPayment")
+    private Integer svPayment;
 
     @TableField("realPointFee")
-    private BigDecimal realPointFee;
+    private Integer realPointFee;
 
     @TableField("consignTime")
-    private Date consignTime;
+    private String consignTime;
 
     @TableField("outCompanyName")
     private String outCompanyName;
@@ -109,20 +121,14 @@ public class Trade {
     @TableField("receiverMobile")
     private String receiverMobile;
 
-    @TableField("receiverPhone")
-    private String receiverPhone;
-
-    @TableField("availableConfirmFee")
-    private BigDecimal availableConfirmFee;
-
-    @TableField("stepPaidFee")
-    private BigDecimal stepPaidFee;
-
     @TableField("receiverName")
     private String receiverName;
 
     @TableField("receiverProvince")
     private String receiverProvince;
+
+    @TableField("receiverZip")
+    private String receiverZip;
 
     @TableField("receiverCity")
     private String receiverCity;
@@ -132,9 +138,6 @@ public class Trade {
 
     @TableField("receiverAddress")
     private String receiverAddress;
-
-    @TableField("receiverZip")
-    private String receiverZip;
 
     @TableField("buyerMemo")
     private String buyerMemo;
@@ -148,6 +151,9 @@ public class Trade {
     @TableField("remarkSign")
     private Integer remarkSign;
 
+    @TableField("tradeMemo")
+    private String tradeMemo;
+
     @TableField("buyerRate")
     private Integer buyerRate;
 
@@ -155,51 +161,42 @@ public class Trade {
     private Integer isAllRefunding;
 
     @TableField("sgFinishGuideId")
-    private Integer sgFinishGuideId;
+    private Long sgFinishGuideId;
 
     @TableField("sgFinishShopId")
     private Long sgFinishShopId;
 
     @TableField("sgHandleGuideId")
-    private Integer sgHandleGuideId;
+    private Long sgHandleGuideId;
 
     @TableField("sgHandleShopId")
     private Long sgHandleShopId;
 
     @TableField("sgExclusiveGuideId")
-    private Integer sgExclusiveGuideId;
+    private Long sgExclusiveGuideId;
 
     @TableField("sgExclusiveShopId")
     private Long sgExclusiveShopId;
+
+    @TableField("orderPayTime")
+    private String orderPayTime;
 
     @TableField("sgShareShopId")
     private Long sgShareShopId;
 
     @TableField("sgShareGuideId")
-    private Integer sgShareGuideId;
+    private Long sgShareGuideId;
 
     @TableField("extJson")
     private String extJson;
 
-    @TableField("groupStatus")
-    private Integer groupStatus;
-
-    @TableField("groupEndTime")
-    private Date groupEndTime;
-
     @TableField("timeoutActionTime")
-    private Date timeoutActionTime;
+    private String timeoutActionTime;
 
     @TableField("endTime")
-    private Date endTime;
+    private String endTime;
 
     @TableField("ladingCode")
     private String ladingCode;
-
-    @TableField("discountFee")
-    private BigDecimal discountFee;
-
-    @TableField("tradeMemo")
-    private String tradeMemo;
 
 }

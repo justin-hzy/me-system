@@ -8,28 +8,52 @@ import lombok.Data;
 @TableName("nascent_promotion")
 public class Promotion {
 
-    @TableField("id")
-    private String id;
+    @TableField("mainid")
+    private Long mainid;
 
-    @TableField("promotionToolId")
-    private String promotionToolId;
+    @TableField("activityType")
+    private Integer activityType;
 
-    @TableField("promotionDetailId")
-    private String promotionDetailId;
+    @TableField("couponType")
+    private Integer couponType;
 
-    @TableField("sysTradeId")
-    private Long sysTradeId;
+    @TableField("discountFee")
+    private String discountFee;
 
-    @TableField("outTradeId")
-    private String outTradeId;
+    @TableField("giftItemId")
+    private String giftItemId;
 
-    @TableField("shopId")
-    private Long shopId;
+    @TableField("giftItemName")
+    private String giftItemName;
+
+    @TableField("giftItemNum")
+    private String giftItemNum;
 
     @TableField("outOrderId")
     private String outOrderId;
 
-    @TableField("discountFee")
-    private String discountFee;
+    @TableField("outTradeId")
+    private String outTradeId;
+
+    @TableField("promotionActivityId")
+    private String promotionActivityId;
+
+    @TableField("promotionDesc")
+    private String promotionDesc;
+
+    @TableField("promotionDetailId")
+    private String promotionDetailId;
+
+    @TableField("promotionName")
+    private String promotionName;
+
+    @TableField("promotionToolId")
+    private String promotionToolId;
+
+    @TableField("promotionType")
+    private Integer promotionType;
+
+    @TableField("shopId")
+    private Long shopId;
 
 }
