@@ -1,4 +1,4 @@
-package com.me.nascent.modules.member.mapper;
+package com.me.nascent.modules.order.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.me.nascent.modules.order.entity.Order;
