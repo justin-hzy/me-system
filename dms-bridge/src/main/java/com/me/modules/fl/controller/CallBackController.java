@@ -249,7 +249,7 @@ public class CallBackController {
                     e.printStackTrace();
                 }
             }
-        }else if("canceled".equals(status)){
+        }else if("canceled".equals(status) || "terminated".equals(status)){
             log.info("name="+name+"订单取消");
             //销售订单，富仑单方面取消，执行以下逻辑
             QueryWrapper<FlOrderFormTableMain> queryWrapper = new QueryWrapper<>();
@@ -509,7 +509,7 @@ public class CallBackController {
             }else {
                 log.info("销售退货回传-数据错误");
             }
-        }else if("canceled".equals(status)) {
+        }else if("canceled".equals(status) || "terminated".equals(status)) {
             log.info("取消dms单据，单据编号:"+title);
             QueryWrapper<FlReOrderSubMain> queryWrapper = new QueryWrapper<>();
             queryWrapper.eq("lcbh",title);
