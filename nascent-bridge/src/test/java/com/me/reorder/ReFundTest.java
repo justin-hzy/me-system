@@ -13,7 +13,7 @@ import java.util.Date;
 
 @SpringBootTest
 @Slf4j
-public class ReOrderTest {
+public class ReFundTest {
 
     @Autowired
     private TransReOrderService transReOrderService;

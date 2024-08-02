@@ -1,10 +1,13 @@
 package com.me.nascent.modules.reorder.service.impl;
 
 import com.me.nascent.common.config.NascentConfig;
+import com.me.nascent.modules.reorder.entity.ReFund;
+import com.me.nascent.modules.reorder.service.ReFundService;
 import com.me.nascent.modules.reorder.service.TransReOrderService;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
+import com.nascent.ecrp.opensdk.domain.refund.Refund;
 import com.nascent.ecrp.opensdk.domain.refund.RefundInfo;
 import com.nascent.ecrp.opensdk.domain.refund.RefundSynInfo;
 import com.nascent.ecrp.opensdk.request.refund.RefundInfoSynRequest;
@@ -13,8 +16,10 @@ import com.nascent.ecrp.opensdk.response.refund.RefundInfoSynResponse;
 import com.nascent.ecrp.opensdk.response.trade.TradeSynResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +31,8 @@ public class TransReOrderServiceImpl implements TransReOrderService {
     private NascentConfig nascentConfig;
 
     private TokenService tokenService;
+
+    private ReFundService reFundService;
 
     @Override
     public void transReOrder(Long id, Date startDate, Date endDate) throws Exception {
@@ -46,8 +53,18 @@ public class TransReOrderServiceImpl implements TransReOrderService {
         log.info(response.getBody());
         List<RefundSynInfo> refundSynInfos = response.getResult();
 
-        /*if(refundSynInfos.size()>0){
+        List<ReFund> reFunds = new ArrayList<>();
 
-        }*/
+        if(refundSynInfos.size()>0){
+            for (RefundSynInfo refundSynInfo : refundSynInfos){
+                ReFund refund = new ReFund();
+                BeanUtils.copyProperties(refundSynInfo,refund);
+                reFunds.add(refund);
+            }
+
+            if(reFunds.size()>0){
+                reFundService.saveBatch(reFunds);
+            }
+        }
     }
 }

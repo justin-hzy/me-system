@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @TableName("")
-public class ReOrder {
+public class ReFund {
 
     @TableField("address")
     private String address;
