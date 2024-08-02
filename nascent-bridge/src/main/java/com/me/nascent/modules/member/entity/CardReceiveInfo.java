@@ -1,13 +1,17 @@
 package com.me.nascent.modules.member.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
+@TableName("nascent_card_receive_info")
 public class CardReceiveInfo {
 
     @TableField("mainId")
-    private Integer mainId;
+    private Long mainId;
 
     @TableField("cardReceivePlatform")
     private Integer cardReceivePlatform;
@@ -16,7 +20,7 @@ public class CardReceiveInfo {
     private Integer cardReceiveStatus;
 
     @TableField("cardReceiveTime")
-    private String cardReceiveTime;
+    private Date cardReceiveTime;
 
     @TableField("cardType")
     private Integer cardType;
@@ -28,5 +32,5 @@ public class CardReceiveInfo {
     private String sourceType;
 
     @TableField("viewId")
-    private Integer viewId;
+    private Long viewId;
 }

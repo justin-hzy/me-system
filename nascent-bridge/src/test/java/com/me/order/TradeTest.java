@@ -94,9 +94,12 @@ public class TradeTest {
 
             Thread.sleep(12000);
         }
-
-
-
-
     }
+
+
+    @Test
+    public void putOrder(){
+        transOrderService.putOrder();
+    }
+
 }

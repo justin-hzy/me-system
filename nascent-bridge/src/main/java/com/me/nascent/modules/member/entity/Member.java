@@ -1,16 +1,20 @@
 package com.me.nascent.modules.member.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
+@TableName("nascent_member")
 public class Member {
 
     @TableField("id")
-    private Integer id;
+    private Long id;
 
     @TableField("activateTime")
-    private String activateTime;
+    private Date activateTime;
 
     @TableField("address")
     private String address;
@@ -25,7 +29,7 @@ public class Member {
     private Integer babySex;
 
     @TableField("bindTime")
-    private String bindTime;
+    private Date bindTime;
 
     @TableField("birthday")
     private String birthday;
@@ -109,6 +113,6 @@ public class Member {
     private Integer subPlatform;
 
     @TableField("updateTime")
-    private String updateTime;
+    private Date updateTime;
     
 }

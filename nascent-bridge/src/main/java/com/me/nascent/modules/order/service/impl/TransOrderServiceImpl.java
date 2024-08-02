@@ -12,6 +12,7 @@ import com.nascent.ecrp.opensdk.domain.trade.PromotionsVo;
 import com.nascent.ecrp.opensdk.domain.trade.tradeByModifyTime.OrdersVo;
 import com.nascent.ecrp.opensdk.domain.trade.tradeByModifyTime.TradeByModifySgFinishInfo;
 import com.nascent.ecrp.opensdk.domain.trade.tradeByModifyTime.TradesVo;
+import com.nascent.ecrp.opensdk.request.trade.TradeSaveRequest;
 import com.nascent.ecrp.opensdk.request.trade.TradeSynRequest;
 import com.nascent.ecrp.opensdk.response.trade.TradeSynResponse;
 import lombok.AllArgsConstructor;
@@ -179,6 +180,20 @@ public class TransOrderServiceImpl implements TransOrderService {
         resMap.put("modifyTime",modifyTime);
         resMap.put("isNext",isNext);
         return resMap;
+
+    }
+
+    @Override
+    public void putOrder() {
+
+        List<Trade> trades = tradeService.list();
+
+        for (Trade trade : trades){
+
+        }
+
+        TradeSaveRequest tradeSaveRequest = new TradeSaveRequest();
+
 
     }
 }
