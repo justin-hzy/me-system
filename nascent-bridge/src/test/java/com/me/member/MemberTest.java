@@ -39,16 +39,18 @@ public class MemberTest {
         // 定义日期时间格式
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         // 解析字符串到 LocalDateTime
-        LocalDateTime startDateTime = LocalDateTime.parse("2022-07-29 00:00:00", formatter);
+        LocalDateTime startDateTime = LocalDateTime.parse("2024-07-31 00:00:00", formatter);
         // 转换为 Date
         Date startDate = Date.from(startDateTime.atZone(ZoneId.systemDefault()).toInstant());
-        LocalDateTime endDateTime = LocalDateTime.parse("2022-07-30 00:00:00", formatter);
+        LocalDateTime endDateTime = LocalDateTime.parse("2024-08-01 00:00:00", formatter);
         Date endDate = Date.from(endDateTime.atZone(ZoneId.systemDefault()).toInstant());
         request.setStartTime(startDate);
         request.setEndTime(endDate);
         request.setActivate(true);
         request.setNextId(0L);
         request.setPageSize(50);
+        //request.setViewId(200001728L);
+        request.setShopId(3411331L);
         ApiClient client = new ApiClientImpl(request);
         ActivateCustomerListSyncResponse response = client.execute(request);
         log.info(response.getBody());
