@@ -66,7 +66,7 @@ public class Order {
     private String orderShippingType;
 
     @TableField("orderConsignTime")
-    private String orderConsignTime;
+    private Date orderConsignTime;
 
     @TableField("orderLogisticsCompany")
     private String orderLogisticsCompany;
@@ -102,10 +102,10 @@ public class Order {
     private Integer orderTotalFee;
 
     @TableField("orderPayTime")
-    private String orderPayTime;
+    private Date orderPayTime;
 
     @TableField("orderCreated")
-    private String orderCreated;
+    private Date orderCreated;
 
     @TableField("orderFrom")
     private String orderFrom;

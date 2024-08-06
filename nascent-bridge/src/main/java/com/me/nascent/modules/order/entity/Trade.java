@@ -14,16 +14,16 @@ public class Trade {
     private Long id;
 
     @TableField("availableConfirmFee")
-    private Integer availableConfirmFee;
+    private BigDecimal availableConfirmFee;
 
     @TableField("discountFee")
-    private Integer discountFee;
+    private BigDecimal discountFee;
 
     @TableField("receiverPhone")
     private String receiverPhone;
 
     @TableField("stepPaidFee")
-    private Integer stepPaidFee;
+    private BigDecimal stepPaidFee;
 
     @TableField("outTradeId")
     private String outTradeId;
@@ -71,40 +71,40 @@ public class Trade {
     private String created;
 
     @TableField("modifyTime")
-    private String modifyTime;
+    private Date modifyTime;
 
     @TableField("updateTime")
-    private String updateTime;
+    private Date updateTime;
 
     @TableField("totalFee")
-    private Integer totalFee;
+    private BigDecimal totalFee;
 
     @TableField("num")
-    private Integer num;
+    private BigDecimal num;
 
     @TableField("payTime")
-    private String payTime;
+    private Date payTime;
 
     @TableField("payType")
     private Integer payType;
 
     @TableField("payment")
-    private Integer payment;
+    private BigDecimal payment;
 
     @TableField("postFee")
-    private Integer postFee;
+    private BigDecimal postFee;
 
     @TableField("adjustFee")
-    private Integer adjustFee;
+    private BigDecimal adjustFee;
 
     @TableField("svPayment")
-    private Integer svPayment;
+    private BigDecimal svPayment;
 
     @TableField("realPointFee")
-    private Integer realPointFee;
+    private BigDecimal realPointFee;
 
     @TableField("consignTime")
-    private String consignTime;
+    private Date consignTime;
 
     @TableField("outCompanyName")
     private String outCompanyName;
@@ -178,9 +178,6 @@ public class Trade {
     @TableField("sgExclusiveShopId")
     private Long sgExclusiveShopId;
 
-    @TableField("orderPayTime")
-    private String orderPayTime;
-
     @TableField("sgShareShopId")
     private Long sgShareShopId;
 
@@ -191,10 +188,10 @@ public class Trade {
     private String extJson;
 
     @TableField("timeoutActionTime")
-    private String timeoutActionTime;
+    private Date timeoutActionTime;
 
     @TableField("endTime")
-    private String endTime;
+    private Date endTime;
 
     @TableField("ladingCode")
     private String ladingCode;
