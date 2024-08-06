@@ -30,6 +30,7 @@ public class TransPointServiceImpl implements TransPointService {
         request.setAppSecret(nascentConfig.getAppSerect());
         request.setGroupId(nascentConfig.getGroupID());
         request.setAccessToken(tokenService.getToken());
+        request.setIntegralAccount("pcode-282900");
 
         ApiClient client = new ApiClientImpl(request);
         CustomerPointInfoQueryResponse response = client.execute(request);

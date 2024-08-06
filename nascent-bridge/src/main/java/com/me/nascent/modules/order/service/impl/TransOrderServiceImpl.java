@@ -78,7 +78,7 @@ public class TransOrderServiceImpl implements TransOrderService {
                 Long id = tradesVo.getId();
                 nextId = id;
                 modifyTime = tradesVo.getModifyTime();
-                /*Trade trade = new Trade();
+                Trade trade = new Trade();
                 BeanUtils.copyProperties(tradesVo, trade);
 
                 QueryWrapper<Trade> tradeQuery = new QueryWrapper<>();
@@ -166,13 +166,18 @@ public class TransOrderServiceImpl implements TransOrderService {
                         }
                     }
                     orderService.saveBatch(orders);
-                }*/
+                }
             }
 
             if(insertTrades.size()>0){
                 log.info(insertTrades.toString());
 
                 tradeService.saveBatch(insertTrades);
+            }
+
+            if(updateTrades.size()>0){
+                log.info(updateTrades.toString());
+                tradeService.saveOrUpdateBatch(updateTrades);
             }
         }
 
@@ -184,7 +189,7 @@ public class TransOrderServiceImpl implements TransOrderService {
     }
 
     @Override
-    public void putOrder() {
+    public void saveOrder() {
 
         List<Trade> trades = tradeService.list();
 
