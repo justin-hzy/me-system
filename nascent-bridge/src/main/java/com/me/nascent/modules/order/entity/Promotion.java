@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("nascent_promotion")
+@TableName("trade_promotion")
 public class Promotion {
 
     @TableField("mainid")

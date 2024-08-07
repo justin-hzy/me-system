@@ -21,7 +21,7 @@ public class ReFundTest {
     @Test
     public void getReOrder() throws Exception {
 
-        String startDateStr  = "2022-07-01 00:00:00";
+        String startDateStr  = "2024-08-07 00:00:00";
 
         //定义日期时间格式
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -37,5 +37,12 @@ public class ReFundTest {
         Long nextId = 0L;
 
         transReOrderService.transReOrder(0L,startDate,oneHourLaterDate);
+    }
+
+
+    @Test
+    public void saveReOrder() throws Exception {
+        transReOrderService.putReOrder();
+
     }
 }

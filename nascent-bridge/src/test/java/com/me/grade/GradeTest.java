@@ -16,5 +16,7 @@ public class GradeTest {
     @Test
     public void transGradeTest() throws Exception {
 
+        transGradeService.TransGrade();
+
     }
 }

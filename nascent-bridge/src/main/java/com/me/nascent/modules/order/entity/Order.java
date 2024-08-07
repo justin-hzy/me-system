@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 @Data
-@TableName("nascent_order")
+@TableName("trade_order")
 public class Order {
 
     @TableField("mainid")

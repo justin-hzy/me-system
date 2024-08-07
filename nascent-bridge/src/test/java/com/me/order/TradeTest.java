@@ -21,7 +21,11 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -45,10 +49,9 @@ public class TradeTest {
 
 
     @Test
-    public void getOrder() throws Exception {
+    public void getOrderByDay() throws Exception {
 
-
-        String startDateStr  = "2022-07-01 00:00:00";
+        String startDateStr  = "2024-03-01 00:00:00";
 
         //定义日期时间格式
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -56,50 +59,51 @@ public class TradeTest {
         LocalDateTime startDateTime = LocalDateTime.parse(startDateStr, formatter);
         // 转换为 Date
         Date startDate = Date.from(startDateTime.atZone(ZoneId.systemDefault()).toInstant());
-
         LocalDateTime sevenDaysLater = startDateTime.plusDays(7);
 
         // 将 LocalDateTime 转换为 Date
         Date sevenDaysLaterDate = Date.from(sevenDaysLater.atZone(ZoneId.systemDefault()).toInstant());
         Long nextId = 0L;
 
-        /*while (true){
+        Map<String,Object> resMap  = transOrderService.transOrder(nextId,startDate,sevenDaysLaterDate);
+        nextId = (Long) resMap.get("nextId");
+        startDate = (Date) resMap.get("modifyTime");
+        Boolean isNext = (Boolean) resMap.get("isNext");
 
-        }*/
-
-        Boolean flag = true;
-        while (flag){
-            /*log.info("nextId="+nextId);
-            log.info("modifyTime="+modifyTime);
-            log.info("isNext="+isNext);*/
-
-            Map<String,Object> resMap  = transOrderService.transOrder(nextId,startDate,sevenDaysLaterDate);
-            nextId = (Long) resMap.get("nextId");
-            startDate = (Date) resMap.get("modifyTime");
-            Boolean isNext = (Boolean) resMap.get("isNext");
-
-            log.info("nextId="+nextId);
-            log.info("modifyTime="+startDate);
-            log.info("isNext="+isNext);
-
-            if(isNext == false){
-                startDateTime = startDateTime.plusDays(7);
-                startDate = Date.from(startDateTime.atZone(ZoneId.systemDefault()).toInstant());
-
-                sevenDaysLater = startDateTime.plusDays(7);
-                sevenDaysLaterDate = Date.from(sevenDaysLater.atZone(ZoneId.systemDefault()).toInstant());
-                log.info(startDateTime.toString());
-                log.info(sevenDaysLaterDate.toString());
-            }
-
-            Thread.sleep(12000);
-        }
+        log.info("nextId="+nextId);
+        log.info("modifyTime="+startDate);
+        log.info("isNext="+isNext);
     }
-
 
     @Test
-    public void putOrder(){
-        transOrderService.putOrder();
+    public void getOrderByYear() throws Exception {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            Date startDate = sdf.parse("2012-01-01");
+            Date endDate = sdf.parse("2012-01-14");
+
+            while (startDate.before(endDate)) {
+                Date endDateOfWeek = new Date(startDate.getTime() + 6 * 24 * 60 * 60 * 1000);
+                if (endDateOfWeek.after(endDate)) {
+                    endDateOfWeek = endDate;
+                }
+
+                String startStr = sdf.format(startDate);
+                String endStr = sdf.format(endDateOfWeek);
+                System.out.println("同步订单数据: " + startStr + " 到 " + endStr);
+
+
+
+                Map<String,Object> resMap  = transOrderService.transOrder(startDate,endDateOfWeek);
+
+                startDate = new Date(endDateOfWeek.getTime() + 24 * 60 * 60 * 1000);
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
     }
+
 
 }

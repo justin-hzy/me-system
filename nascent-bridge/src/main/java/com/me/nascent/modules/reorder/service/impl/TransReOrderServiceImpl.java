@@ -1,12 +1,16 @@
 package com.me.nascent.modules.reorder.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.me.nascent.common.config.NascentConfig;
 import com.me.nascent.modules.reorder.entity.ReFund;
+import com.me.nascent.modules.reorder.entity.ReFundNickInfo;
+import com.me.nascent.modules.reorder.service.ReFundNickInfoService;
 import com.me.nascent.modules.reorder.service.ReFundService;
 import com.me.nascent.modules.reorder.service.TransReOrderService;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
+import com.nascent.ecrp.opensdk.domain.customer.NickInfo;
 import com.nascent.ecrp.opensdk.domain.refund.*;
 import com.nascent.ecrp.opensdk.request.refund.RefundInfoSynRequest;
 import com.nascent.ecrp.opensdk.request.refund.ThirdRefundSaveRequest;
@@ -39,6 +43,8 @@ public class TransReOrderServiceImpl implements TransReOrderService {
 
     private ReFundService reFundService;
 
+    private ReFundNickInfoService reFundNickInfoService;
+
     @Override
     public void transReOrder(Long id, Date startDate, Date endDate) throws Exception {
         RefundInfoSynRequest request = new RefundInfoSynRequest();
@@ -58,23 +64,121 @@ public class TransReOrderServiceImpl implements TransReOrderService {
         log.info(response.getBody());
         List<RefundSynInfo> refundSynInfos = response.getResult();
 
-        List<ReFund> reFunds = new ArrayList<>();
+        List<ReFund> insertReFunds = new ArrayList<>();
+
+        List<ReFund> updateReFunds = new ArrayList<>();
 
         if(refundSynInfos.size()>0){
             for (RefundSynInfo refundSynInfo : refundSynInfos){
-                ReFund refund = new ReFund();
-                BeanUtils.copyProperties(refundSynInfo,refund);
-                reFunds.add(refund);
+
+                QueryWrapper<ReFund> reFundQuery = new QueryWrapper<>();
+                reFundQuery.eq("id",refundSynInfo.getId());
+                ReFund reFundResult = reFundService.getOne(reFundQuery);
+
+
+                ReFund reFund = new ReFund();
+
+                BeanUtils.copyProperties(refundSynInfo,reFund);
+
+                if(reFundResult != null){
+                    updateReFunds.add(reFund);
+                }else {
+                    insertReFunds.add(reFund);
+                }
+
+                List<NickInfo> nickInfos = refundSynInfo.getNickInfos();
+                List<ReFundNickInfo> reFundNickInfos = new ArrayList<>();
+                for (NickInfo nickInfo : nickInfos){
+                    ReFundNickInfo reFundNickInfo = new ReFundNickInfo();
+                    BeanUtils.copyProperties(nickInfo,reFundNickInfo);
+                    reFundNickInfo.setMainid(refundSynInfo.getId());
+                    reFundNickInfos.add(reFundNickInfo);
+                }
+                reFundNickInfoService.saveBatch(reFundNickInfos);
             }
 
-            if(reFunds.size()>0){
-                reFundService.saveBatch(reFunds);
+            if(insertReFunds.size()>0){
+                reFundService.saveBatch(insertReFunds);
+            }
+
+            if(updateReFunds.size()>0){
+                reFundService.saveOrUpdateBatch(updateReFunds);
             }
         }
     }
 
     @Override
-    public void saveReOrder() throws Exception {
+    public void transReOrder(Date startDate, Date endDate) throws Exception {
+        Long id = 0L;
+        saveReFund(0L,startDate,endDate);
+    }
+
+
+    private void saveReFund(Long id,Date startDate, Date endDate) throws Exception {
+        RefundInfoSynRequest request = new RefundInfoSynRequest();
+        request.setServerUrl(nascentConfig.getServerUrl());
+        request.setAppKey(nascentConfig.getAppKey());
+        request.setAppSecret(nascentConfig.getAppSerect());
+        request.setGroupId(nascentConfig.getGroupID());
+        request.setAccessToken(tokenService.getToken());
+
+        request.setStartTime(startDate);
+        request.setEndTime(endDate);
+        request.setId(id);
+        request.setPageSize(50);
+
+        ApiClient client = new ApiClientImpl(request);
+        RefundInfoSynResponse response = client.execute(request);
+        log.info(response.getBody());
+        List<RefundSynInfo> refundSynInfos = response.getResult();
+
+        List<ReFund> insertReFunds = new ArrayList<>();
+
+        List<ReFund> updateReFunds = new ArrayList<>();
+
+        if(refundSynInfos.size()>0){
+            for (RefundSynInfo refundSynInfo : refundSynInfos){
+
+                QueryWrapper<ReFund> reFundQuery = new QueryWrapper<>();
+                reFundQuery.eq("id",refundSynInfo.getId());
+                ReFund reFundResult = reFundService.getOne(reFundQuery);
+
+
+                ReFund reFund = new ReFund();
+
+                BeanUtils.copyProperties(refundSynInfo,reFund);
+
+                if(reFundResult != null){
+                    updateReFunds.add(reFund);
+                }else {
+                    insertReFunds.add(reFund);
+                }
+
+                List<NickInfo> nickInfos = refundSynInfo.getNickInfos();
+                List<ReFundNickInfo> reFundNickInfos = new ArrayList<>();
+                for (NickInfo nickInfo : nickInfos){
+                    ReFundNickInfo reFundNickInfo = new ReFundNickInfo();
+                    BeanUtils.copyProperties(nickInfo,reFundNickInfo);
+                    reFundNickInfo.setMainid(refundSynInfo.getId());
+                    reFundNickInfos.add(reFundNickInfo);
+                }
+                reFundNickInfoService.saveBatch(reFundNickInfos);
+            }
+
+            if(insertReFunds.size()>0){
+                reFundService.saveBatch(insertReFunds);
+            }
+
+            if(updateReFunds.size()>0){
+                reFundService.saveOrUpdateBatch(updateReFunds);
+            }
+        }
+    }
+
+
+
+    @Override
+    public void putReOrder() throws Exception {
 
         ThirdRefundSaveRequest request = new ThirdRefundSaveRequest();
         request.setServerUrl(nascentConfig.getServerUrl());
@@ -128,4 +232,9 @@ public class TransReOrderServiceImpl implements TransReOrderService {
         ThirdRefundSaveResponse response = client.execute(request);
         log.info(response.getBody());
     }
+
+
+
+
+
 }

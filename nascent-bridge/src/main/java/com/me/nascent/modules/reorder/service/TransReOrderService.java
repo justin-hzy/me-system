@@ -6,6 +6,8 @@ public interface TransReOrderService {
 
     void transReOrder(Long nextId, Date startDate, Date endDate) throws Exception;
 
-    void saveReOrder() throws Exception;
+    void transReOrder(Date startDate, Date endDate) throws Exception;
+
+    void putReOrder() throws Exception;
 
 }

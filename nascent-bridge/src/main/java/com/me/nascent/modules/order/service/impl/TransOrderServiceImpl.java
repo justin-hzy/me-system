@@ -189,16 +189,145 @@ public class TransOrderServiceImpl implements TransOrderService {
     }
 
     @Override
-    public void saveOrder() {
+    public Map<String, Object> transOrder(Date startDate, Date endDate) throws Exception {
+        Map resMap = new HashMap();
+        Date modifyTime = null;
+        Boolean isNext = false;
+        TradeSynRequest request = new TradeSynRequest();
+        request.setServerUrl(nascentConfig.getServerUrl());
+        request.setAppKey(nascentConfig.getAppKey());
+        request.setAppSecret(nascentConfig.getAppSerect());
+        request.setGroupId(nascentConfig.getGroupID());
+        request.setAccessToken(tokenService.getToken());
 
-        List<Trade> trades = tradeService.list();
 
-        for (Trade trade : trades){
+        Long nextId =0L;
+        request.setStartTime(startDate);
+        request.setEndTime(endDate);
+        request.setNextId(nextId);
+        request.setPageSize(50);
 
+        ApiClient client = new ApiClientImpl(request);
+        TradeSynResponse response = client.execute(request);
+        log.info(response.getBody());
+        List<TradesVo> tradesVos = response.getResult();
+        List<Trade> insertTrades = new ArrayList<>();
+        List<Trade> updateTrades = new ArrayList<>();
+
+
+        if(tradesVos.size()>0){
+            isNext = true;
+            for(TradesVo tradesVo : tradesVos){
+                Long id = tradesVo.getId();
+                nextId = id;
+                modifyTime = tradesVo.getModifyTime();
+                Trade trade = new Trade();
+                BeanUtils.copyProperties(tradesVo, trade);
+
+                QueryWrapper<Trade> tradeQuery = new QueryWrapper<>();
+                tradeQuery.eq("id",id);
+                Trade tradeResult = tradeService.getOne(tradeQuery);
+                if(tradeResult!=null){
+                    //进入更新集合
+                    updateTrades.add(trade);
+                }else {
+                    insertTrades.add(trade);
+                }
+
+
+                List<NickInfo> nickInfos = tradesVo.getNickInfoList();
+                List<Nick> nicks = new ArrayList<>();
+
+                if(nickInfos.size()>0 || nickInfos !=null){
+                    //清空明细表，重新载入
+                    QueryWrapper<Nick> nickUpdate = new QueryWrapper<>();
+                    nickUpdate.eq("mainid",id);
+                    nickService.remove(nickUpdate);
+
+
+                    for (NickInfo nickInfo : nickInfos){
+                        Nick nick = new Nick();
+                        BeanUtils.copyProperties(nickInfo, nick);
+                        nick.setMainid(id);
+
+                        nicks.add(nick);
+                    }
+                    nickService.saveBatch(nicks);
+                }
+
+                List<PromotionsVo> promotionsVos = tradesVo.getPromotionVos();
+
+                if(promotionsVos != null){
+                    List<Promotion> promotions = new ArrayList<>();
+                    //清空明细表，重新载入
+                    QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
+                    promotionQuery.eq("mainid",id);
+                    promotionService.remove(promotionQuery);
+
+                    for (PromotionsVo promotionsVo : promotionsVos){
+                        Promotion promotion = new Promotion();
+                        BeanUtils.copyProperties(promotionsVo,promotion);
+                        promotion.setMainid(id);
+                        promotions.add(promotion);
+                    }
+                    promotionService.saveBatch(promotions);
+                }
+
+
+                List<OrdersVo> ordersVos = tradesVo.getOrders();
+
+
+                if(ordersVos.size()>0 || ordersVos != null){
+                    List<Order> orders = new ArrayList<>();
+                    //清空明细表，重新载入
+                    QueryWrapper<Order> orderQuery = new QueryWrapper<>();
+                    orderQuery.eq("mainid",id);
+                    orderService.remove(orderQuery);
+
+
+                    for (OrdersVo ordersVo : ordersVos){
+                        Order order = new Order();
+                        BeanUtils.copyProperties(ordersVo,order);
+                        order.setMainid(id);
+                        orders.add(order);
+
+                        List<TradeByModifySgFinishInfo> tradeByModifySgFinishInfos = ordersVo.getSgFinishInfoList();
+
+                        if (tradeByModifySgFinishInfos.size()>0){
+                            List<SgFinishInfo> sgFinishInfos = new ArrayList<>();
+                            //清空明细表，重新载入
+                            QueryWrapper<SgFinishInfo> sgFinishInfoQuery = new QueryWrapper<>();
+                            sgFinishInfoQuery.eq("mainid",id);
+                            sgFinishInfoService.remove(sgFinishInfoQuery);
+
+                            for (TradeByModifySgFinishInfo tradeByModifySgFinishInfo : tradeByModifySgFinishInfos){
+                                SgFinishInfo sgFinishInfo = new SgFinishInfo();
+                                BeanUtils.copyProperties(tradeByModifySgFinishInfo,sgFinishInfo);
+                                sgFinishInfos.add(sgFinishInfo);
+                            }
+                            sgFinishInfoService.saveBatch(sgFinishInfos);
+                        }
+                    }
+                    orderService.saveBatch(orders);
+                }
+            }
+
+            if(insertTrades.size()>0){
+                log.info(insertTrades.toString());
+                tradeService.saveBatch(insertTrades);
+            }
+
+            if(updateTrades.size()>0){
+                log.info(updateTrades.toString());
+                tradeService.saveOrUpdateBatch(updateTrades);
+            }
         }
-
-        TradeSaveRequest tradeSaveRequest = new TradeSaveRequest();
-
-
+        resMap.put("nextId",nextId);
+        resMap.put("modifyTime",modifyTime);
+        resMap.put("isNext",isNext);
+        return resMap;
     }
+
+
+
 }

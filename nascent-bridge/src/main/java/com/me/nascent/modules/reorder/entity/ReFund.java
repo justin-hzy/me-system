@@ -4,15 +4,21 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 @Data
-@TableName("")
+@TableName("refund")
 public class ReFund {
+
+    @TableField("id")
+    private Long id;
 
     @TableField("address")
     private String address;
 
     @TableField("applyTime")
-    private String applyTime;
+    private Date applyTime;
 
     @TableField("companyName")
     private String companyName;
@@ -20,17 +26,14 @@ public class ReFund {
     @TableField("goodsLibId")
     private int goodsLibId;
 
-    @TableField("id")
-    private int id;
-
     @TableField("mobile")
     private String mobile;
 
     @TableField("modified")
-    private String modified;
+    private Date modified;
 
     @TableField("number")
-    private int number;
+    private BigDecimal number;
 
     @TableField("outOrderId")
     private String outOrderId;
@@ -48,10 +51,10 @@ public class ReFund {
     private String picUrl;
 
     @TableField("platform")
-    private int platform;
+    private Integer platform;
 
     @TableField("price")
-    private int price;
+    private BigDecimal price;
 
     @TableField("reasonStr")
     private String reasonStr;
@@ -60,16 +63,16 @@ public class ReFund {
     private String refundDesc;
 
     @TableField("refundFee")
-    private int refundFee;
+    private BigDecimal refundFee;
 
     @TableField("refundGenre")
-    private int refundGenre;
+    private Integer refundGenre;
 
     @TableField("refundName")
     private String refundName;
 
     @TableField("refundNum")
-    private int refundNum;
+    private BigDecimal refundNum;
 
     @TableField("refundRemindTimeout")
     private String refundRemindTimeout;
@@ -105,8 +108,8 @@ public class ReFund {
     private String title;
 
     @TableField("totalFee")
-    private int totalFee;
+    private BigDecimal totalFee;
 
     @TableField("updateTime")
-    private String updateTime;
+    private Date updateTime;
 }

@@ -7,7 +7,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 import java.util.Date;
 @Data
-@TableName("nascent_trade")
+@TableName("trade")
 public class Trade {
 
     @TableField("id")

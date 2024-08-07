@@ -1,19 +1,20 @@
-package com.me.nascent.modules.order.entity;
+package com.me.nascent.modules.reorder.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("trade_nick")
-public class Nick {
+@TableName("refund_nick_info")
+public class ReFundNickInfo {
 
     @TableField("mainid")
     private Long mainid;
 
-    @TableField("nick")
-    private String nick;
+    @TableField("nasOuid")
+    private String nasOuid;
 
     @TableField("platform")
-    private Integer platform;
+    private String platform;
+
 }
