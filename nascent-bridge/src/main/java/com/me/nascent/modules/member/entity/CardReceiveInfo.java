@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@TableName("nascent_card_receive_info")
+@TableName("member_card_receive_info")
 public class CardReceiveInfo {
 
     @TableField("mainId")

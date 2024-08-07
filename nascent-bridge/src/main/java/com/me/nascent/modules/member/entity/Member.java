@@ -7,7 +7,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@TableName("nascent_member")
+@TableName("member")
 public class Member {
 
     @TableField("id")
