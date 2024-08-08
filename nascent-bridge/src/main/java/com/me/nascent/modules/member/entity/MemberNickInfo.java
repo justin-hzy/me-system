@@ -1,17 +1,19 @@
 package com.me.nascent.modules.member.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-public class NickInfo {
+@TableName("member_nick_info")
+public class MemberNickInfo {
 
     @TableField("mainId")
-    private Integer mainId;
+    private Long mainId;
 
     @TableField("nasOuid")
     private String nasOuid;
 
     @TableField("platform")
-    private String platform;
+    private Integer platform;
 }
