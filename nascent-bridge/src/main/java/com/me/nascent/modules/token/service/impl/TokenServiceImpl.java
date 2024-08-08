@@ -32,8 +32,8 @@ public class TokenServiceImpl implements TokenService {
         ApiClient client = new ApiClientImpl(request);
         AccessTokenRegisterResponse response = client.execute(request);
         if (null != response) {
-            log.info(response.getSuccess()+"");
-            log.info(response.getResult().getAccessToken());
+//            log.info(response.getSuccess()+"");
+//            log.info(response.getResult().getAccessToken());
             if(StrUtil.isNotEmpty(response.getSuccess()+"") && response.getSuccess()){
                 return response.getResult().getAccessToken();
             }else {
