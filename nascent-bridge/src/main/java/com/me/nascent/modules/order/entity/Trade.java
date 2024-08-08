@@ -68,7 +68,7 @@ public class Trade {
     private String tradeType;
 
     @TableField("created")
-    private String created;
+    private Date created;
 
     @TableField("modifyTime")
     private Date modifyTime;

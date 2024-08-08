@@ -6,15 +6,15 @@ import com.me.nascent.common.config.NascentConfig;
 import com.me.nascent.modules.member.entity.CardReceiveInfo;
 import com.me.nascent.modules.member.entity.FansStatus;
 import com.me.nascent.modules.member.entity.Member;
-import com.me.nascent.modules.member.service.CardReceiveInfoService;
-import com.me.nascent.modules.member.service.FansStatusService;
-import com.me.nascent.modules.member.service.MemberService;
-import com.me.nascent.modules.member.service.TransMemberService;
+import com.me.nascent.modules.member.entity.MemberNickInfo;
+import com.me.nascent.modules.member.service.*;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
 import com.nascent.ecrp.opensdk.domain.customer.CustomerCardReceiveInfo;
+import com.nascent.ecrp.opensdk.domain.customer.NickInfo;
 import com.nascent.ecrp.opensdk.domain.customer.SystemCustomerInfo;
+import com.nascent.ecrp.opensdk.domain.customer.ThirdPartyInviterInfo;
 import com.nascent.ecrp.opensdk.domain.customer.wxFansStatus.BaseWxFansStatusVo;
 import com.nascent.ecrp.opensdk.request.customer.ActivateCustomerListSyncRequest;
 import com.nascent.ecrp.opensdk.response.customer.ActivateCustomerListSyncResponse;
@@ -26,9 +26,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -45,8 +43,29 @@ public class TransMemberServiceImpl implements TransMemberService {
 
     private FansStatusService fansStatusService;
 
+    private MemberNickInfoService memberNickInfoService;
+
     @Override
-    public void TransMember() throws Exception {
+    public void TransMemberByRange(Date startDate,Date endDate) throws Exception {
+        Long nextId = 0L;
+        boolean flag = true;
+
+        while(flag){
+            Map resMap =  saveMember(nextId,startDate,endDate);
+            startDate = (Date) resMap.get("updateTime");
+            nextId = (Long) resMap.get("nextId");
+            flag = (boolean) resMap.get("isNext");
+            flag = false;
+            log.info("startDate="+startDate);
+            log.info("nextId="+nextId);
+            log.info("flag="+flag);
+        }
+
+
+    }
+
+    private Map<String, Object> saveMember(Long nextId,Date startDate,Date endDate) throws Exception {
+        Map resMap = new HashMap();
         ActivateCustomerListSyncRequest request = new ActivateCustomerListSyncRequest();
 
         request.setServerUrl(nascentConfig.getServerUrl());
@@ -55,20 +74,13 @@ public class TransMemberServiceImpl implements TransMemberService {
         request.setGroupId(nascentConfig.getGroupID());
 
         request.setAccessToken(tokenService.getToken());
-        // 定义日期时间格式
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        // 解析字符串到 LocalDateTime
-        LocalDateTime startDateTime = LocalDateTime.parse("2024-07-31 00:00:00", formatter);
-        // 转换为 Date
-        Date startDate = Date.from(startDateTime.atZone(ZoneId.systemDefault()).toInstant());
-        LocalDateTime endDateTime = LocalDateTime.parse("2024-08-02 23:59:59", formatter);
-        Date endDate = Date.from(endDateTime.atZone(ZoneId.systemDefault()).toInstant());
         request.setStartTime(startDate);
         request.setEndTime(endDate);
         request.setActivate(true);
-        request.setNextId(0L);
+        request.setNextId(nextId);
         request.setPageSize(50);
-        request.setViewId(0L);
+        //100000387 泊美  100000386	Za姬芮 80000078 集团会员
+        request.setViewId(100000387L);
         //request.setShopId(3411331L);
         ApiClient client = new ApiClientImpl(request);
         ActivateCustomerListSyncResponse response = client.execute(request);
@@ -80,11 +92,17 @@ public class TransMemberServiceImpl implements TransMemberService {
 
         List<Member> updateMembers = new ArrayList<>();
 
+        Boolean isNext = false;
+        Date updateTime = null;
 
         if (CollUtil.isNotEmpty(systemCustomerInfos)){
 
+            isNext = true;
+
             for (SystemCustomerInfo systemCustomerInfo : systemCustomerInfos){
                 Long id = systemCustomerInfo.getId();
+                nextId = id;
+                updateTime = systemCustomerInfo.getUpdateTime();
                 QueryWrapper<Member> memberQuery = new QueryWrapper<>();
                 memberQuery.eq("id",id);
                 Member existMember = memberService.getOne(memberQuery);
@@ -97,7 +115,6 @@ public class TransMemberServiceImpl implements TransMemberService {
                 }else {
                     insertMembers.add(member);
                 }
-
 
                 List<CustomerCardReceiveInfo> customerCardReceiveInfos = systemCustomerInfo.getCardReceiveInfoList();
 
@@ -143,6 +160,31 @@ public class TransMemberServiceImpl implements TransMemberService {
 
                     fansStatusService.saveBatch(insertFansStatusList);
                 }
+
+
+
+                List<NickInfo> nickInfos = systemCustomerInfo.getNickInfoList();
+                if (CollUtil.isNotEmpty(nickInfos)){
+                    QueryWrapper<MemberNickInfo> memberNickInfoQuery = new QueryWrapper<>();
+                    memberNickInfoQuery.eq("mainid",id);
+                    List<MemberNickInfo> existInfo = memberNickInfoService.list(memberNickInfoQuery);
+                    if(CollUtil.isNotEmpty(existInfo)){
+                        memberNickInfoService.remove(memberNickInfoQuery);
+                    }
+
+                    List<MemberNickInfo> memberNickInfos = new ArrayList<>();
+
+                    for (NickInfo nickInfo : nickInfos){
+                        MemberNickInfo memberNickInfo = new MemberNickInfo();
+                        BeanUtils.copyProperties(nickInfo,memberNickInfo);
+                        memberNickInfo.setMainId(id);
+                        memberNickInfos.add(memberNickInfo);
+                    }
+
+                    if(memberNickInfos.size()>0){
+                        memberNickInfoService.saveBatch(memberNickInfos);
+                    }
+                }
             }
 
 
@@ -155,5 +197,11 @@ public class TransMemberServiceImpl implements TransMemberService {
                 memberService.saveOrUpdateBatch(updateMembers);
             }
         }
+
+        resMap.put("nextId",nextId);
+        resMap.put("updateTime",updateTime);
+        resMap.put("isNext",isNext);
+        return resMap;
+
     }
 }

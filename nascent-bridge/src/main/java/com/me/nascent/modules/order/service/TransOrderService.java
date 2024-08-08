@@ -7,7 +7,7 @@ public interface TransOrderService {
 
     Map<String,Object> transOrder(Long nextId,Date startDate, Date setEndDate) throws Exception;
 
-    Map<String,Object> transOrder(Date startDate, Date setEndDate) throws Exception;
+    void transOrder(Date startDate, Date setEndDate) throws Exception;
 
 
 }

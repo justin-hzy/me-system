@@ -66,7 +66,7 @@ public class TransOrderServiceImpl implements TransOrderService {
 
         ApiClient client = new ApiClientImpl(request);
         TradeSynResponse response = client.execute(request);
-        log.info(response.getBody());
+        //log.info(response.getBody());
         List<TradesVo> tradesVos = response.getResult();
         List<Trade> insertTrades = new ArrayList<>();
         List<Trade> updateTrades = new ArrayList<>();
@@ -189,9 +189,28 @@ public class TransOrderServiceImpl implements TransOrderService {
     }
 
     @Override
-    public Map<String, Object> transOrder(Date startDate, Date endDate) throws Exception {
+    public void transOrder(Date startDate, Date endDate) throws Exception {
+
+        Long nextId = 0L;
+        boolean flag = true;
+        while(flag){
+            Map resMap = saveOrder(nextId,startDate,endDate);
+            startDate = (Date) resMap.get("updateTime");
+            nextId = (Long) resMap.get("nextId");
+            flag = (boolean) resMap.get("isNext");
+
+            log.info("startDate="+startDate);
+            log.info("nextId="+nextId);
+            log.info("flag="+flag);
+        }
+    }
+
+
+    private Map<String, Object> saveOrder(Long nextId,Date startDate, Date endDate) throws Exception {
+
         Map resMap = new HashMap();
-        Date modifyTime = null;
+
+        Date updateTime = null;
         Boolean isNext = false;
         TradeSynRequest request = new TradeSynRequest();
         request.setServerUrl(nascentConfig.getServerUrl());
@@ -199,9 +218,8 @@ public class TransOrderServiceImpl implements TransOrderService {
         request.setAppSecret(nascentConfig.getAppSerect());
         request.setGroupId(nascentConfig.getGroupID());
         request.setAccessToken(tokenService.getToken());
+        request.setTimeType(1);
 
-
-        Long nextId =0L;
         request.setStartTime(startDate);
         request.setEndTime(endDate);
         request.setNextId(nextId);
@@ -209,7 +227,7 @@ public class TransOrderServiceImpl implements TransOrderService {
 
         ApiClient client = new ApiClientImpl(request);
         TradeSynResponse response = client.execute(request);
-        log.info(response.getBody());
+        //log.info(response.getBody());
         List<TradesVo> tradesVos = response.getResult();
         List<Trade> insertTrades = new ArrayList<>();
         List<Trade> updateTrades = new ArrayList<>();
@@ -220,7 +238,7 @@ public class TransOrderServiceImpl implements TransOrderService {
             for(TradesVo tradesVo : tradesVos){
                 Long id = tradesVo.getId();
                 nextId = id;
-                modifyTime = tradesVo.getModifyTime();
+                updateTime = tradesVo.getUpdateTime();
                 Trade trade = new Trade();
                 BeanUtils.copyProperties(tradesVo, trade);
 
@@ -233,7 +251,6 @@ public class TransOrderServiceImpl implements TransOrderService {
                 }else {
                     insertTrades.add(trade);
                 }
-
 
                 List<NickInfo> nickInfos = tradesVo.getNickInfoList();
                 List<Nick> nicks = new ArrayList<>();
@@ -313,21 +330,19 @@ public class TransOrderServiceImpl implements TransOrderService {
             }
 
             if(insertTrades.size()>0){
-                log.info(insertTrades.toString());
+                //log.info(insertTrades.toString());
                 tradeService.saveBatch(insertTrades);
             }
 
             if(updateTrades.size()>0){
-                log.info(updateTrades.toString());
+                //log.info(updateTrades.toString());
                 tradeService.saveOrUpdateBatch(updateTrades);
             }
         }
+
         resMap.put("nextId",nextId);
-        resMap.put("modifyTime",modifyTime);
+        resMap.put("updateTime",updateTime);
         resMap.put("isNext",isNext);
         return resMap;
     }
-
-
-
 }

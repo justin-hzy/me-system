@@ -1,6 +1,8 @@
 package com.me.nascent.modules.member.service;
 
+import java.util.Date;
+
 public interface TransMemberService {
 
-    void TransMember() throws Exception;
+    void TransMemberByRange(Date startDate, Date endDate) throws Exception;
 }
