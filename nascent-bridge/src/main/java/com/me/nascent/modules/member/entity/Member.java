@@ -101,10 +101,10 @@ public class Member {
     private Integer sgRecruitGuideId;
 
     @TableField("sgRecruitShopId")
-    private Integer sgRecruitShopId;
+    private Long sgRecruitShopId;
 
     @TableField("sgShopId")
-    private Integer sgShopId;
+    private Long sgShopId;
 
     @TableField("source")
     private String source;
