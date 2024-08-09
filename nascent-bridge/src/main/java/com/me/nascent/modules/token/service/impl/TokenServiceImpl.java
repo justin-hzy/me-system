@@ -1,7 +1,10 @@
 package com.me.nascent.modules.token.service.impl;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.me.nascent.common.config.NascentConfig;
+import com.me.nascent.modules.token.entity.Token;
+import com.me.nascent.modules.token.mapper.TokenMapper;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
@@ -14,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @AllArgsConstructor
-public class TokenServiceImpl implements TokenService {
+public class TokenServiceImpl extends ServiceImpl<TokenMapper, Token> implements TokenService {
 
     private NascentConfig nascentConfig;
 

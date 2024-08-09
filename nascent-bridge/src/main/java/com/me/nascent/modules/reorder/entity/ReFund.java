@@ -84,7 +84,7 @@ public class ReFund {
     private String refundStatus;
 
     @TableField("refundType")
-    private int refundType;
+    private Integer refundType;
 
     @TableField("refundWap")
     private int refundWap;

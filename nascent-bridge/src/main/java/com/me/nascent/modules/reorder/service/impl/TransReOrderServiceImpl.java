@@ -1,12 +1,14 @@
 package com.me.nascent.modules.reorder.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.me.nascent.common.config.NascentConfig;
 import com.me.nascent.modules.reorder.entity.ReFund;
 import com.me.nascent.modules.reorder.entity.ReFundNickInfo;
 import com.me.nascent.modules.reorder.service.ReFundNickInfoService;
 import com.me.nascent.modules.reorder.service.ReFundService;
 import com.me.nascent.modules.reorder.service.TransReOrderService;
+import com.me.nascent.modules.token.entity.Token;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
@@ -28,9 +30,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -61,7 +61,9 @@ public class TransReOrderServiceImpl implements TransReOrderService {
 
         ApiClient client = new ApiClientImpl(request);
         RefundInfoSynResponse response = client.execute(request);
-        log.info(response.getBody());
+        String requestId = response.getRequestId();
+        log.info("requestId="+requestId);
+        log.info(response.getMsg());
         List<RefundSynInfo> refundSynInfos = response.getResult();
 
         List<ReFund> insertReFunds = new ArrayList<>();
@@ -77,7 +79,6 @@ public class TransReOrderServiceImpl implements TransReOrderService {
 
 
                 ReFund reFund = new ReFund();
-
                 BeanUtils.copyProperties(refundSynInfo,reFund);
 
                 if(reFundResult != null){
@@ -110,17 +111,33 @@ public class TransReOrderServiceImpl implements TransReOrderService {
     @Override
     public void transReOrder(Date startDate, Date endDate) throws Exception {
         Long id = 0L;
-        saveReFund(0L,startDate,endDate);
+
+        Boolean flag = true;
+
+        while (flag){
+            Map<String,Object> resMap = saveReFund(id,startDate,endDate);
+            log.info(resMap.toString());
+            id = (Long) resMap.get("id");
+            startDate = (Date) resMap.get("startDate");
+            flag = (Boolean) resMap.get("isNext");
+        }
+
+
     }
 
 
-    private void saveReFund(Long id,Date startDate, Date endDate) throws Exception {
+    private Map<String,Object> saveReFund(Long id, Date startDate, Date endDate) throws Exception {
+
+        Map<String,Object> resMap = new HashMap<>();
+
+        Boolean isNext = false;
+
         RefundInfoSynRequest request = new RefundInfoSynRequest();
         request.setServerUrl(nascentConfig.getServerUrl());
         request.setAppKey(nascentConfig.getAppKey());
         request.setAppSecret(nascentConfig.getAppSerect());
         request.setGroupId(nascentConfig.getGroupID());
-        request.setAccessToken(tokenService.getToken());
+        request.setAccessToken(tokenService.list().get(0).getToken());
 
         request.setStartTime(startDate);
         request.setEndTime(endDate);
@@ -129,50 +146,81 @@ public class TransReOrderServiceImpl implements TransReOrderService {
 
         ApiClient client = new ApiClientImpl(request);
         RefundInfoSynResponse response = client.execute(request);
-        log.info(response.getBody());
-        List<RefundSynInfo> refundSynInfos = response.getResult();
 
-        List<ReFund> insertReFunds = new ArrayList<>();
+        if("60001".equals(response.getCode())){
+            String token = tokenService.getToken();
+            UpdateWrapper<Token> tokenUpdate = new UpdateWrapper<>();
+            tokenUpdate.eq("name","nascent").set("token","token");
+            resMap.put("id",id);
+            resMap.put("startDate",startDate);
+            resMap.put("isNext",true);
+        }else if("200".equals(response.getCode())){
+            log.info(response.getBody());
+            List<RefundSynInfo> refundSynInfos = response.getResult();
 
-        List<ReFund> updateReFunds = new ArrayList<>();
+            List<ReFund> insertReFunds = new ArrayList<>();
 
-        if(refundSynInfos.size()>0){
-            for (RefundSynInfo refundSynInfo : refundSynInfos){
+            List<ReFund> updateReFunds = new ArrayList<>();
 
-                QueryWrapper<ReFund> reFundQuery = new QueryWrapper<>();
-                reFundQuery.eq("id",refundSynInfo.getId());
-                ReFund reFundResult = reFundService.getOne(reFundQuery);
+            if(refundSynInfos.size()>0){
+                isNext = true;
+                for (RefundSynInfo refundSynInfo : refundSynInfos){
+                    id = refundSynInfo.getId();
+
+                    startDate = refundSynInfo.getUpdateTime();
+
+                    QueryWrapper<ReFund> reFundQuery = new QueryWrapper<>();
+                    reFundQuery.eq("id",refundSynInfo.getId());
+                    ReFund reFundResult = reFundService.getOne(reFundQuery);
 
 
-                ReFund reFund = new ReFund();
+                    ReFund reFund = new ReFund();
+                    BeanUtils.copyProperties(refundSynInfo,reFund);
+                    log.info(refundSynInfo.toString());
+                    log.info(reFund.toString());
+                    reFund.setUpdateTime(refundSynInfo.getUpdateTime());
 
-                BeanUtils.copyProperties(refundSynInfo,reFund);
+                    if(reFundResult != null){
+                        updateReFunds.add(reFund);
+                    }else {
+                        insertReFunds.add(reFund);
+                    }
 
-                if(reFundResult != null){
-                    updateReFunds.add(reFund);
-                }else {
-                    insertReFunds.add(reFund);
+                    /*List<NickInfo> nickInfos = refundSynInfo.getNickInfos();
+                    List<ReFundNickInfo> reFundNickInfos = new ArrayList<>();
+                    for (NickInfo nickInfo : nickInfos){
+                        ReFundNickInfo reFundNickInfo = new ReFundNickInfo();
+                        BeanUtils.copyProperties(nickInfo,reFundNickInfo);
+                        reFundNickInfo.setMainid(refundSynInfo.getId());
+                        reFundNickInfos.add(reFundNickInfo);
+                    }
+                    reFundNickInfoService.saveBatch(reFundNickInfos);*/
                 }
 
-                List<NickInfo> nickInfos = refundSynInfo.getNickInfos();
-                List<ReFundNickInfo> reFundNickInfos = new ArrayList<>();
-                for (NickInfo nickInfo : nickInfos){
-                    ReFundNickInfo reFundNickInfo = new ReFundNickInfo();
-                    BeanUtils.copyProperties(nickInfo,reFundNickInfo);
-                    reFundNickInfo.setMainid(refundSynInfo.getId());
-                    reFundNickInfos.add(reFundNickInfo);
+                if(insertReFunds.size()>0){
+                    reFundService.saveBatch(insertReFunds);
                 }
-                reFundNickInfoService.saveBatch(reFundNickInfos);
-            }
 
-            if(insertReFunds.size()>0){
-                reFundService.saveBatch(insertReFunds);
-            }
+                if(updateReFunds.size()>0){
+                    reFundService.saveOrUpdateBatch(updateReFunds);
+                }
 
-            if(updateReFunds.size()>0){
-                reFundService.saveOrUpdateBatch(updateReFunds);
+                resMap.put("id",id);
+                resMap.put("startDate",startDate);
+                resMap.put("isNext",isNext);
+            }else {
+                resMap.put("id",0L);
+                resMap.put("startDate",startDate);
+                resMap.put("isNext",false);
             }
         }
+
+
+
+
+
+
+        return resMap;
     }
 
 

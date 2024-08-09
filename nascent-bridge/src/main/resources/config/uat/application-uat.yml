@@ -8,9 +8,9 @@ spring:
     name: dmsBridge
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://39.108.173.42:3306/ME_member?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
-    username: root
-    password: nascent@ecrp
+    url: jdbc:mysql://192.168.0.10:3306/cerp?characterEncoding=UTF-8&useLegacyDatetimeCode=false
+    username: cerp
+    password: fCBKkGkDMK2ebtXb
 
 # ====================Log4j2=========================
 logging:

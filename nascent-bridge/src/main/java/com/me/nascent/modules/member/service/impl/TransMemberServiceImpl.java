@@ -2,12 +2,14 @@ package com.me.nascent.modules.member.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.me.nascent.common.config.NascentConfig;
 import com.me.nascent.modules.member.entity.CardReceiveInfo;
 import com.me.nascent.modules.member.entity.FansStatus;
 import com.me.nascent.modules.member.entity.Member;
 import com.me.nascent.modules.member.entity.MemberNickInfo;
 import com.me.nascent.modules.member.service.*;
+import com.me.nascent.modules.token.entity.Token;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
@@ -55,7 +57,6 @@ public class TransMemberServiceImpl implements TransMemberService {
             startDate = (Date) resMap.get("updateTime");
             nextId = (Long) resMap.get("nextId");
             flag = (boolean) resMap.get("isNext");
-            flag = false;
             log.info("startDate="+startDate);
             log.info("nextId="+nextId);
             log.info("flag="+flag);
@@ -73,7 +74,8 @@ public class TransMemberServiceImpl implements TransMemberService {
         request.setAppSecret(nascentConfig.getAppSerect());
         request.setGroupId(nascentConfig.getGroupID());
 
-        request.setAccessToken(tokenService.getToken());
+        List<Token> tokens = tokenService.list();
+        request.setAccessToken(tokens.get(0).getToken());
         request.setStartTime(startDate);
         request.setEndTime(endDate);
         request.setActivate(true);
@@ -84,124 +86,135 @@ public class TransMemberServiceImpl implements TransMemberService {
         //request.setShopId(3411331L);
         ApiClient client = new ApiClientImpl(request);
         ActivateCustomerListSyncResponse response = client.execute(request);
-        log.info(response.getBody());
 
-        List<SystemCustomerInfo> systemCustomerInfos = response.getResult();
+        if("60001".equals(response.getCode())){
+            UpdateWrapper<Token> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("name","nascent").set("token",tokenService.getToken());
+            tokenService.update(updateWrapper);
+            resMap.put("nextId",nextId);
+            resMap.put("updateTime",startDate);
+            resMap.put("isNext",true);
+            return resMap;
+        }else {
+            //log.info(response.getBody());
 
-        List<Member> insertMembers = new ArrayList<>();
+            List<SystemCustomerInfo> systemCustomerInfos = response.getResult();
 
-        List<Member> updateMembers = new ArrayList<>();
+            List<Member> insertMembers = new ArrayList<>();
 
-        Boolean isNext = false;
-        Date updateTime = null;
+            List<Member> updateMembers = new ArrayList<>();
 
-        if (CollUtil.isNotEmpty(systemCustomerInfos)){
+            Boolean isNext = false;
+            Date updateTime = null;
 
-            isNext = true;
+            if (CollUtil.isNotEmpty(systemCustomerInfos)){
 
-            for (SystemCustomerInfo systemCustomerInfo : systemCustomerInfos){
-                Long id = systemCustomerInfo.getId();
-                nextId = id;
-                updateTime = systemCustomerInfo.getUpdateTime();
-                QueryWrapper<Member> memberQuery = new QueryWrapper<>();
-                memberQuery.eq("id",id);
-                Member existMember = memberService.getOne(memberQuery);
+                isNext = true;
 
-                Member member = new Member();
-                BeanUtils.copyProperties(systemCustomerInfo,member);
+                for (SystemCustomerInfo systemCustomerInfo : systemCustomerInfos){
+                    Long id = systemCustomerInfo.getId();
+                    nextId = id;
+                    updateTime = systemCustomerInfo.getUpdateTime();
+                    QueryWrapper<Member> memberQuery = new QueryWrapper<>();
+                    memberQuery.eq("id",id);
+                    Member existMember = memberService.getOne(memberQuery);
 
-                if(existMember != null){
-                    updateMembers.add(member);
-                }else {
-                    insertMembers.add(member);
+                    Member member = new Member();
+                    BeanUtils.copyProperties(systemCustomerInfo,member);
+
+                    if(existMember != null){
+                        updateMembers.add(member);
+                    }else {
+                        insertMembers.add(member);
+                    }
+
+                    List<CustomerCardReceiveInfo> customerCardReceiveInfos = systemCustomerInfo.getCardReceiveInfoList();
+
+                    List<CardReceiveInfo> insertCardReceiveInfos = new ArrayList<>();
+
+                    if(CollUtil.isNotEmpty(customerCardReceiveInfos)){
+
+                        QueryWrapper<CardReceiveInfo> queryWrapper = new QueryWrapper();
+                        queryWrapper.eq("mainid",id);
+
+                        List<CardReceiveInfo> existInfo = cardReceiveInfoService.list(queryWrapper);
+                        if(CollUtil.isNotEmpty(existInfo)){
+                            cardReceiveInfoService.remove(queryWrapper);
+                        }
+
+                        for (CustomerCardReceiveInfo customerCardReceiveInfo : customerCardReceiveInfos){
+                            CardReceiveInfo cardReceiveInfo = new CardReceiveInfo();
+                            BeanUtils.copyProperties(customerCardReceiveInfo,cardReceiveInfo);
+                            cardReceiveInfo.setMainId(id);
+                            insertCardReceiveInfos.add(cardReceiveInfo);
+                        }
+
+                        cardReceiveInfoService.saveBatch(insertCardReceiveInfos);
+                    }
+
+                    List<BaseWxFansStatusVo> baseWxFansStatusVos = systemCustomerInfo.getFansStatusVos();
+
+                    if(CollUtil.isNotEmpty(baseWxFansStatusVos)){
+
+                        QueryWrapper<FansStatus> fansStatusQuery = new QueryWrapper<>();
+                        fansStatusQuery.eq("mainid",id);
+                        List<FansStatus> existInfo = fansStatusService.list(fansStatusQuery);
+
+                        if(CollUtil.isNotEmpty(existInfo)){
+                            fansStatusService.remove(fansStatusQuery);
+                        }
+                        List<FansStatus> insertFansStatusList = new ArrayList<>();
+                        for (BaseWxFansStatusVo baseWxFansStatusVo : baseWxFansStatusVos){
+                            FansStatus fansStatus = new FansStatus();
+                            BeanUtils.copyProperties(baseWxFansStatusVo,fansStatus);
+                            fansStatus.setMainId(id);
+                        }
+
+                        fansStatusService.saveBatch(insertFansStatusList);
+                    }
+
+
+
+                    List<NickInfo> nickInfos = systemCustomerInfo.getNickInfoList();
+                    if (CollUtil.isNotEmpty(nickInfos)){
+                        QueryWrapper<MemberNickInfo> memberNickInfoQuery = new QueryWrapper<>();
+                        memberNickInfoQuery.eq("mainid",id);
+                        List<MemberNickInfo> existInfo = memberNickInfoService.list(memberNickInfoQuery);
+                        if(CollUtil.isNotEmpty(existInfo)){
+                            memberNickInfoService.remove(memberNickInfoQuery);
+                        }
+
+                        List<MemberNickInfo> memberNickInfos = new ArrayList<>();
+
+                        for (NickInfo nickInfo : nickInfos){
+                            MemberNickInfo memberNickInfo = new MemberNickInfo();
+                            BeanUtils.copyProperties(nickInfo,memberNickInfo);
+                            memberNickInfo.setMainId(id);
+                            memberNickInfos.add(memberNickInfo);
+                        }
+
+                        if(memberNickInfos.size()>0){
+                            memberNickInfoService.saveBatch(memberNickInfos);
+                        }
+                    }
                 }
 
-                List<CustomerCardReceiveInfo> customerCardReceiveInfos = systemCustomerInfo.getCardReceiveInfoList();
 
-                List<CardReceiveInfo> insertCardReceiveInfos = new ArrayList<>();
 
-                if(CollUtil.isNotEmpty(customerCardReceiveInfos)){
-
-                    QueryWrapper<CardReceiveInfo> queryWrapper = new QueryWrapper();
-                    queryWrapper.eq("mainid",id);
-
-                    List<CardReceiveInfo> existInfo = cardReceiveInfoService.list(queryWrapper);
-                    if(CollUtil.isNotEmpty(existInfo)){
-                        cardReceiveInfoService.remove(queryWrapper);
-                    }
-
-                    for (CustomerCardReceiveInfo customerCardReceiveInfo : customerCardReceiveInfos){
-                        CardReceiveInfo cardReceiveInfo = new CardReceiveInfo();
-                        BeanUtils.copyProperties(customerCardReceiveInfo,cardReceiveInfo);
-                        cardReceiveInfo.setMainId(id);
-                        insertCardReceiveInfos.add(cardReceiveInfo);
-                    }
-
-                    cardReceiveInfoService.saveBatch(insertCardReceiveInfos);
+                if(insertMembers.size()>0){
+                    memberService.saveBatch(insertMembers);
                 }
 
-                List<BaseWxFansStatusVo> baseWxFansStatusVos = systemCustomerInfo.getFansStatusVos();
-
-                if(CollUtil.isNotEmpty(baseWxFansStatusVos)){
-
-                    QueryWrapper<FansStatus> fansStatusQuery = new QueryWrapper<>();
-                    fansStatusQuery.eq("mainid",id);
-                    List<FansStatus> existInfo = fansStatusService.list(fansStatusQuery);
-
-                    if(CollUtil.isNotEmpty(existInfo)){
-                        fansStatusService.remove(fansStatusQuery);
-                    }
-                    List<FansStatus> insertFansStatusList = new ArrayList<>();
-                    for (BaseWxFansStatusVo baseWxFansStatusVo : baseWxFansStatusVos){
-                        FansStatus fansStatus = new FansStatus();
-                        BeanUtils.copyProperties(baseWxFansStatusVo,fansStatus);
-                        fansStatus.setMainId(id);
-                    }
-
-                    fansStatusService.saveBatch(insertFansStatusList);
-                }
-
-
-
-                List<NickInfo> nickInfos = systemCustomerInfo.getNickInfoList();
-                if (CollUtil.isNotEmpty(nickInfos)){
-                    QueryWrapper<MemberNickInfo> memberNickInfoQuery = new QueryWrapper<>();
-                    memberNickInfoQuery.eq("mainid",id);
-                    List<MemberNickInfo> existInfo = memberNickInfoService.list(memberNickInfoQuery);
-                    if(CollUtil.isNotEmpty(existInfo)){
-                        memberNickInfoService.remove(memberNickInfoQuery);
-                    }
-
-                    List<MemberNickInfo> memberNickInfos = new ArrayList<>();
-
-                    for (NickInfo nickInfo : nickInfos){
-                        MemberNickInfo memberNickInfo = new MemberNickInfo();
-                        BeanUtils.copyProperties(nickInfo,memberNickInfo);
-                        memberNickInfo.setMainId(id);
-                        memberNickInfos.add(memberNickInfo);
-                    }
-
-                    if(memberNickInfos.size()>0){
-                        memberNickInfoService.saveBatch(memberNickInfos);
-                    }
+                if(updateMembers.size()>0){
+                    memberService.saveOrUpdateBatch(updateMembers);
                 }
             }
 
-
-
-            if(insertMembers.size()>0){
-                memberService.saveBatch(insertMembers);
-            }
-
-            if(updateMembers.size()>0){
-                memberService.saveOrUpdateBatch(updateMembers);
-            }
+            resMap.put("nextId",nextId);
+            resMap.put("updateTime",updateTime);
+            resMap.put("isNext",isNext);
+            return resMap;
         }
-
-        resMap.put("nextId",nextId);
-        resMap.put("updateTime",updateTime);
-        resMap.put("isNext",isNext);
-        return resMap;
 
     }
 }

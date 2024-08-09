@@ -1,72 +1,35 @@
-package com.me.reorder;
+package com.me.nascent.modules.reorder.controller;
 
 import com.me.nascent.modules.reorder.service.TransReOrderService;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-@SpringBootTest
+@RestController
+@RequestMapping("ReFund")
 @Slf4j
-public class ReFundTest {
-
-    @Autowired
-    private TransReOrderService transReOrderService;
-
+public class ReFundController {
 
     @Qualifier("reFundExecutor")
     @Autowired
     private ThreadPoolTaskExecutor reFundExecutor;
 
-    @Test
-    public void getReOrder() throws Exception {
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    @Autowired
+    private TransReOrderService transReOrderService;
 
-        try {
-            Date startDate = sdf.parse("2023-07-01 00:00:00");
-            Date endDate = sdf.parse("2023-07-31 23:59:59");
-
-            while (startDate.before(endDate)) {
-                Date endDateOfWeek = new Date(startDate.getTime() +  30 * 60 * 1000); // 一小时
-                if (endDateOfWeek.after(endDate)) {
-                    endDateOfWeek = endDate;
-                }
-
-                String startStr = sdf.format(startDate);
-                String endStr = sdf.format(endDateOfWeek);
-                System.out.println("同步订单数据: " + startStr + " 到 " + endStr);
-
-                transReOrderService.transReOrder(startDate,endDateOfWeek);
-                startDate = endDateOfWeek;
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @Test
-    public void saveReOrder() throws Exception {
-        transReOrderService.putReOrder();
-
-    }
-
-    @Test
-    public void executorsTest(){
+    @PostMapping("getReFundByRange")
+    private String getReFundByRange(){
         String year = "2023";
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -75,7 +38,7 @@ public class ReFundTest {
 
         ExecutorService reFundExecutorService = reFundExecutor.getThreadPoolExecutor();
 
-        for (int month = 7; month <= 7; month++) {
+        for (int month = 3; month <= 8; month++) {
             cal.set(Calendar.YEAR, Integer.parseInt(year));
             cal.set(Calendar.MONTH, month - 1);
             cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -93,13 +56,17 @@ public class ReFundTest {
             Date endDate = cal.getTime();
             String startStr = sdf.format(startDate);
             String endStr = sdf.format(endDate);
-            /*reFundExecutorService.execute(()->{
+            reFundExecutorService.execute(()->{
                 //System.out.println(Thread.currentThread().getName());
-                log.info("同步订单数据: " + startStr + " 到 " + endStr);
-                data(startDate,endDate);
-            });*/
+                log.info(Thread.currentThread().getName()+"同步订单数据: " + startStr + " 到 " + endStr);
+                try {
+                    data(startDate,endDate);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            });
 
-            CompletableFuture<String> futureImg = CompletableFuture.supplyAsync(() -> {
+            /*CompletableFuture<String> futureImg = CompletableFuture.supplyAsync(() -> {
 
                 log.info("同步订单数据: " + startStr + " 到 " + endStr);
                 try {
@@ -108,9 +75,11 @@ public class ReFundTest {
                     throw new RuntimeException(e);
                 }
                 return "success";
-            },reFundExecutor);
+            },reFundExecutor);*/
         }
+        return "success";
     }
+
 
     private void data(Date startDate,Date endDate) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -123,18 +92,11 @@ public class ReFundTest {
 
             String startStr = sdf.format(startDate);
             String endStr = sdf.format(endDateOfWeek);
-            log.info("时间范围: " + startStr + " 到 " + endStr);
+            log.info(Thread.currentThread().getName()+"时间范围: " + startStr + " 到 " + endStr);
 
             transReOrderService.transReOrder(startDate,endDateOfWeek);
             startDate = endDateOfWeek;
         }
 
-    }
-
-    @Test
-    public void test(){
-
-        ZoneId systemZoneId = ZoneId.systemDefault();
-        System.out.println("系统默认时区: " + systemZoneId);
     }
 }

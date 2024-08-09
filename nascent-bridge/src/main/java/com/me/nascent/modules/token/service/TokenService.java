@@ -1,6 +1,9 @@
 package com.me.nascent.modules.token.service;
 
-public interface TokenService {
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.me.nascent.modules.token.entity.Token;
+
+public interface TokenService extends IService<Token> {
 
     String getToken() throws Exception;
 }

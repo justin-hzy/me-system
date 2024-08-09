@@ -1,9 +1,11 @@
 package com.me.nascent.modules.order.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.me.nascent.common.config.NascentConfig;
 import com.me.nascent.modules.order.entity.*;
 import com.me.nascent.modules.order.service.*;
+import com.me.nascent.modules.token.entity.Token;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
@@ -217,7 +219,11 @@ public class TransOrderServiceImpl implements TransOrderService {
         request.setAppKey(nascentConfig.getAppKey());
         request.setAppSecret(nascentConfig.getAppSerect());
         request.setGroupId(nascentConfig.getGroupID());
-        request.setAccessToken(tokenService.getToken());
+
+
+        List<Token> tokens = tokenService.list();
+        request.setAccessToken(tokens.get(0).getToken());
+
         request.setTimeType(1);
 
         request.setStartTime(startDate);
@@ -233,116 +239,125 @@ public class TransOrderServiceImpl implements TransOrderService {
         List<Trade> updateTrades = new ArrayList<>();
 
 
-        if(tradesVos.size()>0){
-            isNext = true;
-            for(TradesVo tradesVo : tradesVos){
-                Long id = tradesVo.getId();
-                nextId = id;
-                updateTime = tradesVo.getUpdateTime();
-                Trade trade = new Trade();
-                BeanUtils.copyProperties(tradesVo, trade);
 
-                QueryWrapper<Trade> tradeQuery = new QueryWrapper<>();
-                tradeQuery.eq("id",id);
-                Trade tradeResult = tradeService.getOne(tradeQuery);
-                if(tradeResult!=null){
-                    //进入更新集合
-                    updateTrades.add(trade);
-                }else {
-                    insertTrades.add(trade);
-                }
+        if("60001".equals(response.getCode())){
+            UpdateWrapper<Token> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("name","nascent").set("token",tokenService.getToken());
+            tokenService.update(updateWrapper);
+            resMap.put("nextId",nextId);
+            resMap.put("updateTime",startDate);
+            resMap.put("isNext",true);
+        }else if("200".equals(response.getCode())){
+            if(tradesVos.size()>0){
+                isNext = true;
+                for(TradesVo tradesVo : tradesVos){
+                    Long id = tradesVo.getId();
+                    nextId = id;
+                    updateTime = tradesVo.getUpdateTime();
+                    Trade trade = new Trade();
+                    BeanUtils.copyProperties(tradesVo, trade);
 
-                List<NickInfo> nickInfos = tradesVo.getNickInfoList();
-                List<Nick> nicks = new ArrayList<>();
-
-                if(nickInfos.size()>0 || nickInfos !=null){
-                    //清空明细表，重新载入
-                    QueryWrapper<Nick> nickUpdate = new QueryWrapper<>();
-                    nickUpdate.eq("mainid",id);
-                    nickService.remove(nickUpdate);
-
-
-                    for (NickInfo nickInfo : nickInfos){
-                        Nick nick = new Nick();
-                        BeanUtils.copyProperties(nickInfo, nick);
-                        nick.setMainid(id);
-
-                        nicks.add(nick);
+                    QueryWrapper<Trade> tradeQuery = new QueryWrapper<>();
+                    tradeQuery.eq("id",id);
+                    Trade tradeResult = tradeService.getOne(tradeQuery);
+                    if(tradeResult!=null){
+                        //进入更新集合
+                        updateTrades.add(trade);
+                    }else {
+                        insertTrades.add(trade);
                     }
-                    nickService.saveBatch(nicks);
-                }
 
-                List<PromotionsVo> promotionsVos = tradesVo.getPromotionVos();
+                    List<NickInfo> nickInfos = tradesVo.getNickInfoList();
+                    List<Nick> nicks = new ArrayList<>();
 
-                if(promotionsVos != null){
-                    List<Promotion> promotions = new ArrayList<>();
-                    //清空明细表，重新载入
-                    QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
-                    promotionQuery.eq("mainid",id);
-                    promotionService.remove(promotionQuery);
-
-                    for (PromotionsVo promotionsVo : promotionsVos){
-                        Promotion promotion = new Promotion();
-                        BeanUtils.copyProperties(promotionsVo,promotion);
-                        promotion.setMainid(id);
-                        promotions.add(promotion);
-                    }
-                    promotionService.saveBatch(promotions);
-                }
+                    if(nickInfos.size()>0 || nickInfos !=null){
+                        //清空明细表，重新载入
+                        QueryWrapper<Nick> nickUpdate = new QueryWrapper<>();
+                        nickUpdate.eq("mainid",id);
+                        nickService.remove(nickUpdate);
 
 
-                List<OrdersVo> ordersVos = tradesVo.getOrders();
+                        for (NickInfo nickInfo : nickInfos){
+                            Nick nick = new Nick();
+                            BeanUtils.copyProperties(nickInfo, nick);
+                            nick.setMainid(id);
 
-
-                if(ordersVos.size()>0 || ordersVos != null){
-                    List<Order> orders = new ArrayList<>();
-                    //清空明细表，重新载入
-                    QueryWrapper<Order> orderQuery = new QueryWrapper<>();
-                    orderQuery.eq("mainid",id);
-                    orderService.remove(orderQuery);
-
-
-                    for (OrdersVo ordersVo : ordersVos){
-                        Order order = new Order();
-                        BeanUtils.copyProperties(ordersVo,order);
-                        order.setMainid(id);
-                        orders.add(order);
-
-                        List<TradeByModifySgFinishInfo> tradeByModifySgFinishInfos = ordersVo.getSgFinishInfoList();
-
-                        if (tradeByModifySgFinishInfos.size()>0){
-                            List<SgFinishInfo> sgFinishInfos = new ArrayList<>();
-                            //清空明细表，重新载入
-                            QueryWrapper<SgFinishInfo> sgFinishInfoQuery = new QueryWrapper<>();
-                            sgFinishInfoQuery.eq("mainid",id);
-                            sgFinishInfoService.remove(sgFinishInfoQuery);
-
-                            for (TradeByModifySgFinishInfo tradeByModifySgFinishInfo : tradeByModifySgFinishInfos){
-                                SgFinishInfo sgFinishInfo = new SgFinishInfo();
-                                BeanUtils.copyProperties(tradeByModifySgFinishInfo,sgFinishInfo);
-                                sgFinishInfos.add(sgFinishInfo);
-                            }
-                            sgFinishInfoService.saveBatch(sgFinishInfos);
+                            nicks.add(nick);
                         }
+                        nickService.saveBatch(nicks);
                     }
-                    orderService.saveBatch(orders);
+
+                    List<PromotionsVo> promotionsVos = tradesVo.getPromotionVos();
+
+                    if(promotionsVos != null){
+                        List<Promotion> promotions = new ArrayList<>();
+                        //清空明细表，重新载入
+                        QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
+                        promotionQuery.eq("mainid",id);
+                        promotionService.remove(promotionQuery);
+
+                        for (PromotionsVo promotionsVo : promotionsVos){
+                            Promotion promotion = new Promotion();
+                            BeanUtils.copyProperties(promotionsVo,promotion);
+                            promotion.setMainid(id);
+                            promotions.add(promotion);
+                        }
+                        promotionService.saveBatch(promotions);
+                    }
+
+
+                    List<OrdersVo> ordersVos = tradesVo.getOrders();
+
+
+                    if(ordersVos.size()>0 || ordersVos != null){
+                        List<Order> orders = new ArrayList<>();
+                        //清空明细表，重新载入
+                        QueryWrapper<Order> orderQuery = new QueryWrapper<>();
+                        orderQuery.eq("mainid",id);
+                        orderService.remove(orderQuery);
+
+
+                        for (OrdersVo ordersVo : ordersVos){
+                            Order order = new Order();
+                            BeanUtils.copyProperties(ordersVo,order);
+                            order.setMainid(id);
+                            orders.add(order);
+
+                            List<TradeByModifySgFinishInfo> tradeByModifySgFinishInfos = ordersVo.getSgFinishInfoList();
+
+                            if (tradeByModifySgFinishInfos.size()>0){
+                                List<SgFinishInfo> sgFinishInfos = new ArrayList<>();
+                                //清空明细表，重新载入
+                                QueryWrapper<SgFinishInfo> sgFinishInfoQuery = new QueryWrapper<>();
+                                sgFinishInfoQuery.eq("mainid",id);
+                                sgFinishInfoService.remove(sgFinishInfoQuery);
+
+                                for (TradeByModifySgFinishInfo tradeByModifySgFinishInfo : tradeByModifySgFinishInfos){
+                                    SgFinishInfo sgFinishInfo = new SgFinishInfo();
+                                    BeanUtils.copyProperties(tradeByModifySgFinishInfo,sgFinishInfo);
+                                    sgFinishInfos.add(sgFinishInfo);
+                                }
+                                sgFinishInfoService.saveBatch(sgFinishInfos);
+                            }
+                        }
+                        orderService.saveBatch(orders);
+                    }
+                }
+
+                if(insertTrades.size()>0){
+                    //log.info(insertTrades.toString());
+                    tradeService.saveBatch(insertTrades);
+                }
+
+                if(updateTrades.size()>0){
+                    //log.info(updateTrades.toString());
+                    tradeService.saveOrUpdateBatch(updateTrades);
                 }
             }
-
-            if(insertTrades.size()>0){
-                //log.info(insertTrades.toString());
-                tradeService.saveBatch(insertTrades);
-            }
-
-            if(updateTrades.size()>0){
-                //log.info(updateTrades.toString());
-                tradeService.saveOrUpdateBatch(updateTrades);
-            }
+            resMap.put("nextId",nextId);
+            resMap.put("updateTime",updateTime);
+            resMap.put("isNext",isNext);
         }
-
-        resMap.put("nextId",nextId);
-        resMap.put("updateTime",updateTime);
-        resMap.put("isNext",isNext);
         return resMap;
     }
 }
