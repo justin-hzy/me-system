@@ -10,9 +10,12 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.CompletableFuture;
@@ -134,7 +137,21 @@ public class ReFundTest {
     @Test
     public void test(){
 
-        ZoneId systemZoneId = ZoneId.systemDefault();
-        System.out.println("系统默认时区: " + systemZoneId);
+        int year = 2023;
+        int month = 2;
+
+        LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
+        LocalDate lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth());
+
+        LocalDate startDate = firstDayOfMonth;
+        LocalDate endDate = startDate.plusDays(3);
+
+        while (startDate.isBefore(lastDayOfMonth)) {
+            System.out.println(startDate + " - " + endDate);
+
+
+            startDate = endDate.plusDays(1);
+            endDate = startDate.plusDays(3);
+        }
     }
 }
