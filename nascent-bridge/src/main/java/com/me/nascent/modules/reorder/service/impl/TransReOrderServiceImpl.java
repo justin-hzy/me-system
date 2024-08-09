@@ -186,7 +186,7 @@ public class TransReOrderServiceImpl implements TransReOrderService {
                         insertReFunds.add(reFund);
                     }
 
-                    /*List<NickInfo> nickInfos = refundSynInfo.getNickInfos();
+                    List<NickInfo> nickInfos = refundSynInfo.getNickInfos();
                     List<ReFundNickInfo> reFundNickInfos = new ArrayList<>();
                     for (NickInfo nickInfo : nickInfos){
                         ReFundNickInfo reFundNickInfo = new ReFundNickInfo();
@@ -194,7 +194,7 @@ public class TransReOrderServiceImpl implements TransReOrderService {
                         reFundNickInfo.setMainid(refundSynInfo.getId());
                         reFundNickInfos.add(reFundNickInfo);
                     }
-                    reFundNickInfoService.saveBatch(reFundNickInfos);*/
+                    reFundNickInfoService.saveBatch(reFundNickInfos);
                 }
 
                 if(insertReFunds.size()>0){
