@@ -1,5 +1,6 @@
 package com.me.nascent.modules.reorder.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.me.nascent.common.config.NascentConfig;
@@ -188,13 +189,23 @@ public class TransReOrderServiceImpl implements TransReOrderService {
 
                     List<NickInfo> nickInfos = refundSynInfo.getNickInfos();
                     List<ReFundNickInfo> reFundNickInfos = new ArrayList<>();
-                    for (NickInfo nickInfo : nickInfos){
-                        ReFundNickInfo reFundNickInfo = new ReFundNickInfo();
-                        BeanUtils.copyProperties(nickInfo,reFundNickInfo);
-                        reFundNickInfo.setMainid(refundSynInfo.getId());
-                        reFundNickInfos.add(reFundNickInfo);
+
+                    if (CollUtil.isNotEmpty(nickInfos)){
+
+                        QueryWrapper<ReFundNickInfo> reFundNickInfoQuery = new QueryWrapper<>();
+                        reFundNickInfoQuery.eq("mainid",id);
+                        reFundNickInfoService.remove(reFundNickInfoQuery);
+
+                        for (NickInfo nickInfo : nickInfos){
+
+
+                            ReFundNickInfo reFundNickInfo = new ReFundNickInfo();
+                            BeanUtils.copyProperties(nickInfo,reFundNickInfo);
+                            reFundNickInfo.setMainid(refundSynInfo.getId());
+                            reFundNickInfos.add(reFundNickInfo);
+                        }
+                        reFundNickInfoService.saveBatch(reFundNickInfos);
                     }
-                    reFundNickInfoService.saveBatch(reFundNickInfos);
                 }
 
                 if(insertReFunds.size()>0){
