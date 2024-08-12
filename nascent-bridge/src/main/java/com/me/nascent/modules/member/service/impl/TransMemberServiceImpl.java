@@ -115,18 +115,19 @@ public class TransMemberServiceImpl implements TransMemberService {
                     Long id = systemCustomerInfo.getId();
                     nextId = id;
                     updateTime = systemCustomerInfo.getUpdateTime();
-                    QueryWrapper<Member> memberQuery = new QueryWrapper<>();
+                    /*QueryWrapper<Member> memberQuery = new QueryWrapper<>();
                     memberQuery.eq("id",id);
-                    Member existMember = memberService.getOne(memberQuery);
+                    Member existMember = memberService.getOne(memberQuery);*/
 
                     Member member = new Member();
                     BeanUtils.copyProperties(systemCustomerInfo,member);
 
-                    if(existMember != null){
+                    insertMembers.add(member);
+                    /*if(existMember != null){
                         updateMembers.add(member);
                     }else {
                         insertMembers.add(member);
-                    }
+                    }*/
 
                     List<CustomerCardReceiveInfo> customerCardReceiveInfos = systemCustomerInfo.getCardReceiveInfoList();
 
@@ -168,6 +169,8 @@ public class TransMemberServiceImpl implements TransMemberService {
                             FansStatus fansStatus = new FansStatus();
                             BeanUtils.copyProperties(baseWxFansStatusVo,fansStatus);
                             fansStatus.setMainId(id);
+
+                            insertFansStatusList.add(fansStatus);
                         }
 
                         fansStatusService.saveBatch(insertFansStatusList);
@@ -205,9 +208,9 @@ public class TransMemberServiceImpl implements TransMemberService {
                     memberService.saveBatch(insertMembers);
                 }
 
-                if(updateMembers.size()>0){
+                /*if(updateMembers.size()>0){
                     memberService.saveOrUpdateBatch(updateMembers);
-                }
+                }*/
             }
 
             resMap.put("nextId",nextId);
