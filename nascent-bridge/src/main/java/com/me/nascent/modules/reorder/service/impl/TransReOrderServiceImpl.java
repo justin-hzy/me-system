@@ -192,9 +192,9 @@ public class TransReOrderServiceImpl implements TransReOrderService {
 
                     if (CollUtil.isNotEmpty(nickInfos)){
 
-                        QueryWrapper<ReFundNickInfo> reFundNickInfoQuery = new QueryWrapper<>();
+                        /*QueryWrapper<ReFundNickInfo> reFundNickInfoQuery = new QueryWrapper<>();
                         reFundNickInfoQuery.eq("mainid",id);
-                        reFundNickInfoService.remove(reFundNickInfoQuery);
+                        reFundNickInfoService.remove(reFundNickInfoQuery);*/
 
                         for (NickInfo nickInfo : nickInfos){
 
