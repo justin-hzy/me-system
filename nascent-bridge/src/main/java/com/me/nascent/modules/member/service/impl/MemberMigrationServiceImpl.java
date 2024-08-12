@@ -16,7 +16,6 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
 
     private TransMemberService transMemberService;
 
-    @Async
     @Override
     public void transMemberByRange(Date startDate, Date endDate) throws Exception {
         //SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
