@@ -156,7 +156,7 @@ public class TransReOrderServiceImpl implements TransReOrderService {
             resMap.put("startDate",startDate);
             resMap.put("isNext",true);
         }else if("200".equals(response.getCode())){
-            log.info(response.getBody());
+            //log.info(response.getBody());
             List<RefundSynInfo> refundSynInfos = response.getResult();
 
             List<ReFund> insertReFunds = new ArrayList<>();
@@ -225,10 +225,6 @@ public class TransReOrderServiceImpl implements TransReOrderService {
                 resMap.put("isNext",false);
             }
         }
-
-
-
-
 
 
         return resMap;
