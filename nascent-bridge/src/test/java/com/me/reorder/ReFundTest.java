@@ -137,8 +137,8 @@ public class ReFundTest {
     @Test
     public void test(){
 
-        int year = 2023;
-        int month = 2;
+        int year = 2024;
+        int month = 6;
 
         LocalDate firstDayOfMonth = LocalDate.of(year, month, 1);
         LocalDate lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth());
@@ -149,9 +149,41 @@ public class ReFundTest {
         while (startDate.isBefore(lastDayOfMonth)) {
             System.out.println(startDate + " - " + endDate);
 
-
             startDate = endDate.plusDays(1);
             endDate = startDate.plusDays(3);
+
+            if(endDate.isAfter(lastDayOfMonth)){
+                endDate = lastDayOfMonth;
+            }
+
         }
+        /*String year = "2023";
+        int month = 6;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, Integer.parseInt(year));
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date startDate = cal.getTime();
+        cal.add(Calendar.MONTH, 1);
+        cal.add(Calendar.DAY_OF_MONTH, -1);
+        cal.set(Calendar.HOUR_OF_DAY, 23);
+        cal.set(Calendar.MINUTE, 59);
+        cal.set(Calendar.SECOND, 59);
+        cal.set(Calendar.MILLISECOND, 999);
+        Date endDate = cal.getTime();
+
+        String startStr = sdf.format(startDate);
+        String endStr = sdf.format(endDate);
+
+
+
+
+        log.info(Thread.currentThread().getName()+"同步订单数据: " + startStr + " 到 " + endStr);*/
+
     }
 }
