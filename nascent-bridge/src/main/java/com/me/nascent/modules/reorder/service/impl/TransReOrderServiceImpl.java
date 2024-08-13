@@ -174,7 +174,6 @@ public class TransReOrderServiceImpl implements TransReOrderService {
                     reFundQuery.eq("id",refundSynInfo.getId());
                     ReFund reFundResult = reFundService.getOne(reFundQuery);
 
-
                     ReFund reFund = new ReFund();
                     BeanUtils.copyProperties(refundSynInfo,reFund);
                     log.info(refundSynInfo.toString());
@@ -185,26 +184,22 @@ public class TransReOrderServiceImpl implements TransReOrderService {
                         updateReFunds.add(reFund);
                     }else {
                         insertReFunds.add(reFund);
-                    }
 
-                    List<NickInfo> nickInfos = refundSynInfo.getNickInfos();
-                    List<ReFundNickInfo> reFundNickInfos = new ArrayList<>();
+                        List<NickInfo> nickInfos = refundSynInfo.getNickInfos();
+                        List<ReFundNickInfo> reFundNickInfos = new ArrayList<>();
 
-                    if (CollUtil.isNotEmpty(nickInfos)){
+                        if (CollUtil.isNotEmpty(nickInfos)){
 
-                        /*QueryWrapper<ReFundNickInfo> reFundNickInfoQuery = new QueryWrapper<>();
-                        reFundNickInfoQuery.eq("mainid",id);
-                        reFundNickInfoService.remove(reFundNickInfoQuery);*/
-
-                        for (NickInfo nickInfo : nickInfos){
+                            for (NickInfo nickInfo : nickInfos){
 
 
-                            ReFundNickInfo reFundNickInfo = new ReFundNickInfo();
-                            BeanUtils.copyProperties(nickInfo,reFundNickInfo);
-                            reFundNickInfo.setMainid(refundSynInfo.getId());
-                            reFundNickInfos.add(reFundNickInfo);
+                                ReFundNickInfo reFundNickInfo = new ReFundNickInfo();
+                                BeanUtils.copyProperties(nickInfo,reFundNickInfo);
+                                reFundNickInfo.setMainid(refundSynInfo.getId());
+                                reFundNickInfos.add(reFundNickInfo);
+                            }
+                            reFundNickInfoService.saveBatch(reFundNickInfos);
                         }
-                        reFundNickInfoService.saveBatch(reFundNickInfos);
                     }
                 }
 
