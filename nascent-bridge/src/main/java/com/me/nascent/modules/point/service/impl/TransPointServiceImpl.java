@@ -22,7 +22,7 @@ public class TransPointServiceImpl implements TransPointService {
     private TokenService tokenService;
 
     @Override
-    public void transReOrder() throws Exception {
+    public void transPoint() throws Exception {
 
         CustomerPointInfoQueryRequest request = new CustomerPointInfoQueryRequest();
         request.setServerUrl(nascentConfig.getServerUrl());

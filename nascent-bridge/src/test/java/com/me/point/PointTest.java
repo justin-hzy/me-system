@@ -15,6 +15,6 @@ public class PointTest {
 
     @Test
     public void getRePoint() throws Exception {
-        transPointService.transReOrder();
+        transPointService.transPoint();
     }
 }
