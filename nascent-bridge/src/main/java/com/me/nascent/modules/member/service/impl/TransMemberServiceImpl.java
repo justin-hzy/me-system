@@ -82,7 +82,7 @@ public class TransMemberServiceImpl implements TransMemberService {
         request.setNextId(nextId);
         request.setPageSize(50);
         //100000387 泊美  100000386	Za姬芮 80000078 集团会员
-        request.setViewId(100000387L);
+        request.setViewId(100000386L);
         //request.setShopId(3411331L);
         ApiClient client = new ApiClientImpl(request);
         ActivateCustomerListSyncResponse response = client.execute(request);
@@ -135,13 +135,13 @@ public class TransMemberServiceImpl implements TransMemberService {
 
                     if(CollUtil.isNotEmpty(customerCardReceiveInfos)){
 
-                        QueryWrapper<CardReceiveInfo> queryWrapper = new QueryWrapper();
+                        /*QueryWrapper<CardReceiveInfo> queryWrapper = new QueryWrapper();
                         queryWrapper.eq("mainid",id);
 
                         List<CardReceiveInfo> existInfo = cardReceiveInfoService.list(queryWrapper);
                         if(CollUtil.isNotEmpty(existInfo)){
                             cardReceiveInfoService.remove(queryWrapper);
-                        }
+                        }*/
 
                         for (CustomerCardReceiveInfo customerCardReceiveInfo : customerCardReceiveInfos){
                             CardReceiveInfo cardReceiveInfo = new CardReceiveInfo();
@@ -157,13 +157,13 @@ public class TransMemberServiceImpl implements TransMemberService {
 
                     if(CollUtil.isNotEmpty(baseWxFansStatusVos)){
 
-                        QueryWrapper<FansStatus> fansStatusQuery = new QueryWrapper<>();
+                        /*QueryWrapper<FansStatus> fansStatusQuery = new QueryWrapper<>();
                         fansStatusQuery.eq("mainid",id);
                         List<FansStatus> existInfo = fansStatusService.list(fansStatusQuery);
 
                         if(CollUtil.isNotEmpty(existInfo)){
                             fansStatusService.remove(fansStatusQuery);
-                        }
+                        }*/
                         List<FansStatus> insertFansStatusList = new ArrayList<>();
                         for (BaseWxFansStatusVo baseWxFansStatusVo : baseWxFansStatusVos){
                             FansStatus fansStatus = new FansStatus();
@@ -180,12 +180,12 @@ public class TransMemberServiceImpl implements TransMemberService {
 
                     List<NickInfo> nickInfos = systemCustomerInfo.getNickInfoList();
                     if (CollUtil.isNotEmpty(nickInfos)){
-                        QueryWrapper<MemberNickInfo> memberNickInfoQuery = new QueryWrapper<>();
+                        /*QueryWrapper<MemberNickInfo> memberNickInfoQuery = new QueryWrapper<>();
                         memberNickInfoQuery.eq("mainid",id);
                         List<MemberNickInfo> existInfo = memberNickInfoService.list(memberNickInfoQuery);
                         if(CollUtil.isNotEmpty(existInfo)){
                             memberNickInfoService.remove(memberNickInfoQuery);
-                        }
+                        }*/
 
                         List<MemberNickInfo> memberNickInfos = new ArrayList<>();
 
