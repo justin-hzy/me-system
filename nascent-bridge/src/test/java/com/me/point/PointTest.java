@@ -14,7 +14,13 @@ public class PointTest {
     private TransPointService transPointService;
 
     @Test
-    public void getRePoint() throws Exception {
-        transPointService.transPoint();
+    public void getPurePoint() throws Exception {
+
+        /*100000387	泊美  100000386	Za姬芮*/
+
+        /*pcode-206261	泊美积分体系
+          pcode-206256	Za线上积分体系
+          pcode-206258	Za姬芮线下积分体系*/
+        transPointService.transPoint("pcode-206261",100000387L);
     }
 }
