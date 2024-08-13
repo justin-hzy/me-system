@@ -1,6 +1,9 @@
 package com.me.nascent.modules.point.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.me.nascent.common.config.NascentConfig;
+import com.me.nascent.modules.member.entity.MemberNickInfo;
+import com.me.nascent.modules.member.service.MemberNickInfoService;
 import com.me.nascent.modules.point.service.TransPointService;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
@@ -12,6 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @AllArgsConstructor
@@ -20,6 +25,8 @@ public class TransPointServiceImpl implements TransPointService {
     private NascentConfig nascentConfig;
 
     private TokenService tokenService;
+
+    private MemberNickInfoService memberNickInfoService;
 
     @Override
     public void transPoint() throws Exception {
@@ -31,6 +38,20 @@ public class TransPointServiceImpl implements TransPointService {
         request.setGroupId(nascentConfig.getGroupID());
         request.setAccessToken(tokenService.getToken());
         request.setIntegralAccount("pcode-282900");
+
+        List<MemberNickInfo> memberNickInfos = memberNickInfoService.list();
+
+
+        int batchSize = 100; // 每次处理的数据量
+        int totalSize = memberNickInfos.size(); // 总数据量
+        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+
+        for (int i = 0; i < loopCount; i++) {
+            int start = i * batchSize; // 开始索引
+            int end = Math.min((i + 1) * batchSize, totalSize); // 结束索引，确保不超过总数据量
+
+
+        }
 
         ApiClient client = new ApiClientImpl(request);
         CustomerPointInfoQueryResponse response = client.execute(request);
