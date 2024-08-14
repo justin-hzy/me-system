@@ -1,9 +1,9 @@
 package com.me.nascent.modules.member.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.me.nascent.modules.member.entity.FansStatus;
+import com.me.nascent.modules.member.entity.PureMember;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface FansStatusMapper extends BaseMapper<FansStatus> {
+public interface PureMemberMapper extends BaseMapper<PureMember> {
 }

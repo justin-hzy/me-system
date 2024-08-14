@@ -7,8 +7,8 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@TableName("member_card_receive_info")
-public class CardReceiveInfo {
+@TableName("pure_member_card_receive_info")
+public class PureCardReceiveInfo {
 
     @TableField("mainId")
     private Long mainId;

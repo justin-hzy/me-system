@@ -5,8 +5,8 @@ import lombok.Data;
 import com.baomidou.mybatisplus.annotation.TableField;
 
 @Data
-@TableName("member_fans_status")
-public class FansStatus {
+@TableName("pure_member_fans_status")
+public class PureFansStatus {
 
     @TableField("mainId")
     private Long mainId;

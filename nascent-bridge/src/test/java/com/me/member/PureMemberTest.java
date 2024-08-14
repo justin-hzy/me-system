@@ -23,7 +23,7 @@ import java.util.Date;
 
 @SpringBootTest
 @Slf4j
-public class MemberTest {
+public class PureMemberTest {
 
     @Autowired
     private MemberMigrationService memberMigrationService;
@@ -32,12 +32,12 @@ public class MemberTest {
     @Test
     public void transMemberByRange() throws Exception {
 
-        String year = "2023";
+        String year = "2024";
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
 
-        for (int month = 1; month <= 12; month++) {
+        for (int month = 8; month <= 8; month++) {
             cal.set(Calendar.YEAR, Integer.parseInt(year));
             cal.set(Calendar.MONTH, month - 1);
             cal.set(Calendar.DAY_OF_MONTH, 1);

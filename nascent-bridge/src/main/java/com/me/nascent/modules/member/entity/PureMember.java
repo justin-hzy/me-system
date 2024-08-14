@@ -7,8 +7,8 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@TableName("member")
-public class Member {
+@TableName("pure_member")
+public class PureMember {
 
     @TableField("id")
     private Long id;
