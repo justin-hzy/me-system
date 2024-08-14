@@ -4,10 +4,10 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.me.nascent.common.config.NascentConfig;
-import com.me.nascent.modules.member.entity.CardReceiveInfo;
-import com.me.nascent.modules.member.entity.FansStatus;
-import com.me.nascent.modules.member.entity.Member;
-import com.me.nascent.modules.member.entity.MemberNickInfo;
+import com.me.nascent.modules.member.entity.PureCardReceiveInfo;
+import com.me.nascent.modules.member.entity.PureFansStatus;
+import com.me.nascent.modules.member.entity.PureMember;
+import com.me.nascent.modules.member.entity.PureMemberNickInfo;
 import com.me.nascent.modules.member.service.*;
 import com.me.nascent.modules.token.entity.Token;
 import com.me.nascent.modules.token.service.TokenService;
@@ -16,7 +16,6 @@ import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
 import com.nascent.ecrp.opensdk.domain.customer.CustomerCardReceiveInfo;
 import com.nascent.ecrp.opensdk.domain.customer.NickInfo;
 import com.nascent.ecrp.opensdk.domain.customer.SystemCustomerInfo;
-import com.nascent.ecrp.opensdk.domain.customer.ThirdPartyInviterInfo;
 import com.nascent.ecrp.opensdk.domain.customer.wxFansStatus.BaseWxFansStatusVo;
 import com.nascent.ecrp.opensdk.request.customer.ActivateCustomerListSyncRequest;
 import com.nascent.ecrp.opensdk.response.customer.ActivateCustomerListSyncResponse;
@@ -25,9 +24,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -39,13 +35,13 @@ public class TransMemberServiceImpl implements TransMemberService {
 
     private TokenService tokenService;
 
-    private MemberService memberService;
+    private PureMemberService pureMemberService;
 
-    private CardReceiveInfoService cardReceiveInfoService;
+    private PureCardReceiveInfoService pureCardReceiveInfoService;
 
-    private FansStatusService fansStatusService;
+    private PureFansStatusService pureFansStatusService;
 
-    private MemberNickInfoService memberNickInfoService;
+    private PureMemberNickInfoService pureMemberNickInfoService;
 
     @Override
     public void TransMemberByRange(Date startDate,Date endDate) throws Exception {
@@ -82,7 +78,7 @@ public class TransMemberServiceImpl implements TransMemberService {
         request.setNextId(nextId);
         request.setPageSize(50);
         //100000387 泊美  100000386	Za姬芮 80000078 集团会员
-        request.setViewId(100000386L);
+        request.setViewId(100000387L);
         //request.setShopId(3411331L);
         ApiClient client = new ApiClientImpl(request);
         ActivateCustomerListSyncResponse response = client.execute(request);
@@ -100,9 +96,9 @@ public class TransMemberServiceImpl implements TransMemberService {
 
             List<SystemCustomerInfo> systemCustomerInfos = response.getResult();
 
-            List<Member> insertMembers = new ArrayList<>();
+            List<PureMember> insertPureMembers = new ArrayList<>();
 
-            List<Member> updateMembers = new ArrayList<>();
+            List<PureMember> updatePureMembers = new ArrayList<>();
 
             Boolean isNext = false;
             Date updateTime = null;
@@ -115,102 +111,87 @@ public class TransMemberServiceImpl implements TransMemberService {
                     Long id = systemCustomerInfo.getId();
                     nextId = id;
                     updateTime = systemCustomerInfo.getUpdateTime();
-                    /*QueryWrapper<Member> memberQuery = new QueryWrapper<>();
-                    memberQuery.eq("id",id);
-                    Member existMember = memberService.getOne(memberQuery);*/
+                    QueryWrapper<PureMember> memberQuery = new QueryWrapper<>();
+                    memberQuery.eq("id",String.valueOf(id));
+                    PureMember existPureMember = pureMemberService.getOne(memberQuery);
 
-                    Member member = new Member();
-                    BeanUtils.copyProperties(systemCustomerInfo,member);
+                    PureMember pureMember = new PureMember();
+                    BeanUtils.copyProperties(systemCustomerInfo, pureMember);
 
-                    insertMembers.add(member);
-                    /*if(existMember != null){
-                        updateMembers.add(member);
+                    /*insertMembers.add(member);*/
+                    if(existPureMember != null){
+                        //更新逻辑
+                        updatePureMembers.add(pureMember);
                     }else {
-                        insertMembers.add(member);
-                    }*/
+                        //新增逻辑
+                        insertPureMembers.add(pureMember);
 
-                    List<CustomerCardReceiveInfo> customerCardReceiveInfos = systemCustomerInfo.getCardReceiveInfoList();
+                        List<CustomerCardReceiveInfo> customerCardReceiveInfos = systemCustomerInfo.getCardReceiveInfoList();
 
-                    List<CardReceiveInfo> insertCardReceiveInfos = new ArrayList<>();
+                        List<PureCardReceiveInfo> insertPureCardReceiveInfos = new ArrayList<>();
 
-                    if(CollUtil.isNotEmpty(customerCardReceiveInfos)){
+                        if(CollUtil.isNotEmpty(customerCardReceiveInfos)){
 
-                        /*QueryWrapper<CardReceiveInfo> queryWrapper = new QueryWrapper();
-                        queryWrapper.eq("mainid",id);
 
-                        List<CardReceiveInfo> existInfo = cardReceiveInfoService.list(queryWrapper);
-                        if(CollUtil.isNotEmpty(existInfo)){
-                            cardReceiveInfoService.remove(queryWrapper);
-                        }*/
+                            for (CustomerCardReceiveInfo customerCardReceiveInfo : customerCardReceiveInfos){
+                                PureCardReceiveInfo pureCardReceiveInfo = new PureCardReceiveInfo();
+                                BeanUtils.copyProperties(customerCardReceiveInfo, pureCardReceiveInfo);
+                                pureCardReceiveInfo.setMainId(id);
+                                insertPureCardReceiveInfos.add(pureCardReceiveInfo);
+                            }
 
-                        for (CustomerCardReceiveInfo customerCardReceiveInfo : customerCardReceiveInfos){
-                            CardReceiveInfo cardReceiveInfo = new CardReceiveInfo();
-                            BeanUtils.copyProperties(customerCardReceiveInfo,cardReceiveInfo);
-                            cardReceiveInfo.setMainId(id);
-                            insertCardReceiveInfos.add(cardReceiveInfo);
+                            pureCardReceiveInfoService.saveBatch(insertPureCardReceiveInfos);
                         }
 
-                        cardReceiveInfoService.saveBatch(insertCardReceiveInfos);
-                    }
+                        List<BaseWxFansStatusVo> baseWxFansStatusVos = systemCustomerInfo.getFansStatusVos();
 
-                    List<BaseWxFansStatusVo> baseWxFansStatusVos = systemCustomerInfo.getFansStatusVos();
+                        if(CollUtil.isNotEmpty(baseWxFansStatusVos)){
 
-                    if(CollUtil.isNotEmpty(baseWxFansStatusVos)){
+                            List<PureFansStatus> insertPureFansStatusList = new ArrayList<>();
+                            for (BaseWxFansStatusVo baseWxFansStatusVo : baseWxFansStatusVos){
+                                PureFansStatus pureFansStatus = new PureFansStatus();
+                                BeanUtils.copyProperties(baseWxFansStatusVo, pureFansStatus);
+                                pureFansStatus.setMainId(id);
 
-                        /*QueryWrapper<FansStatus> fansStatusQuery = new QueryWrapper<>();
-                        fansStatusQuery.eq("mainid",id);
-                        List<FansStatus> existInfo = fansStatusService.list(fansStatusQuery);
+                                insertPureFansStatusList.add(pureFansStatus);
+                            }
 
-                        if(CollUtil.isNotEmpty(existInfo)){
-                            fansStatusService.remove(fansStatusQuery);
-                        }*/
-                        List<FansStatus> insertFansStatusList = new ArrayList<>();
-                        for (BaseWxFansStatusVo baseWxFansStatusVo : baseWxFansStatusVos){
-                            FansStatus fansStatus = new FansStatus();
-                            BeanUtils.copyProperties(baseWxFansStatusVo,fansStatus);
-                            fansStatus.setMainId(id);
-
-                            insertFansStatusList.add(fansStatus);
+                            pureFansStatusService.saveBatch(insertPureFansStatusList);
                         }
 
-                        fansStatusService.saveBatch(insertFansStatusList);
-                    }
 
 
+                        List<NickInfo> nickInfos = systemCustomerInfo.getNickInfoList();
+                        if (CollUtil.isNotEmpty(nickInfos)){
 
-                    List<NickInfo> nickInfos = systemCustomerInfo.getNickInfoList();
-                    if (CollUtil.isNotEmpty(nickInfos)){
-                        /*QueryWrapper<MemberNickInfo> memberNickInfoQuery = new QueryWrapper<>();
-                        memberNickInfoQuery.eq("mainid",id);
-                        List<MemberNickInfo> existInfo = memberNickInfoService.list(memberNickInfoQuery);
-                        if(CollUtil.isNotEmpty(existInfo)){
-                            memberNickInfoService.remove(memberNickInfoQuery);
-                        }*/
+                            List<PureMemberNickInfo> pureMemberNickInfos = new ArrayList<>();
 
-                        List<MemberNickInfo> memberNickInfos = new ArrayList<>();
+                            for (NickInfo nickInfo : nickInfos){
+                                PureMemberNickInfo pureMemberNickInfo = new PureMemberNickInfo();
+                                BeanUtils.copyProperties(nickInfo, pureMemberNickInfo);
+                                pureMemberNickInfo.setMainId(id);
+                                pureMemberNickInfos.add(pureMemberNickInfo);
+                            }
 
-                        for (NickInfo nickInfo : nickInfos){
-                            MemberNickInfo memberNickInfo = new MemberNickInfo();
-                            BeanUtils.copyProperties(nickInfo,memberNickInfo);
-                            memberNickInfo.setMainId(id);
-                            memberNickInfos.add(memberNickInfo);
-                        }
-
-                        if(memberNickInfos.size()>0){
-                            memberNickInfoService.saveBatch(memberNickInfos);
+                            if(pureMemberNickInfos.size()>0){
+                                pureMemberNickInfoService.saveBatch(pureMemberNickInfos);
+                            }
                         }
                     }
+
+
                 }
 
 
 
-                if(insertMembers.size()>0){
-                    memberService.saveBatch(insertMembers);
+                if(insertPureMembers.size()>0){
+                    pureMemberService.saveBatch(insertPureMembers);
                 }
 
-                /*if(updateMembers.size()>0){
-                    memberService.saveOrUpdateBatch(updateMembers);
-                }*/
+                if(updatePureMembers.size()>0){
+                    pureMemberService.saveOrUpdateBatch(updatePureMembers);
+
+                }
             }
 
             resMap.put("nextId",nextId);
