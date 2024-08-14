@@ -16,7 +16,12 @@ public class GradeTest {
     @Test
     public void transGradeTest() throws Exception {
 
-        transGradeService.TransGrade();
+        //100000387 泊美  100000386	Za姬芮
+        Long viewId = 100000386L;
+
+        transGradeService.TransZaGrade(viewId);
+
+
 
     }
 }
