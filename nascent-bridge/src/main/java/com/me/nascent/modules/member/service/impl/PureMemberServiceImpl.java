@@ -7,5 +7,5 @@ import com.me.nascent.modules.member.service.PureMemberService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PurePureMemberServiceImpl extends ServiceImpl<PureMemberMapper, PureMember> implements PureMemberService {
+public class PureMemberServiceImpl extends ServiceImpl<PureMemberMapper, PureMember> implements PureMemberService {
 }

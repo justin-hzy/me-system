@@ -7,5 +7,5 @@ import com.me.nascent.modules.member.service.PureFansStatusService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PurePureFansStatusServiceImpl extends ServiceImpl<PureFansStatusMapper, PureFansStatus> implements PureFansStatusService {
+public class PureFansStatusServiceImpl extends ServiceImpl<PureFansStatusMapper, PureFansStatus> implements PureFansStatusService {
 }
