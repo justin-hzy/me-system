@@ -113,7 +113,7 @@ public class TradeTest {
 
         Calendar cal = Calendar.getInstance();
 
-        for (int month = 10; month <= 10; month++) {
+        for (int month = 12; month <= 12; month++) {
             cal.set(Calendar.YEAR, Integer.parseInt(year));
             cal.set(Calendar.MONTH, month - 1);
             cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -183,4 +183,9 @@ public class TradeTest {
     }
 
 
+    @Test
+    public void putTrade(){
+        transOrderService.putOrder();
+
+    }
 }

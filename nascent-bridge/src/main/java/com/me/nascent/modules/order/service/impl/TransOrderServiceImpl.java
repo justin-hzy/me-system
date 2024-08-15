@@ -4,19 +4,25 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.me.nascent.common.config.NascentConfig;
+import com.me.nascent.modules.member.entity.PureMemberNickInfo;
 import com.me.nascent.modules.order.entity.*;
 import com.me.nascent.modules.order.service.*;
+import com.me.nascent.modules.point.entity.PureMemberPoint;
 import com.me.nascent.modules.token.entity.Token;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
 import com.nascent.ecrp.opensdk.domain.customer.NickInfo;
+import com.nascent.ecrp.opensdk.domain.trade.OrderDetailVo;
+import com.nascent.ecrp.opensdk.domain.trade.PromotionDetailVo;
 import com.nascent.ecrp.opensdk.domain.trade.PromotionsVo;
+import com.nascent.ecrp.opensdk.domain.trade.TradeDetailVo;
 import com.nascent.ecrp.opensdk.domain.trade.tradeByModifyTime.OrdersVo;
 import com.nascent.ecrp.opensdk.domain.trade.tradeByModifyTime.TradeByModifySgFinishInfo;
 import com.nascent.ecrp.opensdk.domain.trade.tradeByModifyTime.TradesVo;
 import com.nascent.ecrp.opensdk.request.trade.TradeSaveRequest;
 import com.nascent.ecrp.opensdk.request.trade.TradeSynRequest;
+import com.nascent.ecrp.opensdk.response.trade.TradeSaveResponse;
 import com.nascent.ecrp.opensdk.response.trade.TradeSynResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -205,6 +211,75 @@ public class TransOrderServiceImpl implements TransOrderService {
             log.info("startDate="+startDate);
             log.info("nextId="+nextId);
             log.info("flag="+flag);
+        }
+    }
+
+    @Override
+    public void putOrder() throws Exception {
+        List<Trade> trades = tradeService.list();
+
+        int batchSize = 100; // 每次处理的数据量
+        int totalSize = trades.size(); // 总数据量
+        //int totalSize = 200;
+        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+
+        for (int i = 0; i < loopCount; i++) {
+            int start = i * batchSize; // 开始索引
+            int end = Math.min((i + 1) * batchSize, totalSize);
+
+            List<Trade> batchList = trades.subList(start,end);
+            log.info("batchList="+batchList.toString());
+
+            List<TradeDetailVo> tradeDetailVoList = new ArrayList<>();
+            for (Trade trade : batchList){
+
+                Long id = trade.getId();
+
+
+                TradeDetailVo tradeDetailVo = new TradeDetailVo();
+                BeanUtils.copyProperties(trade,tradeDetailVo);
+
+                List<OrderDetailVo> orderDetailVos = tradeDetailVo.getOrderDetailVoList();
+
+                QueryWrapper<Order> orderQuery = new QueryWrapper<>();
+                orderQuery.eq("mainid",id);
+                List<Order> existOrders = orderService.list(orderQuery);
+                if(CollUtil.isNotEmpty(existOrders)){
+                    for (Order order : existOrders){
+                        OrderDetailVo orderDetailVo  = new OrderDetailVo();
+                        BeanUtils.copyProperties(order,orderDetailVo);
+                        orderDetailVos.add(orderDetailVo);
+                    }
+                }
+
+                List<PromotionDetailVo> promotionDetailVos = tradeDetailVo.getPromotionDetailVoList();
+
+                QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
+                orderQuery.eq("mainid",id);
+                List<Promotion> existPromotions = promotionService.list(promotionQuery);
+
+                if (CollUtil.isNotEmpty(existPromotions)){
+                    for (Promotion promotion : existPromotions){
+                        PromotionDetailVo promotionDetailVo = new PromotionDetailVo();
+                        BeanUtils.copyProperties(promotion,promotionDetailVo);
+                        promotionDetailVos.add(promotionDetailVo);
+                    }
+                }
+
+            }
+
+            TradeSaveRequest request = new TradeSaveRequest();
+            request.setServerUrl(nascentConfig.getServerUrl());
+            request.setAppKey(nascentConfig.getAppKey());
+            request.setAppSecret(nascentConfig.getAppSerect());
+            request.setGroupId(nascentConfig.getGroupID());
+            request.setAccessToken(tokenService.getToken());
+            request.setTradeDetailVoList(tradeDetailVoList);
+
+            ApiClient client = new ApiClientImpl(request);
+
+            TradeSaveResponse response = client.execute(request);
+            log.info("code="+response.getCode());
         }
     }
 
