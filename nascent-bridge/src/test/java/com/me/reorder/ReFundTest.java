@@ -10,10 +10,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.Calendar;
@@ -135,7 +132,7 @@ public class ReFundTest {
     }
 
     @Test
-    public void test(){
+    public void test() throws ParseException {
 
         int year = 2024;
         int month = 6;
@@ -144,13 +141,28 @@ public class ReFundTest {
         LocalDate lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth());
 
         LocalDate startDate = firstDayOfMonth;
-        LocalDate endDate = startDate.plusDays(3);
+        LocalTime startTime = LocalTime.MIN;
+        LocalDate endDate = startDate.plusDays(4);
+        LocalTime endTime = LocalTime.MAX;
 
         while (startDate.isBefore(lastDayOfMonth)) {
             System.out.println(startDate + " - " + endDate);
 
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            //System.out.println(startDate.atTime(startTime).format(formatter) + " - " + endDate.atTime(endTime).format(formatter));
+
+            String startDateStr = startDate.atTime(startTime).format(formatter);
+            String endDateStr = endDate.atTime(endTime).format(formatter);
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date1 = sdf.parse(startDateStr);
+            Date date2 = sdf.parse(endDateStr);
+
+            System.out.println("date1="+date1+",date2="+date2);
+
             startDate = endDate.plusDays(1);
-            endDate = startDate.plusDays(3);
+            endDate = startDate.plusDays(4);
 
             if(endDate.isAfter(lastDayOfMonth)){
                 endDate = lastDayOfMonth;
