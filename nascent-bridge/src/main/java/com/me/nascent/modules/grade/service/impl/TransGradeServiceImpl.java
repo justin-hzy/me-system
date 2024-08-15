@@ -73,7 +73,7 @@ public class TransGradeServiceImpl implements TransGradeService {
 
         List<GradeCustomerInfo> list = new ArrayList<>();
 
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i <= size; i++) {
 
             ZaMemberNickInfo zaMemberNickInfo = zaMemberNickInfos.get(i);
 
@@ -117,7 +117,7 @@ public class TransGradeServiceImpl implements TransGradeService {
                 }
             }
 
-            if(list.size() == 10000){
+            if(list.size() == 10000 || i==size){
                 gradeCustomerInfoService.saveBatch(list);
                 list.clear();
             }
