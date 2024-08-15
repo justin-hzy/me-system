@@ -14,6 +14,9 @@ public class PureMemberPoint {
     @TableField("platform")
     private int platform;
 
+    @TableField("integralAccount")
+    private String integralAccount;
+
     @TableField("bindMobile")
     private String bindMobile;
 
