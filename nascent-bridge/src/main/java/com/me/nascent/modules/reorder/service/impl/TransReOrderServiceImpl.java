@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.me.nascent.common.config.NascentConfig;
+import com.me.nascent.modules.order.entity.Trade;
 import com.me.nascent.modules.reorder.entity.ReFund;
 import com.me.nascent.modules.reorder.entity.ReFundNickInfo;
 import com.me.nascent.modules.reorder.service.ReFundNickInfoService;
@@ -236,55 +237,34 @@ public class TransReOrderServiceImpl implements TransReOrderService {
         request.setAppSecret(nascentConfig.getAppSerect());
         request.setGroupId(nascentConfig.getGroupID());
         request.setAccessToken(tokenService.getToken());
-        request.setShopId(3411331L);
 
-        ThirdRefund refund = new ThirdRefund();
+        List<ReFund> existReFund = reFundService.list();
 
-        String createDateStr  = "2022-07-01 00:00:00";
+        int batchSize = 100; // 每次处理的数据量
+        int totalSize = existReFund.size(); // 总数据量
 
-        //定义日期时间格式
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        // 解析字符串到 LocalDateTime
-        LocalDateTime startDateTime = LocalDateTime.parse(createDateStr, formatter);
-        // 转换为 Date
-        Date createDate = Date.from(startDateTime.atZone(ZoneId.systemDefault()).toInstant());
-        refund.setCreated(createDate);
-        refund.setOutRefundId("123456");
-        BigDecimal reFundFee = new BigDecimal("100");
-        refund.setRefundFee(reFundFee);
-        refund.setRefundReasonStr("测试");
-        refund.setRefundStatus("SUCCESS");
-        refund.setRefundWay(0);
-        refund.setOutTradeId("1601695815015278366");
+        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+
+        for (int i = 0; i < loopCount; i++) {
+            int start = i * batchSize; // 开始索引
+            int end = Math.min((i + 1) * batchSize, totalSize);
+
+            List<ReFund> batchList = existReFund.subList(start, end);
+            log.info("batchList=" + batchList.toString());
+
+            List<ThirdRefund> refunds = new ArrayList<>();
+
+            for (ReFund reFund : batchList) {
+                ThirdRefund thirdRefund = new ThirdRefund();
+                BeanUtils.copyProperties(reFund, thirdRefund);
+
+                refunds.add(thirdRefund);
+            }
+
+            request.setRefunds(refunds);
 
 
-        RefundPointInfo refundPointInfo = new RefundPointInfo();
-        refundPointInfo.setIntegralAccount("13316001823");
-        BigDecimal point = new BigDecimal(100);
-        refundPointInfo.setPoint(point);
-        refund.setRefundPointInfo(refundPointInfo);
-
-        List<RefundSgInfo> refundSgInfos = new ArrayList<>();
-        RefundSgInfo refundSgInfo = new RefundSgInfo();
-        BigDecimal ratio = new BigDecimal(0.5);
-        refundSgInfo.setRatio(ratio);
-        refundSgInfos.add(refundSgInfo);
-        refund.setRefundSgInfos(refundSgInfos);
-
-        List<ThirdRefund> refunds = new ArrayList<>();
-        refunds.add(refund);
-        request.setRefunds(refunds);
-
-        ApiClient client = new ApiClientImpl(request);
-
-        log.info(request.toString());
-
-        ThirdRefundSaveResponse response = client.execute(request);
-        log.info(response.getBody());
+            ApiClient client = new ApiClientImpl(request);
+        }
     }
-
-
-
-
-
 }

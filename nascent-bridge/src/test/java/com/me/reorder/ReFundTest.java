@@ -198,4 +198,9 @@ public class ReFundTest {
         log.info(Thread.currentThread().getName()+"同步订单数据: " + startStr + " 到 " + endStr);*/
 
     }
+
+    @Test
+    public void putReFund() throws Exception {
+        transReOrderService.putReOrder();
+    }
 }
