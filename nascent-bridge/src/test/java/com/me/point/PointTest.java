@@ -23,4 +23,9 @@ public class PointTest {
           pcode-206258	Za姬芮线下积分体系*/
         transPointService.transPoint("pcode-206258",100000386L);
     }
+
+    @Test
+    public void putPoint() throws Exception {
+        transPointService.putPureMemberPoint();
+    }
 }

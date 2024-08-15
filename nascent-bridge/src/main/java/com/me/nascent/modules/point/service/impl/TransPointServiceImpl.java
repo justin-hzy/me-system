@@ -9,6 +9,7 @@ import com.me.nascent.modules.member.service.PureMemberNickInfoService;
 import com.me.nascent.modules.point.entity.PureMemberPoint;
 import com.me.nascent.modules.point.service.PureMemberPointService;
 import com.me.nascent.modules.point.service.TransPointService;
+import com.me.nascent.modules.reorder.entity.ReFund;
 import com.me.nascent.modules.token.entity.Token;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
@@ -16,12 +17,15 @@ import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
 import com.nascent.ecrp.opensdk.domain.customer.NickPlatform;
 import com.nascent.ecrp.opensdk.domain.point.CustomerAccountPointInfo;
 import com.nascent.ecrp.opensdk.request.point.CustomerPointInfoQueryRequest;
+import com.nascent.ecrp.opensdk.request.point.PointAddRequest;
 import com.nascent.ecrp.opensdk.response.point.CustomerPointInfoQueryResponse;
+import com.nascent.ecrp.opensdk.response.point.PointAddResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -119,5 +123,41 @@ public class TransPointServiceImpl implements TransPointService {
                 }
             }
         }
+    }
+
+    @Override
+    public void putPureMemberPoint() throws Exception {
+
+        PointAddRequest request = new PointAddRequest();
+        request.setServerUrl(nascentConfig.getServerUrl());
+        request.setAppKey(nascentConfig.getAppKey());
+        request.setAppSecret(nascentConfig.getAppSerect());
+        request.setGroupId(nascentConfig.getGroupID());
+        request.setAccessToken(tokenService.getToken());
+
+        List<PureMemberPoint> pureMemberPoints = pureMemberPointService.list();
+
+        /*int batchSize = 100; // 每次处理的数据量
+        int totalSize = pureMemberPoints.size(); // 总数据量
+
+        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+
+        for (int i = 0; i < loopCount; i++) {
+
+
+        }*/
+
+        for (PureMemberPoint pureMemberPoint : pureMemberPoints){
+            request.setNasOuid(pureMemberPoint.getNasOuid());
+            request.setPlatform(pureMemberPoint.getPlatform());
+            request.setIntegralAccount(pureMemberPoint.getIntegralAccount());
+            request.setPoint(BigDecimal.valueOf(pureMemberPoint.getScore()));
+            request.setSendType(1);
+            request.setRemark("悦江积分初始化");
+
+            ApiClient client = new ApiClientImpl(request);
+            PointAddResponse response = client.execute(request);
+        }
+
     }
 }
