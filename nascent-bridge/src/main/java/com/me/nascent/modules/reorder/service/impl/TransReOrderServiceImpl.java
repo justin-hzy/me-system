@@ -265,6 +265,7 @@ public class TransReOrderServiceImpl implements TransReOrderService {
 
 
             ApiClient client = new ApiClientImpl(request);
+            ThirdRefundSaveResponse response = client.execute(request);
         }
     }
 }
