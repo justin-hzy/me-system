@@ -184,7 +184,7 @@ public class TradeTest {
 
 
     @Test
-    public void putTrade(){
+    public void putTrade() throws Exception {
         transOrderService.putOrder();
 
     }
