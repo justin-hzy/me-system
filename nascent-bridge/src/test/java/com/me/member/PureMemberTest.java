@@ -63,4 +63,9 @@ public class PureMemberTest {
         }
 
     }
+
+    @Test
+    public void putPureMember() throws Exception {
+        memberMigrationService.putPureMember();
+    }
 }
