@@ -9,7 +9,6 @@ import java.util.Date;
 
 @Data
 @TableName("grade_customer_info")
-
 public class GradeCustomerInfo {
 
     @TableField("nasOuid")
