@@ -15,15 +15,19 @@ import com.me.nascent.modules.grade.service.TransGradeService;
 import com.me.nascent.modules.member.entity.PureMemberNickInfo;
 import com.me.nascent.modules.member.entity.ZaMemberNickInfo;
 import com.me.nascent.modules.member.service.ZaMemberNickInfoService;
+import com.me.nascent.modules.point.entity.PureMemberPoint;
 import com.me.nascent.modules.token.entity.Token;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
 
 import com.nascent.ecrp.opensdk.domain.customer.CustomerCardReceiveInfo;
+import com.nascent.ecrp.opensdk.domain.customer.CustomerGradeUpdateInfo;
 import com.nascent.ecrp.opensdk.domain.customer.systemCustomer.SystemCustomerInfo;
 import com.nascent.ecrp.opensdk.domain.customer.wxFansStatus.BaseWxFansStatusVo;
+import com.nascent.ecrp.opensdk.request.customer.CustomerGradeUpdateRequest;
 import com.nascent.ecrp.opensdk.request.customer.SystemCustomerGetRequest;
+import com.nascent.ecrp.opensdk.response.customer.CustomerGradeUpdateResponse;
 import com.nascent.ecrp.opensdk.response.customer.SystemCustomerGetResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -167,5 +171,47 @@ public class TransGradeServiceImpl implements TransGradeService {
                 }
             }
         }*/
+    }
+
+    @Override
+    public void putGrade() throws Exception {
+
+        List<GradeCustomerInfo> gradeCustomerInfos = gradeCustomerInfoService.list();
+        CustomerGradeUpdateRequest request = new CustomerGradeUpdateRequest();
+        request.setServerUrl(nascentConfig.getServerUrl());
+        request.setAppKey(nascentConfig.getAppKey());
+        request.setAppSecret(nascentConfig.getAppSerect());
+        request.setGroupId(nascentConfig.getGroupID());
+        request.setAccessToken(tokenService.getToken());
+
+
+
+
+        List<GradeCustomerInfo> list = new ArrayList<>();
+
+        int batchSize = 100; // 每次处理的数据量
+        int totalSize  = gradeCustomerInfos.size(); // 总数据量;
+        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+
+        for (int i = 0; i < loopCount; i++) {
+
+            int start = i * batchSize; // 开始索引
+            int end = Math.min((i + 1) * batchSize, totalSize); // 结束索引，确保不超过总数据量
+
+            List<GradeCustomerInfo> batchList = gradeCustomerInfos.subList(start, end);
+            log.info("batchList=" + batchList.toString());
+
+            List<CustomerGradeUpdateInfo> customerGradeUpdateInfoList = new ArrayList<>();
+            for (GradeCustomerInfo gradeCustomerInfo : batchList){
+                CustomerGradeUpdateInfo gradeUpdateInfo = new CustomerGradeUpdateInfo();
+                BeanUtils.copyProperties(gradeCustomerInfo,gradeUpdateInfo);
+
+                customerGradeUpdateInfoList.add(gradeUpdateInfo);
+            }
+            request.setCustomerGradeUpdateInfoList(customerGradeUpdateInfoList);
+
+            ApiClient apiClient =new ApiClientImpl(request);
+            CustomerGradeUpdateResponse response = apiClient.execute(request);
+        }
     }
 }

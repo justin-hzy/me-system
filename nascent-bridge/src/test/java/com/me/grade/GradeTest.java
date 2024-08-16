@@ -13,6 +13,8 @@ public class GradeTest {
     @Autowired
     TransGradeService transGradeService;
 
+
+
     @Test
     public void transGradeTest() throws Exception {
 
@@ -20,8 +22,11 @@ public class GradeTest {
         Long viewId = 100000386L;
 
         transGradeService.TransZaGrade(viewId);
+    }
 
 
-
+    @Test
+    public void putGrade() throws Exception {
+        transGradeService.putGrade();
     }
 }
