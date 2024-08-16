@@ -239,7 +239,7 @@ public class TransOrderServiceImpl implements TransOrderService {
                 TradeDetailVo tradeDetailVo = new TradeDetailVo();
                 BeanUtils.copyProperties(trade,tradeDetailVo);
 
-                List<OrderDetailVo> orderDetailVos = tradeDetailVo.getOrderDetailVoList();
+                List<OrderDetailVo> orderDetailVos = new ArrayList<>();
 
                 QueryWrapper<Order> orderQuery = new QueryWrapper<>();
                 orderQuery.eq("mainid",id);
@@ -250,6 +250,8 @@ public class TransOrderServiceImpl implements TransOrderService {
                         BeanUtils.copyProperties(order,orderDetailVo);
                         orderDetailVos.add(orderDetailVo);
                     }
+                    tradeDetailVo.setOrderDetailVoList(orderDetailVos);
+
                 }
 
                 List<PromotionDetailVo> promotionDetailVos = tradeDetailVo.getPromotionDetailVoList();

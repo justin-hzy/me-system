@@ -107,7 +107,9 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
                 CustomerSaveInfo customerSaveInfo = new CustomerSaveInfo();
                 BeanUtils.copyProperties(pureMember,customerSaveInfo);
 
-                List<CardReceiveInfo> cardReceiveInfos = customerSaveInfo.getCardReceiveInfoList();
+                //List<CardReceiveInfo> cardReceiveInfos = customerSaveInfo.getCardReceiveInfoList();
+
+                List<CardReceiveInfo> cardReceiveInfos = new ArrayList<>();
 
                 QueryWrapper<PureCardReceiveInfo> pureCardReceiveInfoQuery = new QueryWrapper<>();
                 pureCardReceiveInfoQuery.eq("mainid",pureMember.getId());
