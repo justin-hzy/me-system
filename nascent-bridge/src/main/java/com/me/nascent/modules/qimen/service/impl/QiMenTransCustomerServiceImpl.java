@@ -1,23 +1,32 @@
 package com.me.nascent.modules.qimen.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.me.nascent.modules.qimen.dto.QiMenDto;
+import com.me.nascent.modules.qimen.entity.QiMenCustomer;
+import com.me.nascent.modules.qimen.service.QiMenCustomerService;
 import com.me.nascent.modules.qimen.service.QiMenTransCustomerService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class QiMenTransCustomerServiceImpl implements QiMenTransCustomerService {
+
+    private QiMenCustomerService qiMenCustomerService;
+
     @Override
-    public String transCustomer(QiMenDto dto) {
+    public String transCustomer(QiMenDto dto) throws Exception {
 
         String message = dto.getMessage();
 
@@ -58,14 +67,50 @@ public class QiMenTransCustomerServiceImpl implements QiMenTransCustomerService 
         //南讯ouid
         String nasOuid = messageMap.get("nasOuid");
 
+        QiMenCustomer qiMenCustomer = new QiMenCustomer();
+        qiMenCustomer.setNasOuid(nasOuid);
+        qiMenCustomer.setSellerNick(sellerNick);
+        qiMenCustomer.setPoint(point);
+        qiMenCustomer.setOuid(ouid);
+        qiMenCustomer.setOmid(omid);
+        qiMenCustomer.setMixMobile(mixMobile);
+        qiMenCustomer.setLevel(level);
+        qiMenCustomer.setLastedUnbindCardTime(lastedUnbindCardTime);
+        qiMenCustomer.setFirstBindCardTime(firstBindCardTime);
 
 
+        QueryWrapper<QiMenCustomer> qiMenCustomerQuery = new QueryWrapper<>();
+        qiMenCustomerQuery.eq("ouid",ouid)
+                .eq("nasOuid",nasOuid)
+                .eq("sellerNick",sellerNick);
+        QiMenCustomer existObj = qiMenCustomerService.getOne(qiMenCustomerQuery);
+        if(existObj != null){
+
+            String existFirstBindCardTime = existObj.getFirstBindCardTime();
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+            Date existDate = sdf.parse(existFirstBindCardTime);
+
+            Date newDate = sdf.parse(firstBindCardTime);
+
+            if(existDate.before(newDate)){
+                UpdateWrapper<QiMenCustomer> qiMenCustomerUpdate = new UpdateWrapper<>();
+                qiMenCustomerUpdate.eq("nasOuid",nasOuid).eq("sellerNick",sellerNick);
+
+                qiMenCustomerService.update(qiMenCustomer,qiMenCustomerUpdate);
+            }
 
 
+        }else {
+            qiMenCustomerService.save(qiMenCustomer);
+        }
 
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("return_code","SUCCESS");
+        jsonObject.put("return_msg","数据处理成功");
 
-
-        return null;
+        return jsonObject.toJSONString();
     }
 
 
