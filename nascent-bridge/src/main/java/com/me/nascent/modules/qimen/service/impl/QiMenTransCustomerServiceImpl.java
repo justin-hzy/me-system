@@ -1,10 +1,9 @@
 package com.me.nascent.modules.qimen.service.impl;
 
-import cn.hutool.crypto.digest.MD5;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.me.nascent.modules.qimen.dto.QiMenDto;
-import com.me.nascent.modules.qimen.service.QiMenCustomerService;
+import com.me.nascent.modules.qimen.service.QiMenTransCustomerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ import java.util.TreeMap;
 
 @Service
 @Slf4j
-public class QiMenCustomerServiceImpl implements QiMenCustomerService {
+public class QiMenTransCustomerServiceImpl implements QiMenTransCustomerService {
     @Override
     public String transCustomer(QiMenDto dto) {
 
@@ -26,18 +25,41 @@ public class QiMenCustomerServiceImpl implements QiMenCustomerService {
 
         /*String sign = dto.getSign();*/
 
-        Map<String, String> map = convertJsonToMap(message);
+        Map<String, String> messageMap = convertJsonToMap(message);
 
 
         List<Map<String, String>> collectionM = new ArrayList<>();
 
-        collectionM.add(map);
+        collectionM.add(messageMap);
 
         String result  = sortAndConcatenateParameters(collectionM);
 
         String secret = "";
 
         String stringSignTemp = secret+result;
+
+        //获取会员属性
+        //最新绑卡时间
+        String firstBindCardTime = messageMap.get("firstBindCardTime");
+        //最新解绑时间
+        String lastedUnbindCardTime = messageMap.get("lastedUnbindCardTime");
+        //会员级别
+        String level = messageMap.get("level");
+        //加密手机号
+        String mixMobile = messageMap.get("mixMobile");
+        //公司级会员唯一标识
+        String omid = messageMap.get("omid");
+        //店铺级会员唯一标识
+        String ouid = messageMap.get("ouid");
+        //会员积分
+        String point = messageMap.get("point");
+        //卖家昵称
+        String sellerNick = messageMap.get("sellerNick");
+        //南讯ouid
+        String nasOuid = messageMap.get("nasOuid");
+
+
+
 
 
 
