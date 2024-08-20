@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.me.nascent.modules.qimen.dto.QiMenDto;
 import com.me.nascent.modules.qimen.entity.QiMenCustomer;
+import com.me.nascent.modules.qimen.entity.QiMenCustomerExtend;
+import com.me.nascent.modules.qimen.service.QiMenCustomerExtendService;
 import com.me.nascent.modules.qimen.service.QiMenCustomerService;
 import com.me.nascent.modules.qimen.service.QiMenTransCustomerService;
 import lombok.AllArgsConstructor;
@@ -24,6 +26,8 @@ import java.util.*;
 public class QiMenTransCustomerServiceImpl implements QiMenTransCustomerService {
 
     private QiMenCustomerService qiMenCustomerService;
+
+    private QiMenCustomerExtendService qiMenCustomerExtendService;
 
     @Override
     public String transCustomer(QiMenDto dto) throws Exception {
@@ -66,6 +70,11 @@ public class QiMenTransCustomerServiceImpl implements QiMenTransCustomerService 
         String sellerNick = messageMap.get("sellerNick");
         //南讯ouid
         String nasOuid = messageMap.get("nasOuid");
+        //拓展信息
+        String extend = messageMap.get("extend");
+
+        JSONObject extendJsonObj = JSONObject.parseObject(extend);
+
 
         QiMenCustomer qiMenCustomer = new QiMenCustomer();
         qiMenCustomer.setNasOuid(nasOuid);
@@ -99,9 +108,37 @@ public class QiMenTransCustomerServiceImpl implements QiMenTransCustomerService 
                 qiMenCustomerUpdate.eq("nasOuid",nasOuid).eq("sellerNick",sellerNick);
 
                 qiMenCustomerService.update(qiMenCustomer,qiMenCustomerUpdate);
+                String babyBirthday = extendJsonObj.getString("babyBirthday");
+                String birthday = extendJsonObj.getString("birthday");
+                String city = extendJsonObj.getString("city");
+                String province = extendJsonObj.getString("province");
+                String email = extendJsonObj.getString("email");
+                String sex = extendJsonObj.getString("sex");
+                String name = extendJsonObj.getString("name");
+
+                QiMenCustomerExtend qiMenCustomerExtend = new QiMenCustomerExtend();
+                qiMenCustomerExtend.setNasOuid(nasOuid);
+                qiMenCustomerExtend.setSellerNick(sellerNick);
+                qiMenCustomerExtend.setBabyBirthday(babyBirthday);
+                qiMenCustomerExtend.setBirthday(birthday);
+                qiMenCustomerExtend.setCity(city);
+                qiMenCustomerExtend.setProvince(province);
+                qiMenCustomerExtend.setEmail(email);
+                qiMenCustomerExtend.setSex(sex);
+                qiMenCustomerExtend.setName(name);
+
+                QueryWrapper<QiMenCustomerExtend> qiMenCustomerExtendQuery = new QueryWrapper<>();
+                qiMenCustomerExtendQuery.eq("nasOuid",nasOuid).eq("sellerNick",sellerNick);
+
+                QiMenCustomerExtend existQiMenCustomerExtend = qiMenCustomerExtendService.getOne(qiMenCustomerExtendQuery);
+                if(existQiMenCustomerExtend != null){
+                    UpdateWrapper<QiMenCustomerExtend> qiMenCustomerExtendUpdate = new UpdateWrapper<>();
+                    qiMenCustomerExtendUpdate.eq("nasOuid",nasOuid).eq("sellerNick",sellerNick);
+                    qiMenCustomerExtendService.update(qiMenCustomerExtend,qiMenCustomerExtendUpdate);
+                }else {
+                    qiMenCustomerExtendService.save(qiMenCustomerExtend);
+                }
             }
-
-
         }else {
             qiMenCustomerService.save(qiMenCustomer);
         }

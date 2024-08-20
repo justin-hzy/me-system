@@ -1,14 +1,17 @@
 package com.me.nascent.modules.qimen.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.me.nascent.modules.qimen.dto.QiMenDto;
+import com.me.nascent.modules.qimen.entity.QIMenExpandCardInfo;
+import com.me.nascent.modules.qimen.entity.QiMenOrder;
+import com.me.nascent.modules.qimen.entity.QiMenPromotionDetail;
 import com.me.nascent.modules.qimen.entity.QiMenTrade;
-import com.me.nascent.modules.qimen.service.QiMenTradeService;
-import com.me.nascent.modules.qimen.service.QiMenTransTradeService;
+import com.me.nascent.modules.qimen.service.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +31,12 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
 
     private QiMenTradeService qiMenTradeService;
 
+    private QiMenOrderService qiMenOrderService;
+
+    private QiMenPromotionDetailService qiMenPromotionDetailService;
+
+    private QIMenExpandCardInfoService qiMenExpandCardInfoService;
+
     @Override
     public String transTrade(QiMenDto dto) throws Exception {
 
@@ -40,6 +49,33 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
         //
         QiMenTrade qiMenTrade = encTrade(messageMap);
 
+        String orders = messageMap.get("orders");
+        JSONArray orderJsonArr = JSONArray.parseArray(orders);
+
+        String promotionDetails = messageMap.get("promotionDetails");
+        JSONArray promotionDetailJsonArr = JSONArray.parseArray(promotionDetails);
+
+        String expandCardInfo = messageMap.get("expandcardInfo");
+        JSONObject expandCardInfoJsonObj = JSONObject.parseObject(expandCardInfo);
+        QIMenExpandCardInfo qiMenExpandCardInfo = encExpandCardInfo(expandCardInfoJsonObj);
+
+        List<QiMenOrder> qiMenOrders = new ArrayList<>();
+        for (int i = 0;i<orderJsonArr.size();i++){
+            JSONObject orderJsonObj = orderJsonArr.getJSONObject(i);
+            QiMenOrder qiMenOrder = encOrder(orderJsonObj);
+
+            qiMenOrders.add(qiMenOrder);
+        }
+
+        List<QiMenPromotionDetail> qiMenPromotionDetails = new ArrayList<>();
+        for (int i = 0 ; i<promotionDetailJsonArr.size();i++){
+            JSONObject promotionDetailJsonObj = promotionDetailJsonArr.getJSONObject(i);
+            QiMenPromotionDetail qiMenPromotionDetail = encPromotion(promotionDetailJsonObj);
+
+            qiMenPromotionDetails.add(qiMenPromotionDetail);
+        }
+
+
         QueryWrapper<QiMenTrade> qiMenTradeQuery = new QueryWrapper<>();
         qiMenTradeQuery.eq("tid",qiMenTrade.getTid())
                 .eq("sellerNick",qiMenTrade.getSellerNick());
@@ -50,7 +86,6 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
             String modified = existTrade.getModified();
             String newModified = qiMenTrade.getModified();
 
-
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             Date existDate = sdf.parse(modified);
@@ -58,12 +93,16 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
             Date newDate = sdf.parse(newModified);
 
             if(existDate.before(newDate)){
-                UpdateWrapper<QiMenTrade> qiMenTradeUpdate = new UpdateWrapper<>();
-                qiMenTradeUpdate.eq("tid",qiMenTrade.getTid())
-                        .eq("sellerNick",qiMenTrade.getSellerNick());
+                qiMenTradeService.saveOrUpdate(existTrade);
+                qiMenOrderService.saveOrUpdateBatch(qiMenOrders);
+                qiMenPromotionDetailService.saveOrUpdateBatch(qiMenPromotionDetails);
+                qiMenExpandCardInfoService.saveOrUpdate(qiMenExpandCardInfo);
             }
         }else {
             qiMenTradeService.save(existTrade);
+            qiMenOrderService.saveBatch(qiMenOrders);
+            qiMenPromotionDetailService.saveBatch(qiMenPromotionDetails);
+            qiMenExpandCardInfoService.save(qiMenExpandCardInfo);
         }
 
 
@@ -186,5 +225,122 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
         qiMenTrade.setSellerNick(sellerNick);
 
         return qiMenTrade;
+    }
+
+    public static QiMenOrder encOrder(JSONObject orderJsonObj){
+        String sellerRate = orderJsonObj.getString("sellerRate");
+        String consignTime = orderJsonObj.getString("consignTime");
+        String timeoutActionTime = orderJsonObj.getString("timeoutActionTime");
+        String customization = orderJsonObj.getString("customization");
+        String adjustFee = orderJsonObj.getString("adjustFee");
+        String num = orderJsonObj.getString("num");
+        String shippingType = orderJsonObj.getString("shippingType");
+        String numIid = orderJsonObj.getString("numIid");
+        String oid = orderJsonObj.getString("oid");
+        String snapshotUrl = orderJsonObj.getString("snapshotUrl");
+        String title = orderJsonObj.getString("title");
+        String buyerRate = orderJsonObj.getString("buyerRate");
+        String discountFee = orderJsonObj.getString("discountFee");
+        String price = orderJsonObj.getString("price");
+        String totalFee = orderJsonObj.getString("totalFee");
+        String payment = orderJsonObj.getString("payment");
+        String isOversold = orderJsonObj.getString("isOversold");
+        String outerSkuId = orderJsonObj.getString("outerSkuId");
+        String partMjzDiscount = orderJsonObj.getString("partMjzDiscount");
+        String refundStatus = orderJsonObj.getString("refundStatus");
+        String bindOids = orderJsonObj.getString("bindOids");
+        String invoiceNo = orderJsonObj.getString("invoiceNo");
+        String endTime = orderJsonObj.getString("endTime");
+        String picPath = orderJsonObj.getString("picPath");
+        String skuId = orderJsonObj.getString("skuId");
+        String skuPropertiesName = orderJsonObj.getString("skuPropertiesName");
+        String refundId = orderJsonObj.getString("refundId");
+        String divideOrderFee = orderJsonObj.getString("divideOrderFee");
+        String orderFrom = orderJsonObj.getString("orderFrom");
+        String outerIid = orderJsonObj.getString("outerIid");
+        String logisticsCompany = orderJsonObj.getString("logisticsCompany");
+        String expandCardExpandPriceUsedSuborder = orderJsonObj.getString("expandCardExpandPriceUsedSuborder");
+        String expandCardBasicPriceUsedSuborder = orderJsonObj.getString("expandCardBasicPriceUsedSuborder");
+        String status = orderJsonObj.getString("status");
+        String cid = orderJsonObj.getString("cid");
+        String itemMealId = orderJsonObj.getString("itemMealId");
+
+        QiMenOrder qiMenOrder = new QiMenOrder();
+        qiMenOrder.setSellerRate(sellerRate);
+        qiMenOrder.setConsignTime(consignTime);
+        qiMenOrder.setTimeoutActionTime(timeoutActionTime);
+        qiMenOrder.setCustomization(customization);
+        qiMenOrder.setAdjustFee(adjustFee);
+        qiMenOrder.setNum(num);
+        qiMenOrder.setShippingType(shippingType);
+        qiMenOrder.setNumIid(numIid);
+        qiMenOrder.setOid(oid);
+        qiMenOrder.setSnapshotUrl(snapshotUrl);
+        qiMenOrder.setTitle(title);
+        qiMenOrder.setBuyerRate(buyerRate);
+        qiMenOrder.setDiscountFee(discountFee);
+        qiMenOrder.setPrice(price);
+        qiMenOrder.setTotalFee(totalFee);
+        qiMenOrder.setPayment(payment);
+        qiMenOrder.setIsOversold(isOversold);
+        qiMenOrder.setOuterSkuId(outerSkuId);
+        qiMenOrder.setPartMjzDiscount(partMjzDiscount);
+        qiMenOrder.setRefundStatus(refundStatus);
+        qiMenOrder.setBindOids(bindOids);
+        qiMenOrder.setInvoiceNo(invoiceNo);
+        qiMenOrder.setEndTime(endTime);
+        qiMenOrder.setPicPath(picPath);
+        qiMenOrder.setSkuId(skuId);
+        qiMenOrder.setSkuPropertiesName(skuPropertiesName);
+        qiMenOrder.setRefundId(refundId);
+        qiMenOrder.setDivideOrderFee(divideOrderFee);
+        qiMenOrder.setOrderFrom(orderFrom);
+        qiMenOrder.setOuterIid(outerIid);
+        qiMenOrder.setLogisticsCompany(logisticsCompany);
+        qiMenOrder.setExpandCardExpandPriceUsedSuborder(expandCardExpandPriceUsedSuborder);
+        qiMenOrder.setExpandCardBasicPriceUsedSuborder(expandCardBasicPriceUsedSuborder);
+        qiMenOrder.setStatus(status);
+        qiMenOrder.setCid(cid);
+        qiMenOrder.setItemMealId(itemMealId);
+
+        return qiMenOrder;
+    }
+
+    public static QiMenPromotionDetail encPromotion(JSONObject promotionJsonObj){
+        String promotionName = promotionJsonObj.getString("promotionName");
+        String giftItemId = promotionJsonObj.getString("giftItemId");
+        String giftItemName = promotionJsonObj.getString("giftItemName");
+        String promotionId = promotionJsonObj.getString("promotionId");
+        String id = promotionJsonObj.getString("id");
+        String giftItemNum = promotionJsonObj.getString("giftItemNum");
+        String promotionDesc = promotionJsonObj.getString("promotionDesc");
+        String discountFee = promotionJsonObj.getString("discountFee");
+
+        QiMenPromotionDetail qiMenPromotionDetail = new QiMenPromotionDetail();
+        qiMenPromotionDetail.setPromotionName(promotionName);
+        qiMenPromotionDetail.setGiftItemId(giftItemId);
+        qiMenPromotionDetail.setGiftItemName(giftItemName);
+        qiMenPromotionDetail.setPromotionId(promotionId);
+        qiMenPromotionDetail.setId(id);
+        qiMenPromotionDetail.setGiftItemNum(giftItemNum);
+        qiMenPromotionDetail.setPromotionDesc(promotionDesc);
+        qiMenPromotionDetail.setDiscountFee(discountFee);
+        return qiMenPromotionDetail;
+    }
+
+
+    public static QIMenExpandCardInfo encExpandCardInfo(JSONObject expandCardInfoJsonObj){
+        String basicPriceUsed = expandCardInfoJsonObj.getString("basicPriceUsed");
+        String expandPrice = expandCardInfoJsonObj.getString("expandPrice");
+        String basicPrice = expandCardInfoJsonObj.getString("basicPrice");
+        String expandPriceUsed = expandCardInfoJsonObj.getString("expandPriceUsed");
+
+        QIMenExpandCardInfo qiMenExpandCardInfo = new QIMenExpandCardInfo();
+        qiMenExpandCardInfo.setBasicPriceUsed(basicPriceUsed);
+        qiMenExpandCardInfo.setExpandPrice(expandPrice);
+        qiMenExpandCardInfo.setBasicPrice(basicPrice);
+        qiMenExpandCardInfo.setExpandPriceUsed(expandPriceUsed);
+
+        return qiMenExpandCardInfo;
     }
 }

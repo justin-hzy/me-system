@@ -6,6 +6,12 @@ import lombok.Data;
 @Data
 public class QiMenCustomerExtend {
 
+    @TableField("nasOuid")
+    private String nasOuid;
+
+    @TableField("sellerNick")
+    private String sellerNick;
+
     @TableField("babyBirthday")
     private String babyBirthday;
 
