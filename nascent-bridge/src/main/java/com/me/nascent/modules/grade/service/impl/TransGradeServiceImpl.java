@@ -72,7 +72,7 @@ public class TransGradeServiceImpl implements TransGradeService {
 
 
 
-        int size = zaMemberNickInfos.size(); // 总数据量
+        /*int size = zaMemberNickInfos.size(); // 总数据量
 
 
         List<GradeCustomerInfo> list = new ArrayList<>();
@@ -125,12 +125,9 @@ public class TransGradeServiceImpl implements TransGradeService {
                 gradeCustomerInfoService.saveBatch(list);
                 list.clear();
             }
-        }
+        }*/
 
-
-
-
-        /*for (ZaMemberNickInfo zaMemberNickInfo : zaMemberNickInfos){
+        for (ZaMemberNickInfo zaMemberNickInfo : zaMemberNickInfos){
 
             String nasOuid = zaMemberNickInfo.getNasOuid();
             int platform = zaMemberNickInfo.getPlatform();
@@ -170,7 +167,7 @@ public class TransGradeServiceImpl implements TransGradeService {
                     }
                 }
             }
-        }*/
+        }
     }
 
     @Override
