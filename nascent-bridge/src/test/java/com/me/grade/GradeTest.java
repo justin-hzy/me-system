@@ -19,14 +19,14 @@ public class GradeTest {
     public void transGradeTest() throws Exception {
 
         //100000387 泊美  100000386	Za姬芮
-        Long viewId = 100000386L;
+        Long viewId = 100000387L;
 
-        transGradeService.TransZaGrade(viewId);
+        transGradeService.TransPureGrade(viewId);
     }
 
 
     @Test
     public void putGrade() throws Exception {
-        transGradeService.putGrade();
+        transGradeService.putPureGrade();
     }
 }

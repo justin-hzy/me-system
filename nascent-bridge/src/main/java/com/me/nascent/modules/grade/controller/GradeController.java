@@ -17,7 +17,7 @@ public class GradeController {
     public String tranGrade() throws Exception {
         Long viewId = 100000386L;
 
-        transGradeService.TransZaGrade(viewId);
+        transGradeService.TransPureGrade(viewId);
 
         return "success";
     }

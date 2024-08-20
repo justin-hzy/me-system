@@ -14,6 +14,7 @@ import com.me.nascent.modules.grade.service.TransGradeService;
 
 import com.me.nascent.modules.member.entity.PureMemberNickInfo;
 import com.me.nascent.modules.member.entity.ZaMemberNickInfo;
+import com.me.nascent.modules.member.service.PureMemberNickInfoService;
 import com.me.nascent.modules.member.service.ZaMemberNickInfoService;
 import com.me.nascent.modules.point.entity.PureMemberPoint;
 import com.me.nascent.modules.token.entity.Token;
@@ -49,6 +50,8 @@ public class TransGradeServiceImpl implements TransGradeService {
 
     private ZaMemberNickInfoService zaMemberNickInfoService;
 
+    private PureMemberNickInfoService pureMemberNickInfoService;
+
     private GradeCustomerInfoService gradeCustomerInfoService;
 
     private GradeCustomerCardReceiveInfoService gradeCustomerCardReceiveInfoService;
@@ -57,7 +60,7 @@ public class TransGradeServiceImpl implements TransGradeService {
 
 
     @Override
-    public void TransZaGrade(Long viewId) throws Exception {
+    public void TransPureGrade(Long viewId) throws Exception {
 
         SystemCustomerGetRequest request = new SystemCustomerGetRequest();
         request.setServerUrl(nascentConfig.getServerUrl());
@@ -68,7 +71,7 @@ public class TransGradeServiceImpl implements TransGradeService {
 
         request.setViewId(viewId);
 
-        List<ZaMemberNickInfo> zaMemberNickInfos = zaMemberNickInfoService.list();
+        List<PureMemberNickInfo> pureMemberNickInfos = pureMemberNickInfoService.list();
 
 
 
@@ -127,10 +130,10 @@ public class TransGradeServiceImpl implements TransGradeService {
             }
         }*/
 
-        for (ZaMemberNickInfo zaMemberNickInfo : zaMemberNickInfos){
+        for (PureMemberNickInfo pureMemberNickInfo : pureMemberNickInfos){
 
-            String nasOuid = zaMemberNickInfo.getNasOuid();
-            int platform = zaMemberNickInfo.getPlatform();
+            String nasOuid = pureMemberNickInfo.getNasOuid();
+            int platform = pureMemberNickInfo.getPlatform();
 
             request.setNasOuid(nasOuid);
             request.setPlatform(platform);
@@ -152,7 +155,7 @@ public class TransGradeServiceImpl implements TransGradeService {
                     GradeCustomerInfo gradeCustomerInfo = new GradeCustomerInfo();
 
                     BeanUtils.copyProperties(systemCustomerInfo,gradeCustomerInfo);
-                    gradeCustomerInfo.setNasOuid(zaMemberNickInfo.getNasOuid());
+                    gradeCustomerInfo.setNasOuid(pureMemberNickInfo.getNasOuid());
 
 
                     QueryWrapper<GradeCustomerInfo> gradeCustomerInfoQuery = new QueryWrapper();
@@ -171,7 +174,7 @@ public class TransGradeServiceImpl implements TransGradeService {
     }
 
     @Override
-    public void putGrade() throws Exception {
+    public void putPureGrade() throws Exception {
 
         List<GradeCustomerInfo> gradeCustomerInfos = gradeCustomerInfoService.list();
         CustomerGradeUpdateRequest request = new CustomerGradeUpdateRequest();
