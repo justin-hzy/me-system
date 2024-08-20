@@ -48,7 +48,7 @@ public class TradeTest {
     @Test
     public void getOrderByDay() throws Exception {
 
-        String startDateStr  = "2012-01-01 00:00:00";
+        /*String startDateStr  = "2012-01-01 00:00:00";
         String endDateStr = "2012-01-01 01:59:59";
 
         //定义日期时间格式
@@ -60,9 +60,9 @@ public class TradeTest {
         LocalDateTime sevenDaysLater = startDateTime.plusDays(7);
 
         // 将 LocalDateTime 转换为 Date
-        /*Date sevenDaysLaterDate = Date.from(sevenDaysLater.atZone(ZoneId.systemDefault()).toInstant());
+        *//*Date sevenDaysLaterDate = Date.from(sevenDaysLater.atZone(ZoneId.systemDefault()).toInstant());
         * Map<String,Object> resMap  = transOrderService.transOrder(nextId,startDate,sevenDaysLaterDate);
-        * */
+        * *//*
 
         LocalDateTime endDateTime = LocalDateTime.parse(endDateStr, formatter);
         Long nextId = 0L;
@@ -76,7 +76,33 @@ public class TradeTest {
 
         log.info("nextId="+nextId);
         log.info("modifyTime="+startDate);
-        log.info("isNext="+isNext);
+        log.info("isNext="+isNext);*/
+
+        String startDateStr  = "2023-02-22 05:38:00";
+        String endDateStr = "2023-02-22 23:59:59";
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        Date startDate = sdf.parse(startDateStr);
+
+        Date endDate = sdf.parse(endDateStr);
+
+        while (startDate.before(endDate)) {
+            Date endDateOfWeek = new Date(startDate.getTime() + 30 * 60 * 1000); // 修改为30分钟
+            if (endDateOfWeek.after(endDate)) {
+                endDateOfWeek = endDate;
+            }
+
+            String startStr1 = sdf.format(startDate);
+            String endStr2 = sdf.format(endDateOfWeek);
+            System.out.println("同步订单数据: " + startStr1 + " 到 " + endStr2);
+
+            transOrderService.transOrder(startDate, endDateOfWeek);
+
+            startDate = endDateOfWeek; // 修改为1分钟
+            //System.out.println("下一个开启时间:" + startDate);
+        }
     }
 
     @Test
@@ -109,11 +135,11 @@ public class TradeTest {
             e.printStackTrace();
         }*/
 
-        String year = "2023";
+        String year = "2024";
 
         Calendar cal = Calendar.getInstance();
 
-        for (int month = 12; month <= 12; month++) {
+        for (int month = 8; month <= 8; month++) {
             cal.set(Calendar.YEAR, Integer.parseInt(year));
             cal.set(Calendar.MONTH, month - 1);
             cal.set(Calendar.DAY_OF_MONTH, 1);
