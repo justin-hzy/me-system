@@ -9,6 +9,9 @@ public class QiMenCustomerExtend {
     @TableField("nasOuid")
     private String nasOuid;
 
+    @TableField("ouid")
+    private String ouid;
+
     @TableField("sellerNick")
     private String sellerNick;
 
