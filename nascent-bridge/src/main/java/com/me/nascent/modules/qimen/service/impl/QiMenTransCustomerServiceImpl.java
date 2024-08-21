@@ -60,7 +60,6 @@ public class QiMenTransCustomerServiceImpl implements QiMenTransCustomerService 
         //拓展信息
         JSONObject extendJsonObj = messageJsonObj.getJSONObject("extend");
 
-        QiMenCustomerExtend qiMenCustomerExtend = encExpand(extendJsonObj,qiMenCustomer);
 
 
         QueryWrapper<QiMenCustomer> qiMenCustomerQuery = new QueryWrapper<>();
@@ -83,50 +82,52 @@ public class QiMenTransCustomerServiceImpl implements QiMenTransCustomerService 
             Date newDate = sdf.parse(qiMenCustomer.getFirstBindCardTime());
 
             if(existDate.before(newDate)){
-
-            }
-
-            UpdateWrapper<QiMenCustomer> qiMenCustomerUpdate = new UpdateWrapper<>();
-            if(qiMenCustomer.getNasOuid() !=null && qiMenCustomer.getOuid() == null){
-                qiMenCustomerQuery.eq("nasOuid",qiMenCustomer.getNasOuid())
-                        .eq("sellerNick",qiMenCustomer.getSellerNick());
-            }else if(qiMenCustomer.getNasOuid() ==null && qiMenCustomer != null){
-                qiMenCustomerQuery.eq("ouid",qiMenCustomer.getOuid())
-                        .eq("sellerNick",qiMenCustomer.getSellerNick());
-            }
-            qiMenCustomerService.update(qiMenCustomer,qiMenCustomerUpdate);
-
-            if(qiMenCustomerExtend != null){
-                QueryWrapper<QiMenCustomerExtend> qiMenCustomerExtendQuery = new QueryWrapper<>();
-                if(qiMenCustomerExtend.getNasOuid() != null && qiMenCustomerExtend.getOuid() == null ){
-                    qiMenCustomerExtendQuery.eq("nasOuid",qiMenCustomer.getNasOuid())
+                UpdateWrapper<QiMenCustomer> qiMenCustomerUpdate = new UpdateWrapper<>();
+                if(qiMenCustomer.getNasOuid() !=null && qiMenCustomer.getOuid() == null){
+                    qiMenCustomerQuery.eq("nasOuid",qiMenCustomer.getNasOuid())
                             .eq("sellerNick",qiMenCustomer.getSellerNick());
-                }else if(qiMenCustomerExtend.getNasOuid() == null && qiMenCustomerExtend.getOuid() != null ){
-                    qiMenCustomerExtendQuery.eq("ouid",qiMenCustomer.getOuid())
+                }else if(qiMenCustomer.getNasOuid() ==null && qiMenCustomer != null){
+                    qiMenCustomerQuery.eq("ouid",qiMenCustomer.getOuid())
                             .eq("sellerNick",qiMenCustomer.getSellerNick());
                 }
-                QiMenCustomerExtend existQiMenCustomerExtend = qiMenCustomerExtendService.getOne(qiMenCustomerExtendQuery);
+                qiMenCustomerService.update(qiMenCustomer,qiMenCustomerUpdate);
 
+                if(!extendJsonObj.isEmpty()){
+                    QiMenCustomerExtend qiMenCustomerExtend = encExpand(extendJsonObj,qiMenCustomer);
 
-                if(existQiMenCustomerExtend != null){
-                    UpdateWrapper<QiMenCustomerExtend> qiMenCustomerExtendUpdate = new UpdateWrapper<>();
-
-                    if(qiMenCustomer.getNasOuid() !=null && qiMenCustomer.getOuid() == null){
-                        qiMenCustomerExtendUpdate.eq("nasOuid",qiMenCustomer.getNasOuid())
+                    QueryWrapper<QiMenCustomerExtend> qiMenCustomerExtendQuery = new QueryWrapper<>();
+                    if(qiMenCustomerExtend.getNasOuid() != null && qiMenCustomerExtend.getOuid() == null ){
+                        qiMenCustomerExtendQuery.eq("nasOuid",qiMenCustomer.getNasOuid())
                                 .eq("sellerNick",qiMenCustomer.getSellerNick());
-                    }else if(qiMenCustomer.getNasOuid() ==null && qiMenCustomer != null){
-                        qiMenCustomerExtendUpdate.eq("ouid",qiMenCustomer.getOuid())
+                    }else if(qiMenCustomerExtend.getNasOuid() == null && qiMenCustomerExtend.getOuid() != null ){
+                        qiMenCustomerExtendQuery.eq("ouid",qiMenCustomer.getOuid())
                                 .eq("sellerNick",qiMenCustomer.getSellerNick());
                     }
-                    qiMenCustomerExtendService.update(qiMenCustomerExtend,qiMenCustomerExtendUpdate);
-                }else {
-                    qiMenCustomerExtendService.save(qiMenCustomerExtend);
+                    QiMenCustomerExtend existQiMenCustomerExtend = qiMenCustomerExtendService.getOne(qiMenCustomerExtendQuery);
+
+                    if(existQiMenCustomerExtend != null){
+                        UpdateWrapper<QiMenCustomerExtend> qiMenCustomerExtendUpdate = new UpdateWrapper<>();
+
+                        if(qiMenCustomer.getNasOuid() !=null && qiMenCustomer.getOuid() == null){
+                            qiMenCustomerExtendUpdate.eq("nasOuid",qiMenCustomer.getNasOuid())
+                                    .eq("sellerNick",qiMenCustomer.getSellerNick());
+                        }else if(qiMenCustomer.getNasOuid() ==null && qiMenCustomer != null){
+                            qiMenCustomerExtendUpdate.eq("ouid",qiMenCustomer.getOuid())
+                                    .eq("sellerNick",qiMenCustomer.getSellerNick());
+                        }
+                        qiMenCustomerExtendService.update(qiMenCustomerExtend,qiMenCustomerExtendUpdate);
+                    }else {
+                        qiMenCustomerExtendService.save(qiMenCustomerExtend);
+                    }
                 }
             }
         }else {
+
+
             qiMenCustomerService.save(qiMenCustomer);
 
-            if(qiMenCustomerExtend != null){
+            if(!extendJsonObj.isEmpty()){
+                QiMenCustomerExtend qiMenCustomerExtend = encExpand(extendJsonObj,qiMenCustomer);
                 qiMenCustomerExtendService.save(qiMenCustomerExtend);
             }
         }

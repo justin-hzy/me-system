@@ -33,13 +33,16 @@ public class QiMenTransReFundServiceImpl implements QiMenTransReFundService {
     @Override
     public String transReFund(QiMenDto dto) {
         String message = dto.getMessage();
-        Map<String, String> messageMap = convertJsonToMap(message);
+        /*Map<String, String> messageMap = convertJsonToMap(message);*/
+        JSONObject messageJsonObj = JSONObject.parseObject(message);
+        JSONObject tradeJsonObj = messageJsonObj.getJSONObject("trade");
 
         // 校验数据合法性 todo
 
-        QiMenReTrade qiMenReTrade = encReTrade(messageMap);
-        String orders = messageMap.get("orders");
-        JSONArray orderJsonArr = JSONArray.parseArray(orders);
+        QiMenReTrade qiMenReTrade = encReTrade(tradeJsonObj);
+
+        JSONArray orderJsonArr = tradeJsonObj.getJSONArray("orders");
+
         List<QiMenOrder> qiMenOrders = new ArrayList<>();
         for(int i = 0;i<orderJsonArr.size();i++){
             JSONObject orderJsonObj = orderJsonArr.getJSONObject(i);
@@ -59,8 +62,13 @@ public class QiMenTransReFundServiceImpl implements QiMenTransReFundService {
 
             qiMenReTradeService.update(qiMenReTrade,qiMenReTradeUpdate);
 
+            for (QiMenOrder qiMenOrder : qiMenOrders){
+                UpdateWrapper<QiMenOrder> qiMenOrderUpdate = new UpdateWrapper<>();
+                qiMenOrderUpdate.eq("tid",existReTrade.getTid()).eq("oid",qiMenOrder.getOid());
+                qiMenOrderService.update(qiMenOrder,qiMenOrderUpdate);
+            }
 
-            qiMenOrderService.saveOrUpdateBatch(qiMenOrders);
+
 
         }else {
             qiMenReTradeService.save(qiMenReTrade);
@@ -85,20 +93,20 @@ public class QiMenTransReFundServiceImpl implements QiMenTransReFundService {
         }
     }
 
-    public static QiMenReTrade encReTrade(Map<String,String> messageMap){
+    public static QiMenReTrade encReTrade(JSONObject tradeJsonObj){
         QiMenReTrade qiMenReTrade = new QiMenReTrade();
 
-        String snapshotUrl = messageMap.get("snapshotUrl");
-        String tid = messageMap.get("tid");
-        String modified = messageMap.get("modified");
-        String sellerMemo = messageMap.get("sellerMemo");
-        String created = messageMap.get("created");
-        String payTime = messageMap.get("payTime");
-        String status = messageMap.get("status");
-        String receiverCity = messageMap.get("receiverCity");
-        String buyerMemo = messageMap.get("buyerMemo");
-        String isPartConsign = messageMap.get("isPartConsign");
-        String sellerNick = messageMap.get("sellerNick");
+        String snapshotUrl = tradeJsonObj.getString("snapshotUrl");
+        String tid = tradeJsonObj.getString("tid");
+        String modified = tradeJsonObj.getString("modified");
+        String sellerMemo = tradeJsonObj.getString("sellerMemo");
+        String created = tradeJsonObj.getString("created");
+        String payTime = tradeJsonObj.getString("payTime");
+        String status = tradeJsonObj.getString("status");
+        String receiverCity = tradeJsonObj.getString("receiverCity");
+        String buyerMemo = tradeJsonObj.getString("buyerMemo");
+        String isPartConsign = tradeJsonObj.getString("isPartConsign");
+        String sellerNick = tradeJsonObj.getString("sellerNick");
 
         qiMenReTrade.setSnapshotUrl(snapshotUrl);
         qiMenReTrade.setTid(tid);
