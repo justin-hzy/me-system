@@ -1,6 +1,7 @@
 package com.me.nascent.modules.member.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -8,7 +9,7 @@ import lombok.Data;
 @TableName("pure_member_nick_info")
 public class PureMemberNickInfo {
 
-    @TableField("mainId")
+    @TableId("mainId")
     private Long mainId;
 
     @TableField("nasOuid")
@@ -16,4 +17,7 @@ public class PureMemberNickInfo {
 
     @TableField("platform")
     private Integer platform;
+
+    @TableField("isTransGrade")
+    private String isTransGrade;
 }

@@ -12,6 +12,7 @@ import com.me.nascent.modules.grade.service.GradeCustomerInfoService;
 import com.me.nascent.modules.grade.service.GradeFansStatusVoService;
 import com.me.nascent.modules.grade.service.TransGradeService;
 
+import com.me.nascent.modules.member.entity.PureMember;
 import com.me.nascent.modules.member.entity.PureMemberNickInfo;
 import com.me.nascent.modules.member.entity.ZaMemberNickInfo;
 import com.me.nascent.modules.member.service.PureMemberNickInfoService;
@@ -71,21 +72,25 @@ public class TransGradeServiceImpl implements TransGradeService {
 
         request.setViewId(viewId);
 
-        List<PureMemberNickInfo> pureMemberNickInfos = pureMemberNickInfoService.list();
+        QueryWrapper<PureMemberNickInfo> pureMemberNickInfoQuery = new QueryWrapper<>();
+        pureMemberNickInfoQuery.isNull("isTransGrade");
+        List<PureMemberNickInfo> pureMemberNickInfos = pureMemberNickInfoService.list(pureMemberNickInfoQuery);
 
 
 
-        /*int size = zaMemberNickInfos.size(); // 总数据量
+        int size = pureMemberNickInfos.size(); // 总数据量
 
 
-        List<GradeCustomerInfo> list = new ArrayList<>();
+        List<GradeCustomerInfo> saveList = new ArrayList<>();
+
+        List<PureMemberNickInfo> pureMemberNickUpdateList = new ArrayList<>();
 
         for (int i = 0; i <= size; i++) {
 
-            ZaMemberNickInfo zaMemberNickInfo = zaMemberNickInfos.get(i);
+            PureMemberNickInfo pureMemberNickInfo = pureMemberNickInfos.get(i);
 
-            String nasOuid = zaMemberNickInfo.getNasOuid();
-            int platform = zaMemberNickInfo.getPlatform();
+            String nasOuid = pureMemberNickInfo.getNasOuid();
+            int platform = pureMemberNickInfo.getPlatform();
 
             request.setNasOuid(nasOuid);
             request.setPlatform(platform);
@@ -107,7 +112,7 @@ public class TransGradeServiceImpl implements TransGradeService {
                     GradeCustomerInfo gradeCustomerInfo = new GradeCustomerInfo();
 
                     BeanUtils.copyProperties(systemCustomerInfo,gradeCustomerInfo);
-                    gradeCustomerInfo.setNasOuid(zaMemberNickInfo.getNasOuid());
+                    gradeCustomerInfo.setNasOuid(pureMemberNickInfo.getNasOuid());
 
 
                     QueryWrapper<GradeCustomerInfo> gradeCustomerInfoQuery = new QueryWrapper();
@@ -118,19 +123,23 @@ public class TransGradeServiceImpl implements TransGradeService {
                         gradeCustomerInfoUpdate.eq("nasOuid",nasOuid);
                         gradeCustomerInfoService.update(gradeCustomerInfo,gradeCustomerInfoUpdate);
                     }else {
-                        list.add(gradeCustomerInfo);
+                        saveList.add(gradeCustomerInfo);
+                        pureMemberNickInfo.setIsTransGrade("1");
+                        pureMemberNickUpdateList.add(pureMemberNickInfo);
                         //gradeCustomerInfoService.save(gradeCustomerInfo);
                     }
                 }
             }
 
-            if(list.size() == 10000 || i==size){
-                gradeCustomerInfoService.saveBatch(list);
-                list.clear();
+            if(saveList.size() == 10 || i == size){
+                gradeCustomerInfoService.saveBatch(saveList);
+                saveList.clear();
+                pureMemberNickInfoService.updateBatchById(pureMemberNickUpdateList);
+                pureMemberNickUpdateList.clear();
             }
-        }*/
+        }
 
-        for (PureMemberNickInfo pureMemberNickInfo : pureMemberNickInfos){
+        /*for (PureMemberNickInfo pureMemberNickInfo : pureMemberNickInfos){
 
             String nasOuid = pureMemberNickInfo.getNasOuid();
             int platform = pureMemberNickInfo.getPlatform();
@@ -170,7 +179,7 @@ public class TransGradeServiceImpl implements TransGradeService {
                     }
                 }
             }
-        }
+        }*/
     }
 
     @Override

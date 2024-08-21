@@ -13,7 +13,7 @@ public class GradeController {
 
     public TransGradeService transGradeService;
 
-    @PostMapping("tranGrade")
+    @PostMapping("tranPureGrade")
     public String tranGrade() throws Exception {
         Long viewId = 100000386L;
 
