@@ -107,22 +107,48 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
                 qiMenTradeService.update(qiMenTrade,qiMenTradeUpdate);
 
                 for (QiMenOrder qiMenOrder : qiMenOrders){
-                    UpdateWrapper<QiMenOrder> qiMenOrderUpdate = new UpdateWrapper();
-                    qiMenOrderUpdate.eq("oid",qiMenOrder.getOid()).eq("tid",qiMenTrade.getTid());
-                    qiMenOrderService.update(qiMenOrder,qiMenOrderUpdate);
+                    QueryWrapper<QiMenOrder> qiMenOrderQuery = new QueryWrapper<>();
+                    qiMenOrderQuery.eq("oid",qiMenOrder.getOid()).eq("tid",qiMenTrade.getTid());
+                    QiMenOrder existQiMenOrder = qiMenOrderService.getOne(qiMenOrderQuery);
+                    if (existQiMenOrder != null){
+                        UpdateWrapper<QiMenOrder> qiMenOrderUpdate = new UpdateWrapper();
+                        qiMenOrderUpdate.eq("oid",qiMenOrder.getOid()).eq("tid",qiMenTrade.getTid());
+                        qiMenOrderService.update(qiMenOrder,qiMenOrderUpdate);
+                    }else {
+                        qiMenOrderService.save(qiMenOrder);
+                    }
                 }
 
                 if (CollUtil.isNotEmpty(qiMenPromotionDetails)){
                     for (QiMenPromotionDetail qiMenPromotionDetail : qiMenPromotionDetails){
-                        UpdateWrapper<QiMenPromotionDetail> qiMenPromotionDetailUpdate = new UpdateWrapper();
-                        qiMenPromotionDetailUpdate.eq("id",qiMenPromotionDetail.getId()).eq("tid",qiMenTrade.getTid());
+                        QueryWrapper<QiMenPromotionDetail> qiMenPromotionDetailQuery = new QueryWrapper<>();
+                        qiMenPromotionDetailQuery.eq("id",qiMenPromotionDetail.getId()).eq("tid",qiMenTrade.getTid());
+                        QiMenPromotionDetail existQiMenPromotionDetail = qiMenPromotionDetailService.getOne(qiMenPromotionDetailQuery);
+
+                        if(existQiMenPromotionDetail != null){
+                            UpdateWrapper<QiMenPromotionDetail> qiMenPromotionDetailUpdate = new UpdateWrapper();
+                            qiMenPromotionDetailUpdate.eq("id",qiMenPromotionDetail.getId()).eq("tid",qiMenTrade.getTid());
+                            qiMenPromotionDetailService.update(qiMenPromotionDetail,qiMenPromotionDetailUpdate);
+                        }else {
+                            qiMenPromotionDetailService.save(qiMenPromotionDetail);
+                        }
+
                     }
                 }
 
                 if(qiMenExpandCardInfo != null){
-                    UpdateWrapper<QIMenExpandCardInfo> qiMenExpandCardInfoUpdate = new UpdateWrapper<>();
-                    qiMenExpandCardInfoUpdate.eq("tid",qiMenExpandCardInfo.getTid());
-                    qiMenExpandCardInfoService.update(qiMenExpandCardInfo,qiMenExpandCardInfoUpdate);
+
+
+                    QueryWrapper<QIMenExpandCardInfo> qiMenExpandCardInfoQuery = new QueryWrapper<>();
+                    qiMenExpandCardInfoQuery.eq("tid",qiMenExpandCardInfo.getTid());
+                    QIMenExpandCardInfo existQIMenExpandCardInfo = qiMenExpandCardInfoService.getOne(qiMenExpandCardInfoQuery);
+                    if(existQIMenExpandCardInfo != null){
+                        UpdateWrapper<QIMenExpandCardInfo> qiMenExpandCardInfoUpdate = new UpdateWrapper<>();
+                        qiMenExpandCardInfoUpdate.eq("tid",qiMenExpandCardInfo.getTid());
+                        qiMenExpandCardInfoService.update(qiMenExpandCardInfo,qiMenExpandCardInfoUpdate);
+                    }else {
+                        qiMenExpandCardInfoService.save(qiMenExpandCardInfo);
+                    }
                 }
             }
         }else {
