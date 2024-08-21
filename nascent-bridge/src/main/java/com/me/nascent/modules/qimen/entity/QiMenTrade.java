@@ -10,7 +10,7 @@ import lombok.Data;
 import java.util.Date;
 import java.util.List;
 
-@TableName("order_table")
+@TableName("qi_men_trade")
 @Data
 public class QiMenTrade {
 
@@ -38,7 +38,7 @@ public class QiMenTrade {
     @TableField("receivedPayment")
     private String receivedPayment;
 
-    @TableField("tid")
+    @TableField(value = "tid")
     private String tid;
 
     @TableField("stepPaidFee")
@@ -80,8 +80,8 @@ public class QiMenTrade {
     @TableField("couponFee")
     private String couponFee;
 
-    @TableField(exist = false)
-    private List<QiMenOrder> orders;
+    /*@TableField(exist = false)
+    private List<QiMenOrder> orders;*/
 
     /*@TableField(exist = false)
     private List<PromotionDetail> promotionDetails;*/
@@ -133,9 +133,6 @@ public class QiMenTrade {
 
     @TableField("buyerMemo")
     private String buyerMemo;
-
-    @TableField("expandcardInfo")
-    private Object expandcardInfo;
 
     @TableField("tradeFrom")
     private String tradeFrom;

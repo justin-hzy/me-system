@@ -8,6 +8,9 @@ import lombok.Data;
 @TableName("qi_men_expand_card_info")
 public class QIMenExpandCardInfo {
 
+    @TableField("tid")
+    private String tid;
+
     @TableField("basicPriceUsed")
     private String basicPriceUsed; // 用卡订单所用的本金
 

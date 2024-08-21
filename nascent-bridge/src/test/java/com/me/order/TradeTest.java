@@ -78,8 +78,8 @@ public class TradeTest {
         log.info("modifyTime="+startDate);
         log.info("isNext="+isNext);*/
 
-        String startDateStr  = "2023-02-22 05:38:00";
-        String endDateStr = "2023-02-22 23:59:59";
+        String startDateStr  = "2023-02-24 00:00:00";
+        String endDateStr = "2023-02-28 23:59:59";
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

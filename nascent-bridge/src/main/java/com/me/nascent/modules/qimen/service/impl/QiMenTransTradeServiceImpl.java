@@ -1,5 +1,6 @@
 package com.me.nascent.modules.qimen.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -42,30 +43,39 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
 
         String message = dto.getMessage();
 
-        Map<String, String> messageMap = convertJsonToMap(message);
-
+        JSONObject messageJsonObj = JSONObject.parseObject(message);
         // 校验数据合法性 todo
 
+
+        JSONObject tradeJsonObj = messageJsonObj.getJSONObject("trade");
+
+
         //
-        QiMenTrade qiMenTrade = encTrade(messageMap);
+        QiMenTrade qiMenTrade = encTrade(tradeJsonObj);
+        log.info(qiMenTrade.toString());
 
-        String orders = messageMap.get("orders");
-        JSONArray orderJsonArr = JSONArray.parseArray(orders);
+        JSONArray orderJsonArr = tradeJsonObj.getJSONArray("orders");
 
-        String promotionDetails = messageMap.get("promotionDetails");
-        JSONArray promotionDetailJsonArr = JSONArray.parseArray(promotionDetails);
+        JSONArray promotionDetailJsonArr = tradeJsonObj.getJSONArray("promotionDetails");
 
-        String expandCardInfo = messageMap.get("expandcardInfo");
-        JSONObject expandCardInfoJsonObj = JSONObject.parseObject(expandCardInfo);
-        QIMenExpandCardInfo qiMenExpandCardInfo = encExpandCardInfo(expandCardInfoJsonObj);
+        JSONObject expandCardInfoJsonObj = tradeJsonObj.getJSONObject("expandcardInfo");
+
+
+        QIMenExpandCardInfo qiMenExpandCardInfo = null;
+
+        if (expandCardInfoJsonObj != null){
+            qiMenExpandCardInfo = encExpandCardInfo(expandCardInfoJsonObj);
+        }
 
         List<QiMenOrder> qiMenOrders = new ArrayList<>();
         for (int i = 0;i<orderJsonArr.size();i++){
             JSONObject orderJsonObj = orderJsonArr.getJSONObject(i);
             QiMenOrder qiMenOrder = encOrder(orderJsonObj);
+            qiMenOrder.setTid(qiMenTrade.getTid());
 
             qiMenOrders.add(qiMenOrder);
         }
+
 
         List<QiMenPromotionDetail> qiMenPromotionDetails = new ArrayList<>();
         for (int i = 0 ; i<promotionDetailJsonArr.size();i++){
@@ -74,7 +84,6 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
 
             qiMenPromotionDetails.add(qiMenPromotionDetail);
         }
-
 
         QueryWrapper<QiMenTrade> qiMenTradeQuery = new QueryWrapper<>();
         qiMenTradeQuery.eq("tid",qiMenTrade.getTid())
@@ -86,25 +95,52 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
             String modified = existTrade.getModified();
             String newModified = qiMenTrade.getModified();
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
 
             Date existDate = sdf.parse(modified);
 
             Date newDate = sdf.parse(newModified);
 
-            if(existDate.before(newDate)){
+            /*if(existDate.before(newDate)){
                 qiMenTradeService.saveOrUpdate(existTrade);
                 qiMenOrderService.saveOrUpdateBatch(qiMenOrders);
                 qiMenPromotionDetailService.saveOrUpdateBatch(qiMenPromotionDetails);
-                qiMenExpandCardInfoService.saveOrUpdate(qiMenExpandCardInfo);
+                if(qiMenExpandCardInfo != null){
+                    qiMenExpandCardInfoService.saveOrUpdate(qiMenExpandCardInfo);
+                }
+            }*/
+
+            UpdateWrapper<QiMenTrade> qiMenTradeUpdate = new UpdateWrapper();
+            qiMenTradeUpdate.eq("tid",qiMenTrade.getTid()).eq("sellerNick",qiMenTrade.getSellerNick());
+            qiMenTradeService.update(qiMenTrade,qiMenTradeUpdate);
+
+            for (QiMenOrder qiMenOrder : qiMenOrders){
+                UpdateWrapper<QiMenOrder> qiMenOrderUpdate = new UpdateWrapper();
+                qiMenOrderUpdate.eq("oid",qiMenOrder.getOid()).eq("tid",qiMenTrade.getTid());
+                qiMenOrderService.update(qiMenOrder,qiMenOrderUpdate);
             }
+
+            if (CollUtil.isNotEmpty(qiMenPromotionDetails)){
+                for (QiMenPromotionDetail qiMenPromotionDetail : qiMenPromotionDetails){
+                    UpdateWrapper<QiMenPromotionDetail> qiMenPromotionDetailUpdate = new UpdateWrapper();
+                    qiMenPromotionDetailUpdate.eq("id",qiMenPromotionDetail.getId()).eq("tid",qiMenTrade.getTid());
+                }
+            }
+
+            if(qiMenExpandCardInfo != null){
+                UpdateWrapper<QIMenExpandCardInfo> qiMenExpandCardInfoUpdate = new UpdateWrapper<>();
+                qiMenExpandCardInfoUpdate.eq("tid",qiMenExpandCardInfo.getTid());
+                qiMenExpandCardInfoService.update(qiMenExpandCardInfo,qiMenExpandCardInfoUpdate);
+            }
+
         }else {
-            qiMenTradeService.save(existTrade);
+            qiMenTradeService.save(qiMenTrade);
             qiMenOrderService.saveBatch(qiMenOrders);
             qiMenPromotionDetailService.saveBatch(qiMenPromotionDetails);
-            qiMenExpandCardInfoService.save(qiMenExpandCardInfo);
+            if(qiMenExpandCardInfo != null){
+                qiMenExpandCardInfoService.save(qiMenExpandCardInfo);
+            }
         }
-
 
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("return_code","SUCCESS");
@@ -124,56 +160,52 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
         }
     }
 
-    public static QiMenTrade encTrade(Map<String,String> messageMap){
-        String consignTime = messageMap.get("consignTime");
-        String adjustFee = messageMap.get("adjustFee");
-        String num = messageMap.get("num");
-        String rxAuditStatus = messageMap.get("rxAuditStatus");
-        String availableConfirmFee = messageMap.get("availableConfirmFee");
-        String snapshotUrl = messageMap.get("snapshotUrl");
-        String type = messageMap.get("type");
-        String receivedPayment = messageMap.get("receivedPayment");
-        String tid = messageMap.get("tid");
-        String stepPaidFee = messageMap.get("stepPaidFee");
-        String price = messageMap.get("price");
-        String expandCardBasicPriceUsed = messageMap.get("expandCardBasicPriceUsed");
-        String totalFee = messageMap.get("totalFee");
-        String modified = messageMap.get("modified");
-        String payment = messageMap.get("payment");
-        String canRate = messageMap.get("canRate");
-        String buyerMessage = messageMap.get("buyerMessage");
-        String sellerMemo = messageMap.get("sellerMemo");
-        String created = messageMap.get("created");
-        String payTime = messageMap.get("payTime");
-        String hasPostFee = messageMap.get("hasPostFee");
-        String couponFee = messageMap.get("couponFee");
-        /*String[] orders = (String[]) messageMap.get("orders");
-        String[] promotionDetails = (String[]) messageMap.get("promotionDetails");*/
-        String sellerCanRate = messageMap.get("sellerCanRate");
-        String status = messageMap.get("status");
-        String sellerRate = messageMap.get("sellerRate");
-        String postFee = messageMap.get("postFee");
-        String timeoutActionTime = messageMap.get("timeoutActionTime");
-        String expandCardExpandPriceUsed = messageMap.get("expandCardExpandPriceUsed");
-        String receiverCity = messageMap.get("receiverCity");
-        String shippingType = messageMap.get("shippingType");
-        String numIid = messageMap.get("numIid");
-        String title = messageMap.get("title");
-        String buyerRate = messageMap.get("buyerRate");
-        String expandCardExpandPrice = messageMap.get("expandCardExpandPrice");
-        String discountFee = messageMap.get("discountFee");
-        String receiverState = messageMap.get("receiverState");
-        String stepTradeStatus = messageMap.get("stepTradeStatus");
-        String buyerMemo = messageMap.get("buyerMemo");
-        /*ExpandcardInfo expandcardInfo = (ExpandcardInfo) messageMap.get("expandcardInfo");*/
-        String buyerOpenUid = messageMap.get("buyerOpenUid");
-        String tradeFrom = messageMap.get("tradeFrom");
-        String endTime = messageMap.get("endTime");
-        String picPath = messageMap.get("picPath");
-        String expandCardBasicPrice = messageMap.get("expandCardBasicPrice");
-        String sellerFlag = messageMap.get("sellerFlag");
-        String isPartConsign = messageMap.get("isPartConsign");
-        String sellerNick = messageMap.get("sellerNick");
+    public static QiMenTrade encTrade(JSONObject tradeJsonObj){
+        String consignTime = tradeJsonObj.getString("consignTime");
+        String adjustFee = tradeJsonObj.getString("adjustFee");
+        String num = tradeJsonObj.getString("num");
+        String rxAuditStatus = tradeJsonObj.getString("rxAuditStatus");
+        String availableConfirmFee = tradeJsonObj.getString("availableConfirmFee");
+        String snapshotUrl = tradeJsonObj.getString("snapshotUrl");
+        String type = tradeJsonObj.getString("type");
+        String receivedPayment = tradeJsonObj.getString("receivedPayment");
+        String tid = tradeJsonObj.getString("tid");
+        String stepPaidFee = tradeJsonObj.getString("stepPaidFee");
+        String price = tradeJsonObj.getString("price");
+        String expandCardBasicPriceUsed = tradeJsonObj.getString("expandCardBasicPriceUsed");
+        String totalFee = tradeJsonObj.getString("totalFee");
+        String modified = tradeJsonObj.getString("modified");
+        String payment = tradeJsonObj.getString("payment");
+        String canRate = tradeJsonObj.getString("canRate");
+        String buyerMessage = tradeJsonObj.getString("buyerMessage");
+        String sellerMemo = tradeJsonObj.getString("sellerMemo");
+        String created = tradeJsonObj.getString("created");
+        String payTime = tradeJsonObj.getString("payTime");
+        String hasPostFee = tradeJsonObj.getString("hasPostFee");
+        String couponFee = tradeJsonObj.getString("couponFee");
+        String sellerCanRate = tradeJsonObj.getString("sellerCanRate");
+        String status = tradeJsonObj.getString("status");
+        String sellerRate = tradeJsonObj.getString("sellerRate");
+        String postFee = tradeJsonObj.getString("postFee");
+        String timeoutActionTime = tradeJsonObj.getString("timeoutActionTime");
+        String expandCardExpandPriceUsed = tradeJsonObj.getString("expandCardExpandPriceUsed");
+        String receiverCity = tradeJsonObj.getString("receiverCity");
+        String shippingType = tradeJsonObj.getString("shippingType");
+        String numIid = tradeJsonObj.getString("numIid");
+        String title = tradeJsonObj.getString("title");
+        String buyerRate = tradeJsonObj.getString("buyerRate");
+        String expandCardExpandPrice = tradeJsonObj.getString("expandCardExpandPrice");
+        String discountFee = tradeJsonObj.getString("discountFee");
+        String receiverState = tradeJsonObj.getString("receiverState");
+        String stepTradeStatus = tradeJsonObj.getString("stepTradeStatus");
+        String buyerMemo = tradeJsonObj.getString("buyerMemo");
+        String tradeFrom = tradeJsonObj.getString("tradeFrom");
+        String endTime = tradeJsonObj.getString("endTime");
+        String picPath = tradeJsonObj.getString("picPath");
+        String expandCardBasicPrice = tradeJsonObj.getString("expandCardBasicPrice");
+        String sellerFlag = tradeJsonObj.getString("sellerFlag");
+        String isPartConsign = tradeJsonObj.getString("isPartConsign");
+        String sellerNick = tradeJsonObj.getString("sellerNick");
 
 
 

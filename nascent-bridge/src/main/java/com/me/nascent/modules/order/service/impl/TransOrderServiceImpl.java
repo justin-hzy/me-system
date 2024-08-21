@@ -341,6 +341,67 @@ public class TransOrderServiceImpl implements TransOrderService {
                     if(tradeResult!=null){
                         //进入更新集合
                         updateTrades.add(trade);
+
+                        List<NickInfo> nickInfos = tradesVo.getNickInfoList();
+
+
+                        if(CollUtil.isNotEmpty(nickInfos)){
+                            List<Nick> nicks = new ArrayList<>();
+
+                            for (NickInfo nickInfo : nickInfos){
+                                Nick nick = new Nick();
+                                BeanUtils.copyProperties(nickInfo, nick);
+                                nick.setMainid(id);
+
+                                nicks.add(nick);
+                            }
+                            nickService.saveOrUpdateBatch(nicks);
+                        }
+
+                        List<PromotionsVo> promotionsVos = tradesVo.getPromotionVos();
+
+                        if(CollUtil.isNotEmpty(promotionsVos)){
+                            List<Promotion> promotions = new ArrayList<>();
+
+                            for (PromotionsVo promotionsVo : promotionsVos){
+                                Promotion promotion = new Promotion();
+                                BeanUtils.copyProperties(promotionsVo,promotion);
+                                promotion.setMainid(id);
+                                promotions.add(promotion);
+                            }
+                            promotionService.saveOrUpdateBatch(promotions);
+                        }
+
+                        List<OrdersVo> ordersVos = tradesVo.getOrders();
+
+
+                        if(CollUtil.isNotEmpty(ordersVos)){
+                            List<Order> orders = new ArrayList<>();
+
+                            for (OrdersVo ordersVo : ordersVos){
+                                Order order = new Order();
+                                BeanUtils.copyProperties(ordersVo,order);
+                                order.setMainid(id);
+                                orders.add(order);
+
+                                List<TradeByModifySgFinishInfo> tradeByModifySgFinishInfos = ordersVo.getSgFinishInfoList();
+
+                                if (tradeByModifySgFinishInfos.size()>0){
+                                    List<SgFinishInfo> sgFinishInfos = new ArrayList<>();
+
+                                    for (TradeByModifySgFinishInfo tradeByModifySgFinishInfo : tradeByModifySgFinishInfos){
+                                        SgFinishInfo sgFinishInfo = new SgFinishInfo();
+                                        BeanUtils.copyProperties(tradeByModifySgFinishInfo,sgFinishInfo);
+                                        sgFinishInfos.add(sgFinishInfo);
+                                    }
+                                    sgFinishInfoService.saveBatch(sgFinishInfos);
+                                }
+                            }
+                            orderService.saveBatch(orders);
+                        }
+
+
+
                     }else {
                         insertTrades.add(trade);
 

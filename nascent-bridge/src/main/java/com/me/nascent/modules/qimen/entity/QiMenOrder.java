@@ -5,11 +5,14 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("qi_men_order")
+@TableName("qi_men_trade_order")
 public class QiMenOrder {
 
     @TableField("oid")
     private String oid; // 子单ID
+
+    @TableField("tid")
+    private String tid;
 
     @TableField("sellerRate")
     private String sellerRate; // 卖家是否已评价

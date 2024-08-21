@@ -23,6 +23,9 @@ public class QiMenPromotionDetail {
     @TableField("id")
     private String id; // 交易的主订单或子订单号
 
+    @TableField("tid")
+    private String tid; // 交易的主订单或子订单号
+
     @TableField("giftItemNum")
     private String giftItemNum; // 礼物数量
 
