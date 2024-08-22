@@ -116,11 +116,11 @@ public class TransGradeServiceImpl implements TransGradeService {
 
 
                     QueryWrapper<GradeCustomerInfo> gradeCustomerInfoQuery = new QueryWrapper();
-                    gradeCustomerInfoQuery.eq("nasOuid",nasOuid);
+                    gradeCustomerInfoQuery.eq("nasOuid",nasOuid).eq("platform",platform);
                     GradeCustomerInfo existObj = gradeCustomerInfoService.getOne(gradeCustomerInfoQuery);
                     if (existObj != null){
                         UpdateWrapper<GradeCustomerInfo> gradeCustomerInfoUpdate = new UpdateWrapper<>();
-                        gradeCustomerInfoUpdate.eq("nasOuid",nasOuid);
+                        gradeCustomerInfoUpdate.eq("nasOuid",nasOuid).eq("platform",platform);
                         gradeCustomerInfoService.update(gradeCustomerInfo,gradeCustomerInfoUpdate);
                     }else {
                         saveList.add(gradeCustomerInfo);

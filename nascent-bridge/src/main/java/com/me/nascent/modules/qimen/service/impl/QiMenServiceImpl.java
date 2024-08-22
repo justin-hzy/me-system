@@ -2,10 +2,7 @@ package com.me.nascent.modules.qimen.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
 import com.me.nascent.modules.qimen.dto.QiMenDto;
-import com.me.nascent.modules.qimen.service.QiMenTransCustomerService;
-import com.me.nascent.modules.qimen.service.QiMenTransReFundService;
-import com.me.nascent.modules.qimen.service.QiMenService;
-import com.me.nascent.modules.qimen.service.QiMenTransTradeService;
+import com.me.nascent.modules.qimen.service.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,9 +21,11 @@ public class QiMenServiceImpl implements QiMenService {
 
     private QiMenTransReFundService qiMenTransReFundService;
 
+    private QiMenPutCustomerService putCustomerService;
+
 
     @Override
-    public String transOrder(QiMenDto dto) throws Exception {
+    public String transQiMen(QiMenDto dto) throws Exception {
         log.info(dto.toString());
 
         String dataType = dto.getDataType();
@@ -45,5 +44,10 @@ public class QiMenServiceImpl implements QiMenService {
         }
 
         return resJson;
+    }
+
+    @Override
+    public void putQiMenCustomer() {
+        putCustomerService.putQiMenCustomer();
     }
 }

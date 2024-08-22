@@ -14,6 +14,9 @@ public class GradeCustomerInfo {
     @TableField("nasOuid")
     private String nasOuid;
 
+    @TableField("platform")
+    private Integer platform;
+
     /*@TableField("activateTime")
     private Date activateTime;
 

@@ -22,8 +22,9 @@ public class QiMenController {
         log.info("dto="+dto.toString());
         /*return null;*/
 
-        String respStr = qiMenService.transOrder(dto);
+        String respStr = qiMenService.transQiMen(dto);
         log.info("respStr="+respStr);
         return respStr;
     }
+
 }
