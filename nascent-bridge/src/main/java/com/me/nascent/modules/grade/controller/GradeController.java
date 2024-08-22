@@ -15,7 +15,7 @@ public class GradeController {
 
     @PostMapping("tranPureGrade")
     public String tranGrade() throws Exception {
-        Long viewId = 100000386L;
+        Long viewId = 100000387L;
 
         transGradeService.TransPureGrade(viewId);
 
