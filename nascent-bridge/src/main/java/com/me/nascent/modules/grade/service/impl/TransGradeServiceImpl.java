@@ -85,7 +85,7 @@ public class TransGradeServiceImpl implements TransGradeService {
 
         List<PureMemberNickInfo> pureMemberNickUpdateList = new ArrayList<>();
 
-        for (int i = 0; i <= size; i++) {
+        for (int i = 0; i < size; i++) {
 
             PureMemberNickInfo pureMemberNickInfo = pureMemberNickInfos.get(i);
 
@@ -131,7 +131,7 @@ public class TransGradeServiceImpl implements TransGradeService {
                 }
             }
 
-            if(saveList.size() == 10 || i == size){
+            if(saveList.size() == 10000 || i == size){
                 gradeCustomerInfoService.saveBatch(saveList);
                 saveList.clear();
                 pureMemberNickInfoService.updateBatchById(pureMemberNickUpdateList);
