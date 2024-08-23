@@ -12,10 +12,10 @@ public class PureMemberNickInfo {
     @TableId("mainId")
     private Long mainId;
 
-    @TableField("nasOuid")
+    @TableId("nasOuid")
     private String nasOuid;
 
-    @TableField("platform")
+    @TableId("platform")
     private Integer platform;
 
     @TableField("isTransGrade")

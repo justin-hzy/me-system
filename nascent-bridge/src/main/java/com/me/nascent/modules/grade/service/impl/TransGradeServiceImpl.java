@@ -134,7 +134,12 @@ public class TransGradeServiceImpl implements TransGradeService {
             if(saveList.size() == 10000 || i == size){
                 gradeCustomerInfoService.saveBatch(saveList);
                 saveList.clear();
-                pureMemberNickInfoService.updateBatchById(pureMemberNickUpdateList);
+                /*pureMemberNickInfoService.updateBatchById(pureMemberNickUpdateList);*/
+                for (PureMemberNickInfo pureMemberNickInfo1 : pureMemberNickUpdateList){
+                    UpdateWrapper<PureMemberNickInfo> pureMemberNickInfoUpdate = new UpdateWrapper<>();
+                    pureMemberNickInfoUpdate.eq("nasOuid",pureMemberNickInfo1.getNasOuid())
+                            .eq("platform",pureMemberNickInfo1.getPlatform());
+                }
                 pureMemberNickUpdateList.clear();
             }
         }
