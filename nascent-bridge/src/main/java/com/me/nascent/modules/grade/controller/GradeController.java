@@ -21,4 +21,13 @@ public class GradeController {
 
         return "success";
     }
+
+    @PostMapping("tranZaGrade")
+    public String tranZaGrade() throws Exception {
+        Long viewId = 100000386L;
+
+        transGradeService.TransZaGrade(viewId);
+
+        return "success";
+    }
 }

@@ -6,5 +6,7 @@ public interface TransGradeService {
 
     void putPureGrade() throws Exception;
 
+    void TransZaGrade(Long viewId) throws Exception;
+
     void checkPureGrade();
 }

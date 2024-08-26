@@ -7,10 +7,8 @@ import com.me.nascent.common.config.NascentConfig;
 import com.me.nascent.modules.grade.entity.GradeCustomerCardReceiveInfo;
 import com.me.nascent.modules.grade.entity.GradeCustomerInfo;
 import com.me.nascent.modules.grade.entity.GradeFansStatusVo;
-import com.me.nascent.modules.grade.service.GradeCustomerCardReceiveInfoService;
-import com.me.nascent.modules.grade.service.GradeCustomerInfoService;
-import com.me.nascent.modules.grade.service.GradeFansStatusVoService;
-import com.me.nascent.modules.grade.service.TransGradeService;
+import com.me.nascent.modules.grade.entity.ZaGradeCustomerInfo;
+import com.me.nascent.modules.grade.service.*;
 
 import com.me.nascent.modules.member.entity.PureMember;
 import com.me.nascent.modules.member.entity.PureMemberNickInfo;
@@ -57,9 +55,12 @@ public class TransGradeServiceImpl implements TransGradeService {
 
     private GradeCustomerInfoService gradeCustomerInfoService;
 
+    private ZaGradeCustomerInfoService zaGradeCustomerInfoService;
+
     private GradeCustomerCardReceiveInfoService gradeCustomerCardReceiveInfoService;
 
     private GradeFansStatusVoService gradeFansStatusVoService;
+
 
 
     @Override
@@ -75,7 +76,7 @@ public class TransGradeServiceImpl implements TransGradeService {
         request.setViewId(viewId);
 
         QueryWrapper<PureMemberNickInfo> pureMemberNickInfoQuery = new QueryWrapper<>();
-        pureMemberNickInfoQuery.isNull("isTransGrade")
+        //pureMemberNickInfoQuery.isNull("isTransGrade")
                 //.last("limit 25")
         ;
         List<PureMemberNickInfo> pureMemberNickInfos = pureMemberNickInfoService.list(pureMemberNickInfoQuery);
@@ -236,6 +237,82 @@ public class TransGradeServiceImpl implements TransGradeService {
             ApiClient apiClient =new ApiClientImpl(request);
             CustomerGradeUpdateResponse response = apiClient.execute(request);
         }
+    }
+
+    @Override
+    public void TransZaGrade(Long viewId) throws Exception {
+
+        SystemCustomerGetRequest request = new SystemCustomerGetRequest();
+        request.setServerUrl(nascentConfig.getServerUrl());
+        request.setAppKey(nascentConfig.getAppKey());
+        request.setAppSecret(nascentConfig.getAppSerect());
+        request.setGroupId(nascentConfig.getGroupID());
+        request.setAccessToken(tokenService.getToken());
+
+        request.setViewId(viewId);
+
+        QueryWrapper<ZaMemberNickInfo> zaMemberNickInfoQueryWrapper = new QueryWrapper<>();
+        //zaMemberNickInfoQueryWrapper.last("limit 0,129")
+                ;
+
+        List<ZaMemberNickInfo> zaMemberNickInfos = zaMemberNickInfoService.list(zaMemberNickInfoQueryWrapper);
+
+        int size = zaMemberNickInfos.size();
+
+        List<ZaGradeCustomerInfo> saveList = new ArrayList<>();
+
+        for (int i = 0; i < size; i++) {
+            ZaMemberNickInfo zaMemberNickInfo = zaMemberNickInfos.get(i);
+
+            String nasOuid = zaMemberNickInfo.getNasOuid();
+            int platform = zaMemberNickInfo.getPlatform();
+            Long mainId = zaMemberNickInfo.getMainId();
+
+            request.setNasOuid(nasOuid);
+            request.setPlatform(platform);
+
+            ApiClient client = new ApiClientImpl(request);
+
+            SystemCustomerGetResponse response = client.execute(request);
+
+            if("60001".equals(response.getCode())){
+                UpdateWrapper<Token> updateWrapper = new UpdateWrapper<>();
+                updateWrapper.eq("name","nascent").set("token",tokenService.getToken());
+                tokenService.update(updateWrapper);
+            }else if("200".equals(response.getCode())) {
+                log.info(response.getBody());
+                SystemCustomerInfo systemCustomerInfo = response.getResult();
+                if (systemCustomerInfo != null){
+                    ZaGradeCustomerInfo zaGradeCustomerInfo = new ZaGradeCustomerInfo();
+
+                    BeanUtils.copyProperties(systemCustomerInfo,zaGradeCustomerInfo);
+                    zaGradeCustomerInfo.setNasOuid(zaMemberNickInfo.getNasOuid());
+                    zaGradeCustomerInfo.setMainId(mainId);
+
+                    QueryWrapper<ZaGradeCustomerInfo> gradeCustomerInfoQuery = new QueryWrapper();
+                    gradeCustomerInfoQuery.eq("nasOuid",nasOuid)
+                            .eq("platform",platform)
+                            .eq("mainId",mainId);
+                    ZaGradeCustomerInfo existObj = zaGradeCustomerInfoService.getOne(gradeCustomerInfoQuery);
+
+                    if (existObj != null){
+//                        UpdateWrapper<ZaGradeCustomerInfo> zaGradeCustomerInfoUpdate = new UpdateWrapper<>();
+//                        zaGradeCustomerInfoUpdate.eq("nasOuid",nasOuid)
+//                                .eq("platform",platform)
+//                                .eq("mainId",mainId);
+//                        zaGradeCustomerInfoService.update(zaGradeCustomerInfo,zaGradeCustomerInfoUpdate);
+                    }else {
+                        saveList.add(zaGradeCustomerInfo);
+                    }
+                }
+            }
+
+            if(saveList.size() == 100000 || i == (size-1)){
+                zaGradeCustomerInfoService.saveBatch(saveList);
+                saveList.clear();
+            }
+        }
+
     }
 
     @Override
