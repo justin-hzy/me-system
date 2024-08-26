@@ -76,7 +76,8 @@ public class TransGradeServiceImpl implements TransGradeService {
 
         QueryWrapper<PureMemberNickInfo> pureMemberNickInfoQuery = new QueryWrapper<>();
         pureMemberNickInfoQuery.isNull("isTransGrade")
-                .last("limit 25");
+                //.last("limit 25")
+        ;
         List<PureMemberNickInfo> pureMemberNickInfos = pureMemberNickInfoService.list(pureMemberNickInfoQuery);
 
 
@@ -139,7 +140,7 @@ public class TransGradeServiceImpl implements TransGradeService {
                 }
             }
 
-            if(saveList.size() == 200000 || i == (size-1)){
+            if(saveList.size() == pureMemberNickInfos.size()){
                 gradeCustomerInfoService.saveBatch(saveList);
                 saveList.clear();
                 /*pureMemberNickInfoService.updateBatchById(pureMemberNickUpdateList);
