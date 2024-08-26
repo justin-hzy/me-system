@@ -24,6 +24,11 @@ public class GradeTest {
         transGradeService.TransPureGrade(viewId);
     }
 
+    @Test
+    public void checkPureGrade(){
+        //transGradeService.checkPureGrade();
+    }
+
 
     @Test
     public void putGrade() throws Exception {

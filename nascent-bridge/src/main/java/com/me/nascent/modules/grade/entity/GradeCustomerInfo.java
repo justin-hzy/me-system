@@ -11,6 +11,9 @@ import java.util.Date;
 @TableName("grade_customer_info")
 public class GradeCustomerInfo {
 
+    @TableField("mainId")
+    private long mainId;
+
     @TableField("nasOuid")
     private String nasOuid;
 

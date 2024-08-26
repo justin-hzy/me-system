@@ -37,7 +37,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -73,7 +75,8 @@ public class TransGradeServiceImpl implements TransGradeService {
         request.setViewId(viewId);
 
         QueryWrapper<PureMemberNickInfo> pureMemberNickInfoQuery = new QueryWrapper<>();
-        pureMemberNickInfoQuery.isNull("isTransGrade");
+        pureMemberNickInfoQuery.isNull("isTransGrade")
+                .last("limit 25");
         List<PureMemberNickInfo> pureMemberNickInfos = pureMemberNickInfoService.list(pureMemberNickInfoQuery);
 
 
@@ -91,6 +94,7 @@ public class TransGradeServiceImpl implements TransGradeService {
 
             String nasOuid = pureMemberNickInfo.getNasOuid();
             int platform = pureMemberNickInfo.getPlatform();
+            Long mainId = pureMemberNickInfo.getMainId();
 
             request.setNasOuid(nasOuid);
             request.setPlatform(platform);
@@ -113,14 +117,18 @@ public class TransGradeServiceImpl implements TransGradeService {
 
                     BeanUtils.copyProperties(systemCustomerInfo,gradeCustomerInfo);
                     gradeCustomerInfo.setNasOuid(pureMemberNickInfo.getNasOuid());
-
+                    gradeCustomerInfo.setMainId(mainId);
 
                     QueryWrapper<GradeCustomerInfo> gradeCustomerInfoQuery = new QueryWrapper();
-                    gradeCustomerInfoQuery.eq("nasOuid",nasOuid).eq("platform",platform);
+                    gradeCustomerInfoQuery.eq("nasOuid",nasOuid)
+                            .eq("platform",platform)
+                            .eq("mainId",mainId);
                     GradeCustomerInfo existObj = gradeCustomerInfoService.getOne(gradeCustomerInfoQuery);
                     if (existObj != null){
                         UpdateWrapper<GradeCustomerInfo> gradeCustomerInfoUpdate = new UpdateWrapper<>();
-                        gradeCustomerInfoUpdate.eq("nasOuid",nasOuid).eq("platform",platform);
+                        gradeCustomerInfoUpdate.eq("nasOuid",nasOuid)
+                                .eq("platform",platform)
+                                .eq("mainId",mainId);
                         gradeCustomerInfoService.update(gradeCustomerInfo,gradeCustomerInfoUpdate);
                     }else {
                         saveList.add(gradeCustomerInfo);
@@ -131,16 +139,16 @@ public class TransGradeServiceImpl implements TransGradeService {
                 }
             }
 
-            if(saveList.size() == 10000 || i == size){
+            if(saveList.size() == 200000 || i == (size-1)){
                 gradeCustomerInfoService.saveBatch(saveList);
                 saveList.clear();
-                /*pureMemberNickInfoService.updateBatchById(pureMemberNickUpdateList);*/
+                /*pureMemberNickInfoService.updateBatchById(pureMemberNickUpdateList);
                 for (PureMemberNickInfo pureMemberNickInfo1 : pureMemberNickUpdateList){
                     UpdateWrapper<PureMemberNickInfo> pureMemberNickInfoUpdate = new UpdateWrapper<>();
                     pureMemberNickInfoUpdate.eq("nasOuid",pureMemberNickInfo1.getNasOuid())
                             .eq("platform",pureMemberNickInfo1.getPlatform());
                 }
-                pureMemberNickUpdateList.clear();
+                pureMemberNickUpdateList.clear();*/
             }
         }
 
@@ -227,5 +235,33 @@ public class TransGradeServiceImpl implements TransGradeService {
             ApiClient apiClient =new ApiClientImpl(request);
             CustomerGradeUpdateResponse response = apiClient.execute(request);
         }
+    }
+
+    @Override
+    public void checkPureGrade() {
+        QueryWrapper<PureMemberNickInfo> pureMemberNickInfoQuery = new QueryWrapper<>();
+        pureMemberNickInfoQuery.eq("isTransGrade",1);
+        List<PureMemberNickInfo> list = pureMemberNickInfoService.list(pureMemberNickInfoQuery);
+        log.info(list.size()+"");
+        List<Map<String,String>> list1 = new ArrayList<>();
+        for (PureMemberNickInfo pureMemberNickInfo : list){
+            String nasOuid = pureMemberNickInfo.getNasOuid();
+            Integer platform = pureMemberNickInfo.getPlatform();
+
+            QueryWrapper<GradeCustomerInfo> gradeCustomerInfoQuery = new QueryWrapper<>();
+            gradeCustomerInfoQuery.eq("nasOuid",nasOuid);
+            gradeCustomerInfoQuery.eq("platform",platform);
+
+            GradeCustomerInfo gradeCustomerInfo = gradeCustomerInfoService.getOne(gradeCustomerInfoQuery);
+            if(gradeCustomerInfo == null){
+                Map<String,String> map = new HashMap();
+                map.put("nasOuid",nasOuid);
+                map.put("platform",String.valueOf(platform));
+                list1.add(map);
+            }
+        }
+
+        log.info(list1.toString());
+
     }
 }
