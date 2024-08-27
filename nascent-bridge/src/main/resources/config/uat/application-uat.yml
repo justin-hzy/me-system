@@ -1,5 +1,5 @@
 server:
-  port: 8092
+  port: 9093
   servlet:
     context-path: /nascentBridge
 
@@ -52,4 +52,9 @@ nascent:
   appKey: NS80000078003
   appSerect: 67A55FF4D1AF5623B5478D93DCDC16C5
   groupID: 80000078
+
+  btnServerUrl:
+  btnAppKey:
+  btnAppSerect:
+  btnGroupID:
 
