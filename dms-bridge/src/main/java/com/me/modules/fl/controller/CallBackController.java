@@ -180,7 +180,12 @@ public class CallBackController {
                     JSONArray workflowRequestTableFieldsArr = new JSONArray();
 
                     JSONObject workflowRequestTableFields1 = new JSONObject();
-                    Integer quantity  = Integer.valueOf(products.get(i).getShipped_quantity());
+                    String shipped_quantity = products.get(i).getShipped_quantity();
+                    Integer quantity = 0 ;
+                    if(shipped_quantity != null){
+                        quantity = Integer.valueOf(shipped_quantity);
+                    }
+
                     workflowRequestTableFields1.put("fieldName","cksl");
                     workflowRequestTableFields1.put("fieldValue",quantity);
 
