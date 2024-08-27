@@ -18,4 +18,16 @@ public class NascentConfig {
 
     @Value("${nascent.groupID}")
     private Long groupID;
+
+    @Value("${nascent.btnServerUrl}")
+    private String btnServerUrl;
+
+    @Value("${nascent.btnAppKey}")
+    private String btnAppKey;
+
+    @Value("${nascent.btnAppSerect}")
+    private String btnAppSerect;
+
+    @Value("${nascent.btnGroupID}")
+    private Long btnGroupID;
 }

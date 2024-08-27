@@ -8,5 +8,13 @@ public interface QiMenService {
 
     String transQiMen(QiMenDto dto) throws Exception;
 
-    void putQiMenCustomer();
+    void putQiMenCustomer() throws Exception;
+
+    void putQiMenGrade() throws Exception;
+
+    void putQiMenPoint() throws Exception;
+
+    void putQiMenTrade() throws Exception;
+
+    void putQiMenReFund() throws Exception;
 }

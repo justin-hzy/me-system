@@ -21,7 +21,15 @@ public class QiMenServiceImpl implements QiMenService {
 
     private QiMenTransReFundService qiMenTransReFundService;
 
-    private QiMenPutCustomerService putCustomerService;
+    private QiMenPutCustomerService qiMenPutCustomerService;
+
+    private QiMenPutGradeService qiMenPutGradeService;
+
+    private QiMenPutPointService qiMenPutPointService;
+
+    private QiMenPutTradeService qiMenPutTradeService;
+
+    private QiMenPutReFundService qiMenPutReFundService;
 
 
     @Override
@@ -47,7 +55,28 @@ public class QiMenServiceImpl implements QiMenService {
     }
 
     @Override
-    public void putQiMenCustomer() {
-        putCustomerService.putQiMenCustomer();
+    public void putQiMenCustomer() throws Exception {
+        qiMenPutCustomerService.putQiMenCustomer();
+    }
+
+    @Override
+    public void putQiMenGrade() throws Exception {
+        qiMenPutGradeService.putQiMenGrade();
+    }
+
+    @Override
+    public void putQiMenPoint() throws Exception {
+        qiMenPutPointService.putQiMenPoint();
+    }
+
+    @Override
+    public void putQiMenTrade() throws Exception {
+        qiMenPutTradeService.putQiMenTrade();
+
+    }
+
+    @Override
+    public void putQiMenReFund() throws Exception {
+        qiMenPutReFundService.putQiMenReFund();
     }
 }

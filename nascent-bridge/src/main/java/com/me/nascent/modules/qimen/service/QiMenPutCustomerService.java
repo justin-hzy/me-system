@@ -2,5 +2,5 @@ package com.me.nascent.modules.qimen.service;
 
 public interface QiMenPutCustomerService {
 
-    void putQiMenCustomer();
+    void putQiMenCustomer() throws Exception;
 }

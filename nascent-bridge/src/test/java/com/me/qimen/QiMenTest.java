@@ -15,7 +15,27 @@ public class QiMenTest {
     QiMenService qiMenService;
 
     @Test
-    public void putQiMenTrade(){
+    public void putQiMenCustomer() throws Exception {
+        qiMenService.putQiMenCustomer();
+    }
 
+    @Test
+    public void putQiMenGrade() throws Exception {
+        qiMenService.putQiMenGrade();
+    }
+
+    @Test
+    public void putQiMenPoint() throws Exception {
+        qiMenService.putQiMenPoint();
+    }
+
+    @Test
+    public void putQiMenTrade() throws Exception{
+        qiMenService.putQiMenTrade();
+    }
+
+    @Test
+    public void putQiMenReFund() throws Exception{
+        qiMenService.putQiMenReFund();
     }
 }

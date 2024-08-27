@@ -224,6 +224,7 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
         String sellerFlag = tradeJsonObj.getString("sellerFlag");
         String isPartConsign = tradeJsonObj.getString("isPartConsign");
         String sellerNick = tradeJsonObj.getString("sellerNick");
+        String buyerOpenUid = tradeJsonObj.getString("buyerOpenUid");
 
 
 
@@ -266,6 +267,7 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
         qiMenTrade.setReceiverState(receiverState);
         qiMenTrade.setStepTradeStatus(stepTradeStatus);
         qiMenTrade.setBuyerMemo(buyerMemo);
+        qiMenTrade.setBuyerOpenUid(buyerOpenUid);
         qiMenTrade.setTradeFrom(tradeFrom);
         qiMenTrade.setEndTime(endTime);
         qiMenTrade.setPicPath(picPath);

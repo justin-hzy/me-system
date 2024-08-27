@@ -134,6 +134,9 @@ public class QiMenTrade {
     @TableField("buyerMemo")
     private String buyerMemo;
 
+    @TableField("buyerOpenUid")
+    private String buyerOpenUid;
+
     @TableField("tradeFrom")
     private String tradeFrom;
 
