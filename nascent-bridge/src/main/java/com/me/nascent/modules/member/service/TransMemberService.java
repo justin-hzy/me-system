@@ -4,5 +4,7 @@ import java.util.Date;
 
 public interface TransMemberService {
 
-    void TransMemberByRange(Date startDate, Date endDate) throws Exception;
+    void TransPureMemberByRange(Date startDate, Date endDate) throws Exception;
+
+    void TransZaMemberByRange(Date startDate, Date endDate) throws Exception;
 }

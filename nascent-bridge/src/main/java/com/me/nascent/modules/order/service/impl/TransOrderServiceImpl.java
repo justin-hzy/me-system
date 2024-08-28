@@ -346,8 +346,12 @@ public class TransOrderServiceImpl implements TransOrderService {
 
 
                         if(CollUtil.isNotEmpty(nickInfos)){
-                            List<Nick> nicks = new ArrayList<>();
 
+                            QueryWrapper<Nick> nickQuery = new QueryWrapper<>();
+                            nickQuery.eq("mainid",id);
+                            nickService.remove(nickQuery);
+
+                            List<Nick> nicks = new ArrayList<>();
                             for (NickInfo nickInfo : nickInfos){
                                 Nick nick = new Nick();
                                 BeanUtils.copyProperties(nickInfo, nick);
@@ -355,12 +359,19 @@ public class TransOrderServiceImpl implements TransOrderService {
 
                                 nicks.add(nick);
                             }
-                            nickService.saveOrUpdateBatch(nicks);
+                            nickService.saveBatch(nicks);
+
                         }
 
                         List<PromotionsVo> promotionsVos = tradesVo.getPromotionVos();
 
                         if(CollUtil.isNotEmpty(promotionsVos)){
+
+                            QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
+                            promotionQuery.eq("mainid",id);
+                            promotionService.remove(promotionQuery);
+
+
                             List<Promotion> promotions = new ArrayList<>();
 
                             for (PromotionsVo promotionsVo : promotionsVos){
@@ -369,7 +380,7 @@ public class TransOrderServiceImpl implements TransOrderService {
                                 promotion.setMainid(id);
                                 promotions.add(promotion);
                             }
-                            promotionService.saveOrUpdateBatch(promotions);
+                            promotionService.saveBatch(promotions);
                         }
 
                         List<OrdersVo> ordersVos = tradesVo.getOrders();
@@ -378,15 +389,19 @@ public class TransOrderServiceImpl implements TransOrderService {
                         if(CollUtil.isNotEmpty(ordersVos)){
                             List<Order> orders = new ArrayList<>();
 
+                            QueryWrapper<Order> orderQuery = new QueryWrapper<>();
+                            orderQuery.eq("mainid",id);
+                            orderService.remove(orderQuery);
+
                             for (OrdersVo ordersVo : ordersVos){
                                 Order order = new Order();
                                 BeanUtils.copyProperties(ordersVo,order);
                                 order.setMainid(id);
                                 orders.add(order);
 
-                                List<TradeByModifySgFinishInfo> tradeByModifySgFinishInfos = ordersVo.getSgFinishInfoList();
+                                /*List<TradeByModifySgFinishInfo> tradeByModifySgFinishInfos = ordersVo.getSgFinishInfoList();
 
-                                if (tradeByModifySgFinishInfos.size()>0){
+                                if (CollUtil.isNotEmpty(tradeByModifySgFinishInfos)){
                                     List<SgFinishInfo> sgFinishInfos = new ArrayList<>();
 
                                     for (TradeByModifySgFinishInfo tradeByModifySgFinishInfo : tradeByModifySgFinishInfos){
@@ -395,7 +410,7 @@ public class TransOrderServiceImpl implements TransOrderService {
                                         sgFinishInfos.add(sgFinishInfo);
                                     }
                                     sgFinishInfoService.saveBatch(sgFinishInfos);
-                                }
+                                }*/
                             }
                             orderService.saveBatch(orders);
                         }

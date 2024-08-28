@@ -1,6 +1,7 @@
 package com.me.nascent.modules.order.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -8,7 +9,7 @@ import lombok.Data;
 @TableName("trade_nick")
 public class Nick {
 
-    @TableField("mainid")
+    @TableId("mainid")
     private Long mainid;
 
     @TableField("nick")
