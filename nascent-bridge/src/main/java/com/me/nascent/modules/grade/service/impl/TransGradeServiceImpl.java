@@ -13,6 +13,7 @@ import com.me.nascent.modules.grade.service.*;
 import com.me.nascent.modules.member.entity.PureMember;
 import com.me.nascent.modules.member.entity.PureMemberNickInfo;
 import com.me.nascent.modules.member.entity.ZaMemberNickInfo;
+import com.me.nascent.modules.member.mapper.PureMemberNickInfoMapper;
 import com.me.nascent.modules.member.service.PureMemberNickInfoService;
 import com.me.nascent.modules.member.service.ZaMemberNickInfoService;
 import com.me.nascent.modules.point.entity.PureMemberPoint;
@@ -61,6 +62,8 @@ public class TransGradeServiceImpl implements TransGradeService {
 
     private GradeFansStatusVoService gradeFansStatusVoService;
 
+    private PureMemberNickInfoMapper pureMemberNickInfoMapper;
+
 
 
     @Override
@@ -79,7 +82,9 @@ public class TransGradeServiceImpl implements TransGradeService {
         //pureMemberNickInfoQuery.isNull("isTransGrade")
                 //.last("limit 25")
         ;
-        List<PureMemberNickInfo> pureMemberNickInfos = pureMemberNickInfoService.list(pureMemberNickInfoQuery);
+        //List<PureMemberNickInfo> pureMemberNickInfos = pureMemberNickInfoService.list(pureMemberNickInfoQuery);
+
+        List<PureMemberNickInfo> pureMemberNickInfos = pureMemberNickInfoMapper.findNotInGradeCustomerInfo();
 
 
 
@@ -90,6 +95,7 @@ public class TransGradeServiceImpl implements TransGradeService {
 
         List<PureMemberNickInfo> pureMemberNickUpdateList = new ArrayList<>();
 
+        log.info(pureMemberNickUpdateList.toString());
         for (int i = 0; i < size; i++) {
 
             PureMemberNickInfo pureMemberNickInfo = pureMemberNickInfos.get(i);
@@ -144,57 +150,8 @@ public class TransGradeServiceImpl implements TransGradeService {
             if(saveList.size() == pureMemberNickInfos.size()){
                 gradeCustomerInfoService.saveBatch(saveList);
                 saveList.clear();
-                /*pureMemberNickInfoService.updateBatchById(pureMemberNickUpdateList);
-                for (PureMemberNickInfo pureMemberNickInfo1 : pureMemberNickUpdateList){
-                    UpdateWrapper<PureMemberNickInfo> pureMemberNickInfoUpdate = new UpdateWrapper<>();
-                    pureMemberNickInfoUpdate.eq("nasOuid",pureMemberNickInfo1.getNasOuid())
-                            .eq("platform",pureMemberNickInfo1.getPlatform());
-                }
-                pureMemberNickUpdateList.clear();*/
             }
         }
-
-        /*for (PureMemberNickInfo pureMemberNickInfo : pureMemberNickInfos){
-
-            String nasOuid = pureMemberNickInfo.getNasOuid();
-            int platform = pureMemberNickInfo.getPlatform();
-
-            request.setNasOuid(nasOuid);
-            request.setPlatform(platform);
-
-            ApiClient client = new ApiClientImpl(request);
-
-            SystemCustomerGetResponse response = client.execute(request);
-
-
-
-            if("60001".equals(response.getCode())){
-                UpdateWrapper<Token> updateWrapper = new UpdateWrapper<>();
-                updateWrapper.eq("name","nascent").set("token",tokenService.getToken());
-                tokenService.update(updateWrapper);
-            }else if("200".equals(response.getCode())) {
-                log.info(response.getBody());
-                SystemCustomerInfo systemCustomerInfo = response.getResult();
-                if (systemCustomerInfo != null){
-                    GradeCustomerInfo gradeCustomerInfo = new GradeCustomerInfo();
-
-                    BeanUtils.copyProperties(systemCustomerInfo,gradeCustomerInfo);
-                    gradeCustomerInfo.setNasOuid(pureMemberNickInfo.getNasOuid());
-
-
-                    QueryWrapper<GradeCustomerInfo> gradeCustomerInfoQuery = new QueryWrapper();
-                    gradeCustomerInfoQuery.eq("nasOuid",nasOuid);
-                    GradeCustomerInfo existObj = gradeCustomerInfoService.getOne(gradeCustomerInfoQuery);
-                    if (existObj != null){
-                        UpdateWrapper<GradeCustomerInfo> gradeCustomerInfoUpdate = new UpdateWrapper<>();
-                        gradeCustomerInfoUpdate.eq("nasOuid",nasOuid);
-                        gradeCustomerInfoService.update(gradeCustomerInfo,gradeCustomerInfoUpdate);
-                    }else {
-                        gradeCustomerInfoService.save(gradeCustomerInfo);
-                    }
-                }
-            }
-        }*/
     }
 
     @Override
