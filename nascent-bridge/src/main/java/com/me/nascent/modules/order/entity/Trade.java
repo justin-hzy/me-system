@@ -200,4 +200,7 @@ public class Trade {
     @TableField("ladingCode")
     private String ladingCode;
 
+    @TableField("transTime")
+    private Date transTime;
+
 }

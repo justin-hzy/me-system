@@ -335,6 +335,8 @@ public class TransOrderServiceImpl implements TransOrderService {
                     Trade trade = new Trade();
                     BeanUtils.copyProperties(tradesVo, trade);
                     trade.setRequestId(response.getRequestId());
+                    Date date = new Date();
+                    trade.setTransTime(date);
 
                     QueryWrapper<Trade> tradeQuery = new QueryWrapper<>();
                     tradeQuery.eq("id",id);
