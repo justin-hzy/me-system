@@ -48,36 +48,6 @@ public class TradeTest {
     @Test
     public void getOrderByDay() throws Exception {
 
-        /*String startDateStr  = "2012-01-01 00:00:00";
-        String endDateStr = "2012-01-01 01:59:59";
-
-        //定义日期时间格式
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        // 解析字符串到 LocalDateTime
-        LocalDateTime startDateTime = LocalDateTime.parse(startDateStr, formatter);
-        // 转换为 Date
-        Date startDate = Date.from(startDateTime.atZone(ZoneId.systemDefault()).toInstant());
-        LocalDateTime sevenDaysLater = startDateTime.plusDays(7);
-
-        // 将 LocalDateTime 转换为 Date
-        *//*Date sevenDaysLaterDate = Date.from(sevenDaysLater.atZone(ZoneId.systemDefault()).toInstant());
-        * Map<String,Object> resMap  = transOrderService.transOrder(nextId,startDate,sevenDaysLaterDate);
-        * *//*
-
-        LocalDateTime endDateTime = LocalDateTime.parse(endDateStr, formatter);
-        Long nextId = 0L;
-        Date endDate = Date.from(endDateTime.atZone(ZoneId.systemDefault()).toInstant());
-
-        Map<String,Object> resMap  = transOrderService.transOrder(nextId,startDate,endDate);
-
-        nextId = (Long) resMap.get("nextId");
-        startDate = (Date) resMap.get("modifyTime");
-        Boolean isNext = (Boolean) resMap.get("isNext");
-
-        log.info("nextId="+nextId);
-        log.info("modifyTime="+startDate);
-        log.info("isNext="+isNext);*/
-
         String startDateStr  = "2023-02-24 00:00:00";
         String endDateStr = "2023-02-28 23:59:59";
 
@@ -109,31 +79,6 @@ public class TradeTest {
     public void getOrderByYear() throws Exception {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        /*try {
-            Date startDate = sdf.parse("2023-02-21 16:37:16");
-            Date endDate = sdf.parse("2023-02-30 23:59:59");
-
-            System.out.println(startDate.before(endDate));
-
-            while (startDate.before(endDate)) {
-                Date endDateOfWeek = new Date(startDate.getTime() + 6 * 24 * 60 * 60 * 1000);
-                if (endDateOfWeek.after(endDate)) {
-                    endDateOfWeek = endDate;
-                }
-
-                String startStr = sdf.format(startDate);
-                String endStr = sdf.format(endDateOfWeek);
-                System.out.println("同步订单数据: " + startStr + " 到 " + endStr);
-
-                //transOrderService.transOrder(startDate,endDateOfWeek);
-
-
-                startDate = new Date(endDateOfWeek.getTime() + 24 * 60 * 60 * 1000);
-                System.out.println("下一个开启时间:"+startDate);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }*/
 
         String year = "2024";
 

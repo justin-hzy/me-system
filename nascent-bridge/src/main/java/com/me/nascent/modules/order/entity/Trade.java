@@ -1,6 +1,7 @@
 package com.me.nascent.modules.order.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -10,8 +11,11 @@ import java.util.Date;
 @TableName("trade")
 public class Trade {
 
-    @TableField("id")
+    @TableId("id")
     private Long id;
+
+    @TableField("requestId")
+    private String requestId;
 
     @TableField("availableConfirmFee")
     private BigDecimal availableConfirmFee;

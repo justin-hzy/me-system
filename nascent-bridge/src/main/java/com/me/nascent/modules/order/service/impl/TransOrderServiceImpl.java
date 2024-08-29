@@ -314,7 +314,7 @@ public class TransOrderServiceImpl implements TransOrderService {
         log.info(response.getBody());
         List<TradesVo> tradesVos = response.getResult();
         List<Trade> insertTrades = new ArrayList<>();
-        List<Trade> updateTrades = new ArrayList<>();
+
 
 
 
@@ -334,13 +334,17 @@ public class TransOrderServiceImpl implements TransOrderService {
                     updateTime = tradesVo.getUpdateTime();
                     Trade trade = new Trade();
                     BeanUtils.copyProperties(tradesVo, trade);
+                    trade.setRequestId(response.getRequestId());
 
                     QueryWrapper<Trade> tradeQuery = new QueryWrapper<>();
                     tradeQuery.eq("id",id);
                     Trade tradeResult = tradeService.getOne(tradeQuery);
                     if(tradeResult!=null){
                         //进入更新集合
-                        updateTrades.add(trade);
+                        //updateTrades.add(trade);
+                        UpdateWrapper<Trade> tradeUpdate = new UpdateWrapper<>();
+                        tradeUpdate.eq("id",id);
+                        tradeService.update(trade,tradeUpdate);
 
                         List<NickInfo> nickInfos = tradesVo.getNickInfoList();
 
@@ -360,7 +364,6 @@ public class TransOrderServiceImpl implements TransOrderService {
                                 nicks.add(nick);
                             }
                             nickService.saveBatch(nicks);
-
                         }
 
                         List<PromotionsVo> promotionsVos = tradesVo.getPromotionVos();
@@ -399,18 +402,6 @@ public class TransOrderServiceImpl implements TransOrderService {
                                 order.setMainid(id);
                                 orders.add(order);
 
-                                /*List<TradeByModifySgFinishInfo> tradeByModifySgFinishInfos = ordersVo.getSgFinishInfoList();
-
-                                if (CollUtil.isNotEmpty(tradeByModifySgFinishInfos)){
-                                    List<SgFinishInfo> sgFinishInfos = new ArrayList<>();
-
-                                    for (TradeByModifySgFinishInfo tradeByModifySgFinishInfo : tradeByModifySgFinishInfos){
-                                        SgFinishInfo sgFinishInfo = new SgFinishInfo();
-                                        BeanUtils.copyProperties(tradeByModifySgFinishInfo,sgFinishInfo);
-                                        sgFinishInfos.add(sgFinishInfo);
-                                    }
-                                    sgFinishInfoService.saveBatch(sgFinishInfos);
-                                }*/
                             }
                             orderService.saveBatch(orders);
                         }
@@ -482,14 +473,9 @@ public class TransOrderServiceImpl implements TransOrderService {
                 }
 
                 if(insertTrades.size()>0){
-                    //log.info(insertTrades.toString());
                     tradeService.saveBatch(insertTrades);
                 }
 
-                if(updateTrades.size()>0){
-                    //log.info(updateTrades.toString());
-                    tradeService.saveOrUpdateBatch(updateTrades);
-                }
             }
             resMap.put("nextId",nextId);
             resMap.put("updateTime",updateTime);
