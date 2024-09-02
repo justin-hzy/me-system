@@ -37,8 +37,8 @@ public class ReFundTest {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         try {
-            Date startDate = sdf.parse("2023-07-01 00:00:00");
-            Date endDate = sdf.parse("2023-07-31 23:59:59");
+            Date startDate = sdf.parse("2024-08-01 00:00:00");
+            Date endDate = sdf.parse("2024-08-31 23:59:59");
 
             while (startDate.before(endDate)) {
                 Date endDateOfWeek = new Date(startDate.getTime() +  30 * 60 * 1000); // 一小时
@@ -66,7 +66,7 @@ public class ReFundTest {
     }
 
     @Test
-    public void executorsTest(){
+    public void executorsTest() throws Exception {
         String year = "2023";
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -93,13 +93,15 @@ public class ReFundTest {
             Date endDate = cal.getTime();
             String startStr = sdf.format(startDate);
             String endStr = sdf.format(endDate);
+
+            data(startDate,endDate);
             /*reFundExecutorService.execute(()->{
                 //System.out.println(Thread.currentThread().getName());
                 log.info("同步订单数据: " + startStr + " 到 " + endStr);
                 data(startDate,endDate);
             });*/
 
-            CompletableFuture<String> futureImg = CompletableFuture.supplyAsync(() -> {
+            /*CompletableFuture<String> futureImg = CompletableFuture.supplyAsync(() -> {
 
                 log.info("同步订单数据: " + startStr + " 到 " + endStr);
                 try {
@@ -108,7 +110,7 @@ public class ReFundTest {
                     throw new RuntimeException(e);
                 }
                 return "success";
-            },reFundExecutor);
+            },reFundExecutor);*/
         }
     }
 

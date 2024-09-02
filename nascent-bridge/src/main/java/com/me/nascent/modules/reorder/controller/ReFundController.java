@@ -29,7 +29,7 @@ public class ReFundController {
     private TransReOrderService transReOrderService;
 
     @PostMapping("getReFundByRange")
-    private String getReFundByRange(){
+    private String getReFundByRange() throws Exception {
         String year = "2023";
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -56,7 +56,8 @@ public class ReFundController {
             Date endDate = cal.getTime();
             String startStr = sdf.format(startDate);
             String endStr = sdf.format(endDate);
-            reFundExecutorService.execute(()->{
+            data(startDate,endDate);
+            /*reFundExecutorService.execute(()->{
                 //System.out.println(Thread.currentThread().getName());
                 log.info(Thread.currentThread().getName()+"同步订单数据: " + startStr + " 到 " + endStr);
                 try {
@@ -64,7 +65,7 @@ public class ReFundController {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-            });
+            });*/
 
             /*CompletableFuture<String> futureImg = CompletableFuture.supplyAsync(() -> {
 
