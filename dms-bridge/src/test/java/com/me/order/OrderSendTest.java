@@ -421,16 +421,25 @@ public class OrderSendTest {
             String timeStr = dateFormat.format(new Date()).toString();
             if("0".equals(code)){
 
-                UpdateWrapper<FlSetDismantleReqLog> updateWrapper = new UpdateWrapper<>();
+                UpdateWrapper<FlTransCodeReqLog> updateWrapper = new UpdateWrapper<>();
                 updateWrapper.eq("requestId",requestId);
                 //status  0: 未请求  1:请求成功 2:请求失败 3: 三次执行失败，需要人工干预 (组装拆卸/转码 4:提交流程 5:提交流程失败)
                 updateWrapper.set("status","1");
                 updateWrapper.set("message","执行成功");
                 updateWrapper.set("updateTime",timeStr);
 
-                flSetDismantleReqLogService.update(updateWrapper);
+                flTransCodeReqLogService.update(updateWrapper);
 
                 log.info("执行成功!");
+            }else {
+                String message = apiRes.getString(("message"));
+                UpdateWrapper<FlTransCodeReqLog> updateWrapper = new UpdateWrapper<>();
+                updateWrapper.eq("requestId",requestId);
+                //status 1:成功 2:失败
+                updateWrapper.set("status","2");
+                updateWrapper.set("message",message);
+                flTransCodeReqLogService.update(updateWrapper);
+                log.info("接口执行异常!");
             }
         }
 
@@ -511,6 +520,14 @@ public class OrderSendTest {
                 flSetDismantleReqLogService.update(updateWrapper);
 
                 log.info("执行成功!");
+            }else {
+                String message = apiRes.getString(("message"));
+                UpdateWrapper<FlSetDismantleReqLog> updateWrapper = new UpdateWrapper<>();
+                updateWrapper.eq("requestId",requestId);
+                //status  0: 未请求  1:请求成功 2:请求失败 3: 三次执行失败，需要人工干预
+                updateWrapper.set("status","2");
+                updateWrapper.set("message",message);
+                flSetDismantleReqLogService.update(updateWrapper);
             }
         }
     }

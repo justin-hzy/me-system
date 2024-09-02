@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("formtable_main_151")
+@TableName("formtable_main_272")
 public class FlOrderFormTableMain {
 
     @TableField("id")
