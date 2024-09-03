@@ -95,12 +95,21 @@ public class MemberTest {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
 
-        /*100149663L 抖音泊美官方旗舰店 2024-07-16 到 2024-07-17 开始有数据
-        100150166L 泊美品牌商城
-        100156928L 泊美会员中心 */
-        Long shopId = 100149663L;
+        /*
 
-        for (int month = 7; month <= 12; month++) {
+        100149663L 抖音泊美官方旗舰店 2024-07-16 到 2024-07-17 开始有数据
+        100150166L 泊美品牌商城 2023年有数据
+        100156928L 泊美会员中心 2024年有数据
+
+        100150083L Za会员中心
+        100149660L Za姬芮官方旗舰店
+        100149661L 抖音Za姬芮官方旗舰店
+        100150165L 有赞Za姬芮官方旗舰店
+
+        */
+        Long shopId = 100156928L;
+
+        for (int month = 1; month <= 12; month++) {
             cal.set(Calendar.YEAR, Integer.parseInt(year));
             cal.set(Calendar.MONTH, month - 1);
             cal.set(Calendar.DAY_OF_MONTH, 1);
