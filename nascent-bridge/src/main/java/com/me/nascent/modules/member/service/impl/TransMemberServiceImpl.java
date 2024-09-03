@@ -10,12 +10,12 @@ import com.me.nascent.modules.token.entity.Token;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
-import com.nascent.ecrp.opensdk.domain.customer.CustomerCardReceiveInfo;
-import com.nascent.ecrp.opensdk.domain.customer.NickInfo;
-import com.nascent.ecrp.opensdk.domain.customer.SystemCustomerInfo;
+import com.nascent.ecrp.opensdk.domain.customer.*;
 import com.nascent.ecrp.opensdk.domain.customer.wxFansStatus.BaseWxFansStatusVo;
 import com.nascent.ecrp.opensdk.request.customer.ActivateCustomerListSyncRequest;
+import com.nascent.ecrp.opensdk.request.customer.ShopActiveCustomerListSyncRequest;
 import com.nascent.ecrp.opensdk.response.customer.ActivateCustomerListSyncResponse;
+import com.nascent.ecrp.opensdk.response.customer.ShopActiveCustomerListSyncResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -48,7 +48,13 @@ public class TransMemberServiceImpl implements TransMemberService {
 
     private ZaMemberNickInfoService zaMemberNickInfoService;
 
+    private ShopActiveCustomerService shopActiveCustomerService;
 
+    private ShopActiveCustomerNickService shopActiveCustomerNickService;
+
+    private ShopActiveCustomerWeChatService shopActiveCustomerWeChat;
+
+    private ShopActiveCustomerCardService shopActiveCustomerCardService;
 
     @Override
     public void TransPureMemberByRange(Date startDate,Date endDate) throws Exception {
@@ -76,6 +82,22 @@ public class TransMemberServiceImpl implements TransMemberService {
 
         while(flag){
             Map resMap =  saveZaMember(nextId,startDate,endDate);
+            startDate = (Date) resMap.get("updateTime");
+            nextId = (Long) resMap.get("nextId");
+            flag = (boolean) resMap.get("isNext");
+            log.info("startDate="+startDate);
+            log.info("nextId="+nextId);
+            log.info("flag="+flag);
+        }
+    }
+
+    @Override
+    public void transPureStoreMemberByRange(Date startDate, Date endDate,Long shopId) throws Exception {
+        Long nextId = 0L;
+        boolean flag = true;
+
+        while(flag){
+            Map resMap = savePureStoreMember(nextId,startDate,endDate,shopId);
             startDate = (Date) resMap.get("updateTime");
             nextId = (Long) resMap.get("nextId");
             flag = (boolean) resMap.get("isNext");
@@ -363,4 +385,114 @@ public class TransMemberServiceImpl implements TransMemberService {
         }
 
     }
+
+    private Map<String, Object> savePureStoreMember(Long nextId,Date startDate,Date endDate,Long shopId) throws Exception {
+        Map resMap = new HashMap();
+        ShopActiveCustomerListSyncRequest request = new ShopActiveCustomerListSyncRequest();
+
+        request.setServerUrl(nascentConfig.getServerUrl());
+        request.setAppKey(nascentConfig.getAppKey());
+        request.setAppSecret(nascentConfig.getAppSerect());
+        request.setGroupId(nascentConfig.getGroupID());
+
+        List<Token> tokens = tokenService.list();
+        request.setAccessToken(tokens.get(0).getToken());
+        request.setStartTime(startDate);
+        request.setEndTime(endDate);
+        request.setNextId(nextId);
+        request.setPageSize(50);
+        request.setShopId(shopId);
+        ApiClient client = new ApiClientImpl(request);
+        ShopActiveCustomerListSyncResponse response = client.execute(request);
+
+        if("60001".equals(response.getCode())){
+            UpdateWrapper<Token> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("name","nascent").set("token",tokenService.getToken());
+            tokenService.update(updateWrapper);
+            resMap.put("nextId",nextId);
+            resMap.put("updateTime",startDate);
+            resMap.put("isNext",true);
+            return resMap;
+        }else if("200".equals(response.getCode())){
+            log.info(response.getBody());
+            List<ShopActiveCustomerInfo> systemCustomerInfos = response.getResult();
+
+            Boolean isNext = false;
+            Date updateTime = null;
+
+            if(CollUtil.isNotEmpty(systemCustomerInfos)){
+                isNext = true;
+                List<ShopActiveCustomer> shopActiveCustomerInfos = new ArrayList<>();
+                for (ShopActiveCustomerInfo shopActiveCustomerInfo : systemCustomerInfos){
+                    Long id = shopActiveCustomerInfo.getId();
+                    nextId = id;
+                    updateTime = shopActiveCustomerInfo.getUpdateTime();
+                    ShopActiveCustomer shopActiveCustomer = new ShopActiveCustomer();
+                    BeanUtils.copyProperties(shopActiveCustomerInfo,shopActiveCustomer);
+                    shopActiveCustomer.setShopId(shopId);
+
+                    QueryWrapper<ShopActiveCustomer> shopActiveCustomerQuery = new QueryWrapper<>();
+                    shopActiveCustomerQuery.eq("id",id);
+                    ShopActiveCustomer existObj = shopActiveCustomerService.getOne(shopActiveCustomerQuery);
+                    if (existObj != null){
+                        UpdateWrapper<ShopActiveCustomer> shopActiveCustomerUpdate = new UpdateWrapper<>();
+                        shopActiveCustomerUpdate.eq("id",id);
+                        shopActiveCustomerService.update(shopActiveCustomer,shopActiveCustomerUpdate);
+                    }else {
+                        shopActiveCustomerInfos.add(shopActiveCustomer);
+
+                        List<NickPlatform> nickPlatforms = shopActiveCustomerInfo.getNickInfoList();
+
+                        if(CollUtil.isNotEmpty(nickPlatforms)){
+                            List<ShopActiveCustomerNick> shopActiveCustomerNicks = new ArrayList<>();
+                            for (NickPlatform nickPlatform : nickPlatforms){
+                                ShopActiveCustomerNick shopActiveCustomerNick = new ShopActiveCustomerNick();
+                                BeanUtils.copyProperties(nickPlatform,shopActiveCustomerNick);
+                                shopActiveCustomerNick.setMainId(id);
+                                shopActiveCustomerNicks.add(shopActiveCustomerNick);
+                            }
+
+                            shopActiveCustomerNickService.saveBatch(shopActiveCustomerNicks);
+                        }
+
+
+                        List<CustomerWechatInfo> customerWechatInfos = shopActiveCustomerInfo.getCustomerWechatInfoList();
+                        if (CollUtil.isNotEmpty(customerWechatInfos)){
+                            List<ShopActiveCustomerWeChat> shopActiveCustomerWeChats = new ArrayList<>();
+                            for (CustomerWechatInfo customerWechatInfo : customerWechatInfos){
+                                ShopActiveCustomerWeChat shopActiveCustomerWeChat = new ShopActiveCustomerWeChat();
+                                BeanUtils.copyProperties(customerWechatInfo,shopActiveCustomerWeChat);
+                                shopActiveCustomerWeChat.setMainId(id);
+
+                                shopActiveCustomerWeChats.add(shopActiveCustomerWeChat);
+                            }
+
+                            shopActiveCustomerWeChat.saveBatch(shopActiveCustomerWeChats);
+                        }
+
+                        List<ShopActiveCustomerCardInfo> shopActiveCustomerCardInfos = shopActiveCustomerInfo.getCustomerCardInfoList();
+                        if (CollUtil.isNotEmpty(shopActiveCustomerCardInfos)){
+                            List<ShopActiveCustomerCard> shopActiveCustomerCards = new ArrayList<>();
+                            for (ShopActiveCustomerCardInfo shopActiveCustomerCardInfo : shopActiveCustomerCardInfos){
+                                ShopActiveCustomerCard shopActiveCustomerCard = new ShopActiveCustomerCard();
+                                BeanUtils.copyProperties(shopActiveCustomerCardInfo,shopActiveCustomerCard);
+                                shopActiveCustomerCard.setMainId(id);
+                                shopActiveCustomerCards.add(shopActiveCustomerCard);
+                            }
+                            shopActiveCustomerCardService.saveBatch(shopActiveCustomerCards);
+                        }
+                    }
+                }
+
+                shopActiveCustomerService.saveBatch(shopActiveCustomerInfos);
+
+
+            }
+            resMap.put("nextId", nextId);
+            resMap.put("updateTime", updateTime);
+            resMap.put("isNext", isNext);
+        }
+        return resMap;
+    }
+
 }

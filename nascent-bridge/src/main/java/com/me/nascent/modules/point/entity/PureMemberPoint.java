@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
-@TableName("za_offline_member_point")
+@TableName("pure_member_point")
 public class PureMemberPoint {
 
     @TableField("nasOuid")
@@ -24,5 +26,5 @@ public class PureMemberPoint {
     private String memberCard;
 
     @TableField("score")
-    private int score;
+    private BigDecimal score;
 }

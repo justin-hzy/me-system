@@ -17,4 +17,12 @@ public interface PureMemberNickInfoMapper extends BaseMapper<PureMemberNickInfo>
                     "WHERE g.nasOuid IS NULL and g.mainId IS NULL and g.platform IS NULL"
                 })
     List<PureMemberNickInfo> findNotInGradeCustomerInfo();
+
+    @Select({
+            "SELECT p.mainId, p.nasOuid, p.platform ",
+            "FROM pure_member_nick_info p ",
+            "LEFT JOIN pure_member_point g ON p.nasOuid = g.nasOuid AND p.platform = g.platform",
+            "WHERE g.nasOuid IS NULL and g.platform IS NULL"
+    })
+    List<PureMemberNickInfo> findNotInPointCustomerInfo();
 }

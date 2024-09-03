@@ -8,5 +8,7 @@ public interface MemberMigrationService {
 
     void transZaMemberByRange(Date startDate, Date endDate) throws Exception;
 
+    void transPureStoreMemberByRange(Date startDate, Date endDate,Long shopId) throws Exception;
+
     void putPureMember() throws Exception;
 }

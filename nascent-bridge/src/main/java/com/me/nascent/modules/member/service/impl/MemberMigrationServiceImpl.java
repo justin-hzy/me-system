@@ -100,6 +100,27 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
     }
 
     @Override
+    public void transPureStoreMemberByRange(Date startDate, Date endDate,Long shopId) throws Exception {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        while (startDate.before(endDate)) {
+            Date endDateOfWeek = new Date(startDate.getTime() + 1 * 24 * 60 * 60 * 1000); // 修改为30分钟
+            if (endDateOfWeek.after(endDate)) {
+                endDateOfWeek = endDate;
+            }
+
+            String startStr = sdf.format(startDate);
+            String endStr = sdf.format(endDateOfWeek);
+            System.out.println("同步订单数据: " + startStr + " 到 " + endStr);
+
+            transMemberService.transPureStoreMemberByRange(startDate,endDateOfWeek,shopId);
+
+            startDate = endDateOfWeek;  // 修改为1分钟
+            //System.out.println("下一个开启时间:" + startDate);
+        }
+    }
+
+    @Override
     public void putPureMember() throws Exception {
         BatchCustomerSaveRequest request = new BatchCustomerSaveRequest();
         request.setServerUrl(nascentConfig.getServerUrl());

@@ -7,4 +7,6 @@ public interface TransMemberService {
     void TransPureMemberByRange(Date startDate, Date endDate) throws Exception;
 
     void TransZaMemberByRange(Date startDate, Date endDate) throws Exception;
+
+    void transPureStoreMemberByRange(Date startDate, Date endDate,Long shopId) throws Exception;
 }
