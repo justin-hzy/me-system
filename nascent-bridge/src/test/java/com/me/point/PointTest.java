@@ -21,7 +21,17 @@ public class PointTest {
         /*pcode-206261	泊美积分体系
           pcode-206256	Za线上积分体系
           pcode-206258	Za姬芮线下积分体系*/
-        transPointService.transPoint("pcode-206258",100000386L);
+        transPointService.transPurePoint("pcode-206261",100000387L);
+    }
+
+    @Test
+    public void getZaOnlinePoint() throws Exception {
+        transPointService.transZaOnlinePoint("pcode-206256",100000386L);
+    }
+
+    @Test
+    public void getZaOfflinePoint() throws Exception{
+        transPointService.getZaOfflinePoint("pcode-206258",100000386L);
     }
 
     @Test
