@@ -48,8 +48,8 @@ public class TradeTest {
     @Test
     public void getOrderByDay() throws Exception {
 
-        String startDateStr  = "2023-02-24 00:00:00";
-        String endDateStr = "2023-02-28 23:59:59";
+        String startDateStr  = "2024-08-28 13:25:16";
+        String endDateStr = "2024-08-31 23:59:59";
 
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -155,8 +155,8 @@ public class TradeTest {
 
 
     @Test
-    public void putTrade() throws Exception {
-        transOrderService.putOrder();
+    public void putTradeByYear() throws Exception {
+        transOrderService.putTradeByYear();
 
     }
 }

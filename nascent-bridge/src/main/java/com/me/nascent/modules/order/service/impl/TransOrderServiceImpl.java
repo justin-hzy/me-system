@@ -215,8 +215,11 @@ public class TransOrderServiceImpl implements TransOrderService {
     }
 
     @Override
-    public void putOrder() throws Exception {
-        List<Trade> trades = tradeService.list();
+    public void putTradeByYear() throws Exception {
+        QueryWrapper queryWrapper = new QueryWrapper();
+        queryWrapper.likeRight("created","2011-");
+
+        List<Trade> trades = tradeService.list(queryWrapper);
 
         int batchSize = 100; // 每次处理的数据量
         int totalSize = trades.size(); // 总数据量
@@ -228,7 +231,7 @@ public class TransOrderServiceImpl implements TransOrderService {
             int end = Math.min((i + 1) * batchSize, totalSize);
 
             List<Trade> batchList = trades.subList(start,end);
-            log.info("batchList="+batchList.toString());
+            //log.info("batchList="+batchList.toString());
 
             List<TradeDetailVo> tradeDetailVoList = new ArrayList<>();
             for (Trade trade : batchList){
@@ -257,7 +260,7 @@ public class TransOrderServiceImpl implements TransOrderService {
                 List<PromotionDetailVo> promotionDetailVos = tradeDetailVo.getPromotionDetailVoList();
 
                 QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
-                orderQuery.eq("mainid",id);
+                promotionQuery.eq("mainid",id);
                 List<Promotion> existPromotions = promotionService.list(promotionQuery);
 
                 if (CollUtil.isNotEmpty(existPromotions)){
@@ -270,12 +273,13 @@ public class TransOrderServiceImpl implements TransOrderService {
 
             }
 
+            log.info(tradeDetailVoList.toString());
             TradeSaveRequest request = new TradeSaveRequest();
-            request.setServerUrl(nascentConfig.getServerUrl());
-            request.setAppKey(nascentConfig.getAppKey());
-            request.setAppSecret(nascentConfig.getAppSerect());
-            request.setGroupId(nascentConfig.getGroupID());
-            request.setAccessToken(tokenService.getToken());
+            request.setServerUrl(nascentConfig.getBtnServerUrl());
+            request.setAppKey(nascentConfig.getBtnAppKey());
+            request.setAppSecret(nascentConfig.getBtnAppSerect());
+            request.setGroupId(nascentConfig.getBtnGroupID());
+            request.setAccessToken(tokenService.getBtnToken());
             request.setTradeDetailVoList(tradeDetailVoList);
 
             ApiClient client = new ApiClientImpl(request);
@@ -334,9 +338,9 @@ public class TransOrderServiceImpl implements TransOrderService {
                     updateTime = tradesVo.getUpdateTime();
                     Trade trade = new Trade();
                     BeanUtils.copyProperties(tradesVo, trade);
-                    trade.setRequestId(response.getRequestId());
+                    /*trade.setRequestId(response.getRequestId());
                     Date date = new Date();
-                    trade.setTransTime(date);
+                    trade.setTransTime(date);*/
 
                     QueryWrapper<Trade> tradeQuery = new QueryWrapper<>();
                     tradeQuery.eq("id",id);
