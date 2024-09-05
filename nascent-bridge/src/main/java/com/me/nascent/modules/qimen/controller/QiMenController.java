@@ -19,11 +19,11 @@ public class QiMenController {
 
     @PostMapping("transQiMen")
     private String transOrder(@RequestBody QiMenDto dto) throws Exception {
-        log.info("dto="+dto.toString());
+        //log.info("dto="+dto.toString());
         /*return null;*/
 
         String respStr = qiMenService.transQiMen(dto);
-        log.info("respStr="+respStr);
+        //log.info("respStr="+respStr);
         return respStr;
     }
 

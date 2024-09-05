@@ -33,7 +33,7 @@ public class QiMenServiceImpl implements QiMenService {
 
 
     @Override
-    public String transQiMen(QiMenDto dto) throws Exception {
+    public synchronized String transQiMen(QiMenDto dto) throws Exception {
         log.info(dto.toString());
 
         String dataType = dto.getDataType();
