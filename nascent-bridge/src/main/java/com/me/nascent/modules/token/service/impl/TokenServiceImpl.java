@@ -47,4 +47,28 @@ public class TokenServiceImpl extends ServiceImpl<TokenMapper, Token> implements
         }
 
     }
+
+    @Override
+    public String getBtnToken() throws Exception {
+        AccessTokenRegisterRequest request = new AccessTokenRegisterRequest();
+        request.setServerUrl(nascentConfig.getBtnServerUrl());
+        request.setAppKey(nascentConfig.getBtnAppKey());
+        request.setAppSecret(nascentConfig.getBtnAppSerect());
+        request.setGroupId(nascentConfig.getBtnGroupID());
+        request.setForceRefresh(false);
+
+        ApiClient client = new ApiClientImpl(request);
+        AccessTokenRegisterResponse response = client.execute(request);
+        if (null != response) {
+//            log.info(response.getSuccess()+"");
+//            log.info(response.getResult().getAccessToken());
+            if(StrUtil.isNotEmpty(response.getSuccess()+"") && response.getSuccess()){
+                return response.getResult().getAccessToken();
+            }else {
+                return "";
+            }
+        }else {
+            return "";
+        }
+    }
 }
