@@ -48,7 +48,12 @@ mybatis-plus:
 
 
 nascent:
-  serverUrl: https://sandbox-open.vecrp.com
-  appKey: NS81000091115
-  appSerect: 8C0E680049958ED52EC856BDADBCD829
-  groupID: 81000091
+  serverUrl: https://open-v6.vecrp.com
+  appKey: NS80000078003
+  appSerect: 67A55FF4D1AF5623B5478D93DCDC16C5
+  groupID: 80000078
+
+  btnServerUrl: https://openapi.winona.cn
+  btnAppKey: NS60000015008
+  btnAppSerect: FB80483826E946DC417D3DDB89897623
+  btnGroupID: 60000015
