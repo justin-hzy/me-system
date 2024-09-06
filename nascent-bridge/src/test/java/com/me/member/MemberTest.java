@@ -151,7 +151,7 @@ public class MemberTest {
         List<Long> numbers = getOffLineStoreId();
 
         for (Long shopId : numbers){
-            for (int year = 2016;year<=2024;year++){
+            for (int year = 2023;year<=2024;year++){
                 for (int month = 1; month <= 12; month++) {
                     cal.set(Calendar.YEAR, year);
                     cal.set(Calendar.MONTH, month - 1);
