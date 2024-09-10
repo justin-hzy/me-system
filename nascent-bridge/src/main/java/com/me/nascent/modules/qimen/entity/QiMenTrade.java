@@ -14,6 +14,9 @@ import java.util.List;
 @Data
 public class QiMenTrade {
 
+    @TableField("nasOuId")
+    private String nasOuId;
+
     @TableField("consignTime")
     private String consignTime;
 

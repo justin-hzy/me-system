@@ -39,19 +39,21 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
     private QIMenExpandCardInfoService qiMenExpandCardInfoService;
 
     @Override
-    public String transTrade(QiMenDto dto) throws Exception {
+    public synchronized String transTrade(QiMenDto dto) throws Exception {
 
         String message = dto.getMessage();
 
         JSONObject messageJsonObj = JSONObject.parseObject(message);
         // 校验数据合法性 todo
 
+        String nasOuId = messageJsonObj.getString("nasOuId");
 
         JSONObject tradeJsonObj = messageJsonObj.getJSONObject("trade");
 
 
         //
         QiMenTrade qiMenTrade = encTrade(tradeJsonObj);
+        qiMenTrade.setNasOuId(nasOuId);
         log.info(qiMenTrade.toString());
 
         JSONArray orderJsonArr = tradeJsonObj.getJSONArray("orders");
@@ -92,7 +94,7 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
         QiMenTrade existTrade = qiMenTradeService.getOne(qiMenTradeQuery);
 
         if(existTrade != null){
-            String modified = existTrade.getModified();
+            /*String modified = existTrade.getModified();
             String newModified = qiMenTrade.getModified();
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
@@ -150,7 +152,58 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
                         qiMenExpandCardInfoService.save(qiMenExpandCardInfo);
                     }
                 }
+            }*/
+
+            //直接更新
+            UpdateWrapper<QiMenTrade> qiMenTradeUpdate = new UpdateWrapper();
+            qiMenTradeUpdate.eq("tid",qiMenTrade.getTid()).eq("sellerNick",qiMenTrade.getSellerNick());
+            qiMenTradeService.update(qiMenTrade,qiMenTradeUpdate);
+
+            for (QiMenOrder qiMenOrder : qiMenOrders){
+                QueryWrapper<QiMenOrder> qiMenOrderQuery = new QueryWrapper<>();
+                qiMenOrderQuery.eq("oid",qiMenOrder.getOid()).eq("tid",qiMenTrade.getTid());
+                QiMenOrder existQiMenOrder = qiMenOrderService.getOne(qiMenOrderQuery);
+                if (existQiMenOrder != null){
+                    UpdateWrapper<QiMenOrder> qiMenOrderUpdate = new UpdateWrapper();
+                    qiMenOrderUpdate.eq("oid",qiMenOrder.getOid()).eq("tid",qiMenTrade.getTid());
+                    qiMenOrderService.update(qiMenOrder,qiMenOrderUpdate);
+                }else {
+                    qiMenOrderService.save(qiMenOrder);
+                }
             }
+
+            /*if (CollUtil.isNotEmpty(qiMenPromotionDetails)){
+                for (QiMenPromotionDetail qiMenPromotionDetail : qiMenPromotionDetails){
+                    QueryWrapper<QiMenPromotionDetail> qiMenPromotionDetailQuery = new QueryWrapper<>();
+                    qiMenPromotionDetailQuery.eq("id",qiMenPromotionDetail.getId());
+                    QiMenPromotionDetail existQiMenPromotionDetail = qiMenPromotionDetailService.getOne(qiMenPromotionDetailQuery);
+
+                    if(existQiMenPromotionDetail != null){
+                        UpdateWrapper<QiMenPromotionDetail> qiMenPromotionDetailUpdate = new UpdateWrapper();
+                        qiMenPromotionDetailUpdate.eq("id",qiMenPromotionDetail.getId());
+                        qiMenPromotionDetailService.update(qiMenPromotionDetail,qiMenPromotionDetailUpdate);
+                    }else {
+                        qiMenPromotionDetailService.save(qiMenPromotionDetail);
+                    }
+
+                }
+            }*/
+
+            /*if(qiMenExpandCardInfo != null){
+
+
+                QueryWrapper<QIMenExpandCardInfo> qiMenExpandCardInfoQuery = new QueryWrapper<>();
+                qiMenExpandCardInfoQuery.eq("tid",qiMenExpandCardInfo.getTid());
+                QIMenExpandCardInfo existQIMenExpandCardInfo = qiMenExpandCardInfoService.getOne(qiMenExpandCardInfoQuery);
+                if(existQIMenExpandCardInfo != null){
+                    UpdateWrapper<QIMenExpandCardInfo> qiMenExpandCardInfoUpdate = new UpdateWrapper<>();
+                    qiMenExpandCardInfoUpdate.eq("tid",qiMenExpandCardInfo.getTid());
+                    qiMenExpandCardInfoService.update(qiMenExpandCardInfo,qiMenExpandCardInfoUpdate);
+                }else {
+                    qiMenExpandCardInfoService.save(qiMenExpandCardInfo);
+                }
+            }*/
+
         }else {
             qiMenTradeService.save(qiMenTrade);
             qiMenOrderService.saveBatch(qiMenOrders);

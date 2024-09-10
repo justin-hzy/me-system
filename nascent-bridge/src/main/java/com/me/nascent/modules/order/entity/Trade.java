@@ -14,8 +14,8 @@ public class Trade {
     @TableId("id")
     private Long id;
 
-    @TableField("requestId")
-    private String requestId;
+    /*@TableField("requestId")
+    private String requestId;*/
 
     @TableField("availableConfirmFee")
     private BigDecimal availableConfirmFee;
@@ -200,7 +200,7 @@ public class Trade {
     @TableField("ladingCode")
     private String ladingCode;
 
-    @TableField("transTime")
-    private Date transTime;
+    /*@TableField("transTime")
+    private Date transTime;*/
 
 }
