@@ -80,11 +80,11 @@ public class TradeTest {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        String year = "2024";
+        String year = "2023";
 
         Calendar cal = Calendar.getInstance();
 
-        for (int month = 8; month <= 8; month++) {
+        for (int month = 4; month <= 12; month++) {
             cal.set(Calendar.YEAR, Integer.parseInt(year));
             cal.set(Calendar.MONTH, month - 1);
             cal.set(Calendar.DAY_OF_MONTH, 1);

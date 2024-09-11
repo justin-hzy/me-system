@@ -30,6 +30,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -218,83 +219,90 @@ public class TransOrderServiceImpl implements TransOrderService {
     public void putTradeByYear() throws Exception {
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        shopQueryWrapper.likeRight("created","2011-").select("distinct shopId");
-        List<Trade> shopIds = tradeService.list(shopQueryWrapper);
+        shopQueryWrapper.likeRight("created","2011-").eq("shopId","100149660");
+        List<Trade> trades = tradeService.list(shopQueryWrapper);
 
-        for (Trade shopId : shopIds){
-            QueryWrapper<Trade> tradeQuery = new QueryWrapper();
-            tradeQuery.likeRight("created","2011-").eq("shopId",shopId);
+        int batchSize = 1; // 每次处理的数据量
+        //int totalSize = trades.size(); // 总数据量
+        int totalSize = 1;
+        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
 
-            List<Trade> trades = tradeService.list(tradeQuery);
+        for (int i = 0; i < loopCount; i++) {
+            int start = i * batchSize; // 开始索引
+            int end = Math.min((i + 1) * batchSize, totalSize);
 
-            int batchSize = 1; // 每次处理的数据量
-            //int totalSize = trades.size(); // 总数据量
-            int totalSize = 1;
-            int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+            List<Trade> batchList = trades.subList(start,end);
+            //log.info("batchList="+batchList.toString());
 
-            for (int i = 0; i < loopCount; i++) {
-                int start = i * batchSize; // 开始索引
-                int end = Math.min((i + 1) * batchSize, totalSize);
+            List<TradeDetailVo> tradeDetailVoList = new ArrayList<>();
+            for (Trade trade : batchList){
 
-                List<Trade> batchList = trades.subList(start,end);
-                //log.info("batchList="+batchList.toString());
+                Long id = trade.getId();
+                log.info("id="+id);
 
-                List<TradeDetailVo> tradeDetailVoList = new ArrayList<>();
-                for (Trade trade : batchList){
+                TradeDetailVo tradeDetailVo = new TradeDetailVo();
+                BeanUtils.copyProperties(trade,tradeDetailVo);
+                tradeDetailVo.setRealPointFee(null);
 
-                    Long id = trade.getId();
-                    log.info("id="+id);
 
-                    TradeDetailVo tradeDetailVo = new TradeDetailVo();
-                    BeanUtils.copyProperties(trade,tradeDetailVo);
-                    tradeDetailVoList.add(tradeDetailVo);
+                List<OrderDetailVo> orderDetailVos = new ArrayList<>();
 
-                    List<OrderDetailVo> orderDetailVos = new ArrayList<>();
+                QueryWrapper<Order> orderQuery = new QueryWrapper<>();
+                orderQuery.eq("mainid",id);
+                List<Order> existOrders = orderService.list(orderQuery);
+                if(CollUtil.isNotEmpty(existOrders)){
+                    for (Order order : existOrders){
+                        OrderDetailVo orderDetailVo  = new OrderDetailVo();
+                        orderDetailVo.setOutOrderId(order.getOutOrderId());
+                        orderDetailVo.setOrderStatus(order.getOrderStatus());
+                        orderDetailVo.setTitle(order.getTitle());
+                        orderDetailVo.setOutItemId(order.getOutItemId());
+                        orderDetailVo.setOrderNum(order.getOrderNum());
+                        orderDetailVo.setOrderTotalFee(order.getOrderTotalFee());
+                        orderDetailVo.setOrderPayment(order.getOrderPayment());
+                        BigDecimal bigDecimal_1 = new BigDecimal(order.getOrderPrice());
+                        orderDetailVo.setOrderPrice(bigDecimal_1);
 
-                    QueryWrapper<Order> orderQuery = new QueryWrapper<>();
-                    orderQuery.eq("mainid",id);
-                    List<Order> existOrders = orderService.list(orderQuery);
-                    if(CollUtil.isNotEmpty(existOrders)){
-                        for (Order order : existOrders){
-                            OrderDetailVo orderDetailVo  = new OrderDetailVo();
-                            BeanUtils.copyProperties(order,orderDetailVo);
-                            orderDetailVos.add(orderDetailVo);
-                        }
-                        tradeDetailVo.setOrderDetailVoList(orderDetailVos);
-
+                        orderDetailVos.add(orderDetailVo);
                     }
-
-                    List<PromotionDetailVo> promotionDetailVos = tradeDetailVo.getPromotionDetailVoList();
-
-                    QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
-                    promotionQuery.eq("mainid",id);
-                    List<Promotion> existPromotions = promotionService.list(promotionQuery);
-
-                    if (CollUtil.isNotEmpty(existPromotions)){
-                        for (Promotion promotion : existPromotions){
-                            PromotionDetailVo promotionDetailVo = new PromotionDetailVo();
-                            BeanUtils.copyProperties(promotion,promotionDetailVo);
-                            promotionDetailVos.add(promotionDetailVo);
-                        }
-                    }
+                    tradeDetailVo.setOrderDetailVoList(orderDetailVos);
 
                 }
 
-                log.info(tradeDetailVoList.toString());
-                /*TradeSaveRequest request = new TradeSaveRequest();
-                request.setServerUrl(nascentConfig.getBtnServerUrl());
-                request.setAppKey(nascentConfig.getBtnAppKey());
-                request.setAppSecret(nascentConfig.getBtnAppSerect());
-                request.setGroupId(nascentConfig.getBtnGroupID());
-                request.setAccessToken(tokenService.getBtnToken());
-                request.setTradeDetailVoList(tradeDetailVoList);
+                List<PromotionDetailVo> promotionDetailVos = tradeDetailVo.getPromotionDetailVoList();
 
-                ApiClient client = new ApiClientImpl(request);
+                QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
+                promotionQuery.eq("mainid",id);
+                List<Promotion> existPromotions = promotionService.list(promotionQuery);
 
-                TradeSaveResponse response = client.execute(request);
-                log.info("code="+response.getCode());*/
+                if (CollUtil.isNotEmpty(existPromotions)){
+                    for (Promotion promotion : existPromotions){
+                        PromotionDetailVo promotionDetailVo = new PromotionDetailVo();
+                        BeanUtils.copyProperties(promotion,promotionDetailVo);
+                        promotionDetailVos.add(promotionDetailVo);
+                    }
+                }
+
+                tradeDetailVoList.add(tradeDetailVo);
+
             }
+
+            log.info(tradeDetailVoList.toString());
+            TradeSaveRequest request = new TradeSaveRequest();
+            request.setServerUrl(nascentConfig.getBtnServerUrl());
+            request.setAppKey(nascentConfig.getBtnAppKey());
+            request.setAppSecret(nascentConfig.getBtnAppSerect());
+            request.setGroupId(nascentConfig.getBtnGroupID());
+            request.setAccessToken(tokenService.getBtnToken());
+            request.setShopId(101130616L);
+            request.setTradeDetailVoList(tradeDetailVoList);
+
+            ApiClient client = new ApiClientImpl(request);
+
+            TradeSaveResponse response = client.execute(request);
+            log.info(response.getBody());
         }
+
     }
 
 
@@ -363,7 +371,7 @@ public class TransOrderServiceImpl implements TransOrderService {
                         List<NickInfo> nickInfos = tradesVo.getNickInfoList();
 
 
-                        if(CollUtil.isNotEmpty(nickInfos)){
+                        /*if(CollUtil.isNotEmpty(nickInfos)){
 
                             QueryWrapper<Nick> nickQuery = new QueryWrapper<>();
                             nickQuery.eq("mainid",id);
@@ -378,7 +386,7 @@ public class TransOrderServiceImpl implements TransOrderService {
                                 nicks.add(nick);
                             }
                             nickService.saveBatch(nicks);
-                        }
+                        }*/
 
                         List<PromotionsVo> promotionsVos = tradesVo.getPromotionVos();
 
