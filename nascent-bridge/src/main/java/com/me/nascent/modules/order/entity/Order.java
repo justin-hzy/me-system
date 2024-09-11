@@ -30,13 +30,13 @@ public class Order {
     private String orderPrice;
 
     @TableField("orderNum")
-    private Integer orderNum;
+    private BigDecimal orderNum;
 
     @TableField("orderPayment")
-    private Integer orderPayment;
+    private BigDecimal orderPayment;
 
     @TableField("orderDivideFee")
-    private Integer orderDivideFee;
+    private BigDecimal orderDivideFee;
 
     @TableField("picPath")
     private String picPath;
@@ -54,10 +54,10 @@ public class Order {
     private String refundId;
 
     @TableField("orderRefundNum")
-    private Integer orderRefundNum;
+    private BigDecimal orderRefundNum;
 
     @TableField("orderRefundFee")
-    private String orderRefundFee;
+    private BigDecimal orderRefundFee;
 
     @TableField("orderRefundStatus")
     private String orderRefundStatus;
@@ -93,13 +93,13 @@ public class Order {
     private String outerId;
 
     @TableField("orderDiscountFee")
-    private Integer orderDiscountFee;
+    private BigDecimal orderDiscountFee;
 
     @TableField("orderAdjustFee")
-    private Integer orderAdjustFee;
+    private BigDecimal orderAdjustFee;
 
     @TableField("orderTotalFee")
-    private Integer orderTotalFee;
+    private BigDecimal orderTotalFee;
 
     @TableField("orderPayTime")
     private Date orderPayTime;
