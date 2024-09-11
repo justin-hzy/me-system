@@ -219,7 +219,8 @@ public class TransOrderServiceImpl implements TransOrderService {
     public void putTradeByYear() throws Exception {
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        shopQueryWrapper.likeRight("created","2011-").eq("shopId","100149660");
+        //shopQueryWrapper.likeRight("created","2011-").eq("shopId","100149660");
+        shopQueryWrapper.eq("id",11321166);
         List<Trade> trades = tradeService.list(shopQueryWrapper);
 
         int batchSize = 1; // 每次处理的数据量
@@ -241,8 +242,20 @@ public class TransOrderServiceImpl implements TransOrderService {
                 log.info("id="+id);
 
                 TradeDetailVo tradeDetailVo = new TradeDetailVo();
-                BeanUtils.copyProperties(trade,tradeDetailVo);
-                tradeDetailVo.setRealPointFee(null);
+                tradeDetailVo.setTotalFee(trade.getTotalFee());
+                tradeDetailVo.setPayment(trade.getPayment());
+                tradeDetailVo.setShippingType(trade.getShippingType());
+                tradeDetailVo.setOutTradeId(trade.getOutTradeId());
+                tradeDetailVo.setNasOuid(trade.getOutNick());
+                tradeDetailVo.setTradeStatus(trade.getTradeStatus());
+                tradeDetailVo.setTradeType(trade.getTradeType());
+                tradeDetailVo.setCreated(trade.getCreated());
+                tradeDetailVo.setNum(trade.getNum());
+                tradeDetailVo.setRefundStatus(0);
+                tradeDetailVo.setPayType(trade.getPayType());
+                tradeDetailVo.setTradeFrom(trade.getTradeFrom());
+                tradeDetailVo.setEndTime(trade.getEndTime());
+                tradeDetailVo.setIsCalIntegral(true);
 
 
                 List<OrderDetailVo> orderDetailVos = new ArrayList<>();
@@ -269,7 +282,7 @@ public class TransOrderServiceImpl implements TransOrderService {
 
                 }
 
-                List<PromotionDetailVo> promotionDetailVos = tradeDetailVo.getPromotionDetailVoList();
+                List<PromotionDetailVo> promotionDetailVos = new ArrayList<>();
 
                 QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
                 promotionQuery.eq("mainid",id);
