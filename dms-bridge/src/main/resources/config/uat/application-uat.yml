@@ -50,8 +50,8 @@ mybatis-plus:
 # ====================dms=========================
 dms:
   order:
-    orderMainTable: formtable_main_151
-    orderDetailTable2: formtable_main_151_dt2
+    orderMainTable: formtable_main_272
+    orderDetailTable2: formtable_main_272_dt2
 
     returnOrderMainTable: formtable_main_227
     returnOrderDetailTable2: formtable_main_227_dt2
