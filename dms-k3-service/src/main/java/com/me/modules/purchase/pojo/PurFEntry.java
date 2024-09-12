@@ -1,0 +1,17 @@
+package com.me.modules.purchase.pojo;
+
+import lombok.Data;
+
+@Data
+public class PurFEntry {
+
+    private String fmaterialId;
+
+    private String fentrytaxrate;
+
+    private String frealqty;
+
+    private String fstockid;
+
+    private String ftaxprice;
+}
