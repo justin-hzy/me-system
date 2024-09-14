@@ -9,7 +9,9 @@ public interface TransOrderService {
 
     void transOrder(Date startDate, Date setEndDate) throws Exception;
 
-    void putTradeByYear() throws Exception;
+    void putTradeByOne() throws Exception;
+
+    void putTradeByRange() throws Exception;
 
 
 }

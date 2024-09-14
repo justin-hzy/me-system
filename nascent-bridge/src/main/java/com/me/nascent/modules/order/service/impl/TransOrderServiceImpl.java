@@ -1,6 +1,7 @@
 package com.me.nascent.modules.order.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.me.nascent.common.config.NascentConfig;
@@ -10,6 +11,8 @@ import com.me.nascent.modules.order.service.*;
 import com.me.nascent.modules.point.entity.PureMemberPoint;
 import com.me.nascent.modules.token.entity.Token;
 import com.me.nascent.modules.token.service.TokenService;
+import com.me.nascent.modules.trans.entity.TransBtnTradeFail;
+import com.me.nascent.modules.trans.service.TransBtnTradeFailService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
 import com.nascent.ecrp.opensdk.domain.customer.NickInfo;
@@ -26,6 +29,7 @@ import com.nascent.ecrp.opensdk.response.trade.TradeSaveResponse;
 import com.nascent.ecrp.opensdk.response.trade.TradeSynResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,6 +58,8 @@ public class TransOrderServiceImpl implements TransOrderService {
     private OrderService orderService;
 
     private SgFinishInfoService sgFinishInfoService;
+
+    private TransBtnTradeFailService transBtnTradeFailService;
 
     @Override
     public Map<String,Object> transOrder(Long nextId,Date startDate,Date endDate) throws Exception {
@@ -216,106 +222,310 @@ public class TransOrderServiceImpl implements TransOrderService {
     }
 
     @Override
-    public void putTradeByYear() throws Exception {
+    public void putTradeByOne() throws Exception {
+
+        Map<Long,Long> storeIdMap = storeIdMap();
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        //shopQueryWrapper.likeRight("created","2011-").eq("shopId","100149660");
-        shopQueryWrapper.eq("id",11321166);
+        shopQueryWrapper.likeRight("created","2023-04").in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928");
         List<Trade> trades = tradeService.list(shopQueryWrapper);
 
-        int batchSize = 1; // 每次处理的数据量
-        //int totalSize = trades.size(); // 总数据量
-        int totalSize = 1;
-        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+        HashMap<Long,List<Trade>> tradeHashMap = new HashMap<>();
+        for (Trade trade : trades){
+            Long shopId = trade.getShopId();
+            if(tradeHashMap.containsKey(shopId)){
+                List<Trade> tradeList = tradeHashMap.get(shopId);
+                tradeList.add(trade);
+            }else {
+                List<Trade> tradeList = new ArrayList<>();
+                tradeList.add(trade);
+                tradeHashMap.put(shopId,tradeList);
+            }
+        }
+        Set<Long> keys = tradeHashMap.keySet();
+        /*
 
-        for (int i = 0; i < loopCount; i++) {
-            int start = i * batchSize; // 开始索引
-            int end = Math.min((i + 1) * batchSize, totalSize);
+        int sum = 0;
+        for (Long key : keys){
+            List<Trade> list = tradeHashMap.get(key);
+            log.info("key="+key+",list="+list.size());
+            sum = sum + list.size();
+        }
+        log.info(sum+"");*/
 
-            List<Trade> batchList = trades.subList(start,end);
-            //log.info("batchList="+batchList.toString());
-
+        for (Trade trade : trades){
             List<TradeDetailVo> tradeDetailVoList = new ArrayList<>();
-            for (Trade trade : batchList){
+            Long id = trade.getId();
+            log.info("id="+id);
 
-                Long id = trade.getId();
-                log.info("id="+id);
 
-                TradeDetailVo tradeDetailVo = new TradeDetailVo();
-                tradeDetailVo.setTotalFee(trade.getTotalFee());
-                tradeDetailVo.setPayment(trade.getPayment());
+            TradeDetailVo tradeDetailVo = new TradeDetailVo();
+            /*BeanUtils.copyProperties(trade,tradeDetailVo);*/
+            tradeDetailVo.setTotalFee(trade.getTotalFee());
+            tradeDetailVo.setPayment(trade.getPayment());
+            tradeDetailVo.setShippingType(trade.getShippingType());
+            if(trade.getShippingType() == null){
+                tradeDetailVo.setShippingType("free");
+            }else {
                 tradeDetailVo.setShippingType(trade.getShippingType());
-                tradeDetailVo.setOutTradeId(trade.getOutTradeId());
-                tradeDetailVo.setNasOuid(trade.getOutNick());
-                tradeDetailVo.setTradeStatus(trade.getTradeStatus());
-                tradeDetailVo.setTradeType(trade.getTradeType());
-                tradeDetailVo.setCreated(trade.getCreated());
-                tradeDetailVo.setNum(trade.getNum());
-                tradeDetailVo.setRefundStatus(0);
-                tradeDetailVo.setPayType(trade.getPayType());
-                tradeDetailVo.setTradeFrom(trade.getTradeFrom());
-                tradeDetailVo.setEndTime(trade.getEndTime());
-                tradeDetailVo.setIsCalIntegral(true);
+            }
+            tradeDetailVo.setOutTradeId(trade.getOutTradeId());
+            tradeDetailVo.setNasOuid(trade.getOutNick());
+            tradeDetailVo.setTradeStatus(trade.getTradeStatus());
+            tradeDetailVo.setTradeType(trade.getTradeType());
+            tradeDetailVo.setCreated(trade.getCreated());
+            tradeDetailVo.setNum(trade.getNum());
+            tradeDetailVo.setRefundStatus(0);
+            if(!"TRADE_CLOSED_BY_TAOBAO".equals(trade.getTradeStatus())){
+                tradeDetailVo.setPayTime(trade.getPayTime());
+            }
+            tradeDetailVo.setConsignTime(trade.getConsignTime());
+            tradeDetailVo.setPayType(trade.getPayType());
+            tradeDetailVo.setTradeFrom(trade.getTradeFrom());
+            tradeDetailVo.setEndTime(trade.getEndTime());
+            tradeDetailVo.setIsCalIntegral(true);
+                    /*tradeDetailVo.setRealPointFee(null);
+                    tradeDetailVo.setSysCustomerId(null);*/
 
 
-                List<OrderDetailVo> orderDetailVos = new ArrayList<>();
+            List<OrderDetailVo> orderDetailVos = new ArrayList<>();
 
-                QueryWrapper<Order> orderQuery = new QueryWrapper<>();
-                orderQuery.eq("mainid",id);
-                List<Order> existOrders = orderService.list(orderQuery);
-                if(CollUtil.isNotEmpty(existOrders)){
-                    for (Order order : existOrders){
-                        OrderDetailVo orderDetailVo  = new OrderDetailVo();
-                        orderDetailVo.setOutOrderId(order.getOutOrderId());
-                        orderDetailVo.setOrderStatus(order.getOrderStatus());
-                        orderDetailVo.setTitle(order.getTitle());
-                        orderDetailVo.setOutItemId(order.getOutItemId());
-                        orderDetailVo.setOrderNum(order.getOrderNum());
-                        orderDetailVo.setOrderTotalFee(order.getOrderTotalFee());
-                        orderDetailVo.setOrderPayment(order.getOrderPayment());
-                        BigDecimal bigDecimal_1 = new BigDecimal(order.getOrderPrice());
-                        orderDetailVo.setOrderPrice(bigDecimal_1);
+            QueryWrapper<Order> orderQuery = new QueryWrapper<>();
+            orderQuery.eq("mainid",id);
+            List<Order> existOrders = orderService.list(orderQuery);
+            if(CollUtil.isNotEmpty(existOrders)){
+                for (Order order : existOrders){
+                    OrderDetailVo orderDetailVo  = new OrderDetailVo();
+                    orderDetailVo.setOutOrderId(order.getOutOrderId());
+                    orderDetailVo.setOrderStatus(order.getOrderStatus());
+                    orderDetailVo.setTitle(order.getTitle());
+                    orderDetailVo.setOutItemId(order.getOutItemId());
+                    orderDetailVo.setOrderNum(order.getOrderNum());
+                    orderDetailVo.setOrderTotalFee(order.getOrderTotalFee());
+                    orderDetailVo.setOrderPayment(order.getOrderPayment());
+                    BigDecimal bigDecimal_1 = new BigDecimal(order.getOrderPrice());
+                    orderDetailVo.setOrderPrice(bigDecimal_1);
 
-                        orderDetailVos.add(orderDetailVo);
-                    }
-                    tradeDetailVo.setOrderDetailVoList(orderDetailVos);
-
+                    orderDetailVos.add(orderDetailVo);
                 }
-
-                List<PromotionDetailVo> promotionDetailVos = new ArrayList<>();
-
-                QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
-                promotionQuery.eq("mainid",id);
-                List<Promotion> existPromotions = promotionService.list(promotionQuery);
-
-                if (CollUtil.isNotEmpty(existPromotions)){
-                    for (Promotion promotion : existPromotions){
-                        PromotionDetailVo promotionDetailVo = new PromotionDetailVo();
-                        BeanUtils.copyProperties(promotion,promotionDetailVo);
-                        promotionDetailVos.add(promotionDetailVo);
-                    }
-                }
-
-                tradeDetailVoList.add(tradeDetailVo);
+                tradeDetailVo.setOrderDetailVoList(orderDetailVos);
 
             }
 
-            log.info(tradeDetailVoList.toString());
+            List<PromotionDetailVo> promotionDetailVos = new ArrayList<>();
+
+            QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
+            promotionQuery.eq("mainid",id);
+            List<Promotion> existPromotions = promotionService.list(promotionQuery);
+
+            if (CollUtil.isNotEmpty(existPromotions)){
+                for (Promotion promotion : existPromotions){
+                    PromotionDetailVo promotionDetailVo = new PromotionDetailVo();
+                    BeanUtils.copyProperties(promotion,promotionDetailVo);
+                            /*if(StrUtil.isEmpty(promotionDetailVo.getPromotionToolId())){
+                                promotionDetailVo.setPromotionToolId("优惠卷");
+                            }*/
+
+                    promotionDetailVo.setPromotionToolId(null);
+
+                    promotionDetailVos.add(promotionDetailVo);
+                }
+                tradeDetailVo.setPromotionDetailVoList(promotionDetailVos);
+            }
+            tradeDetailVoList.add(tradeDetailVo);
+
+            log.info(tradeDetailVoList.size()+"");
             TradeSaveRequest request = new TradeSaveRequest();
             request.setServerUrl(nascentConfig.getBtnServerUrl());
             request.setAppKey(nascentConfig.getBtnAppKey());
             request.setAppSecret(nascentConfig.getBtnAppSerect());
             request.setGroupId(nascentConfig.getBtnGroupID());
             request.setAccessToken(tokenService.getBtnToken());
-            request.setShopId(101130616L);
+
+            request.setShopId(storeIdMap.get(trade.getShopId()));
             request.setTradeDetailVoList(tradeDetailVoList);
 
             ApiClient client = new ApiClientImpl(request);
 
             TradeSaveResponse response = client.execute(request);
-            log.info(response.getBody());
+
+            if("200".equals(response.getCode())){
+                log.info(response.getBody());
+            }else {
+                log.info(response.getBody());
+
+                TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
+                transBtnTradeFail.setId(String.valueOf(trade.getId()));
+                transBtnTradeFail.setMessage(response.getMsg());
+                transBtnTradeFailService.save(transBtnTradeFail);
+            }
         }
 
+    }
+
+    @Override
+    public void putTradeByRange() throws Exception {
+        Map<Long,Long> storeIdMap = storeIdMap();
+
+        QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
+        shopQueryWrapper.likeRight("created","2023-04").in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928");
+        List<Trade> trades = tradeService.list(shopQueryWrapper);
+
+        HashMap<Long,List<Trade>> tradeHashMap = new HashMap<>();
+        for (Trade trade : trades){
+            Long shopId = trade.getShopId();
+            if(tradeHashMap.containsKey(shopId)){
+                List<Trade> tradeList = tradeHashMap.get(shopId);
+                tradeList.add(trade);
+            }else {
+                List<Trade> tradeList = new ArrayList<>();
+                tradeList.add(trade);
+                tradeHashMap.put(shopId,tradeList);
+            }
+        }
+        Set<Long> keys = tradeHashMap.keySet();
+
+        for (long key : keys){
+            List<Trade> list = tradeHashMap.get(key);
+            int batchSize = 100; // 每次处理的数据量
+            int totalSize = list.size(); // 总数据量
+            //int totalSize = 1;
+            int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+
+            for (int i = 0; i < loopCount; i++) {
+                int start = i * batchSize; // 开始索引
+                int end = Math.min((i + 1) * batchSize, totalSize);
+
+                List<Trade> batchList = trades.subList(start,end);
+                log.info("batchList="+batchList.toString());
+
+                List<TradeDetailVo> tradeDetailVoList = new ArrayList<>();
+                for (Trade trade : batchList){
+
+                    Long id = trade.getId();
+                    log.info("id="+id);
+
+
+                    TradeDetailVo tradeDetailVo = new TradeDetailVo();
+                    /*BeanUtils.copyProperties(trade,tradeDetailVo);*/
+                    tradeDetailVo.setTotalFee(trade.getTotalFee());
+                    tradeDetailVo.setPayment(trade.getPayment());
+                    tradeDetailVo.setShippingType(trade.getShippingType());
+                    if(trade.getShippingType() == null){
+                        tradeDetailVo.setShippingType("free");
+                    }else {
+                        tradeDetailVo.setShippingType(trade.getShippingType());
+                    }
+                    tradeDetailVo.setOutTradeId(trade.getOutTradeId());
+                    tradeDetailVo.setNasOuid(trade.getOutNick());
+                    tradeDetailVo.setTradeStatus(trade.getTradeStatus());
+                    tradeDetailVo.setTradeType(trade.getTradeType());
+                    tradeDetailVo.setCreated(trade.getCreated());
+                    tradeDetailVo.setNum(trade.getNum());
+                    tradeDetailVo.setRefundStatus(0);
+                    if(!"TRADE_CLOSED_BY_TAOBAO".equals(trade.getTradeStatus())){
+                        tradeDetailVo.setPayTime(trade.getPayTime());
+                    }
+                    tradeDetailVo.setConsignTime(trade.getConsignTime());
+                    tradeDetailVo.setPayType(trade.getPayType());
+                    tradeDetailVo.setTradeFrom(trade.getTradeFrom());
+                    tradeDetailVo.setEndTime(trade.getEndTime());
+                    tradeDetailVo.setIsCalIntegral(true);
+                    /*tradeDetailVo.setRealPointFee(null);
+                    tradeDetailVo.setSysCustomerId(null);*/
+
+
+                    List<OrderDetailVo> orderDetailVos = new ArrayList<>();
+
+                    QueryWrapper<Order> orderQuery = new QueryWrapper<>();
+                    orderQuery.eq("mainid",id);
+                    List<Order> existOrders = orderService.list(orderQuery);
+                    if(CollUtil.isNotEmpty(existOrders)){
+                        for (Order order : existOrders){
+                            OrderDetailVo orderDetailVo  = new OrderDetailVo();
+                            orderDetailVo.setOutOrderId(order.getOutOrderId());
+                            orderDetailVo.setOrderStatus(order.getOrderStatus());
+                            orderDetailVo.setTitle(order.getTitle());
+                            orderDetailVo.setOutItemId(order.getOutItemId());
+                            orderDetailVo.setOrderNum(order.getOrderNum());
+                            orderDetailVo.setOrderTotalFee(order.getOrderTotalFee());
+                            orderDetailVo.setOrderPayment(order.getOrderPayment());
+                            BigDecimal bigDecimal_1 = new BigDecimal(order.getOrderPrice());
+                            orderDetailVo.setOrderPrice(bigDecimal_1);
+
+                            orderDetailVos.add(orderDetailVo);
+                        }
+                        tradeDetailVo.setOrderDetailVoList(orderDetailVos);
+
+                    }
+
+                    List<PromotionDetailVo> promotionDetailVos = new ArrayList<>();
+
+                    QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
+                    promotionQuery.eq("mainid",id);
+                    List<Promotion> existPromotions = promotionService.list(promotionQuery);
+
+                    if (CollUtil.isNotEmpty(existPromotions)){
+                        for (Promotion promotion : existPromotions){
+                            PromotionDetailVo promotionDetailVo = new PromotionDetailVo();
+                            BeanUtils.copyProperties(promotion,promotionDetailVo);
+                            /*if(StrUtil.isEmpty(promotionDetailVo.getPromotionToolId())){
+                                promotionDetailVo.setPromotionToolId("优惠卷");
+                            }*/
+
+                            promotionDetailVo.setPromotionToolId(null);
+
+                            promotionDetailVos.add(promotionDetailVo);
+                        }
+                        tradeDetailVo.setPromotionDetailVoList(promotionDetailVos);
+                    }
+
+                    tradeDetailVoList.add(tradeDetailVo);
+
+                }
+
+                /*log.info(tradeDetailVoList.toString());*/
+                log.info(tradeDetailVoList.size()+"");
+                TradeSaveRequest request = new TradeSaveRequest();
+                request.setServerUrl(nascentConfig.getBtnServerUrl());
+                request.setAppKey(nascentConfig.getBtnAppKey());
+                request.setAppSecret(nascentConfig.getBtnAppSerect());
+                request.setGroupId(nascentConfig.getBtnGroupID());
+                request.setAccessToken(tokenService.getBtnToken());
+
+
+
+                request.setShopId(storeIdMap.get(key));
+                request.setTradeDetailVoList(tradeDetailVoList);
+
+                ApiClient client = new ApiClientImpl(request);
+
+                TradeSaveResponse response = client.execute(request);
+                log.info(response.getCode());
+                log.info(response.getMsg());
+                if("200".equals(response.getCode())){
+                    log.info(response.getBody());
+                }else {
+                    log.info(response.getBody());
+                    String ids = "";
+                    for (int j = 0 ; j<batchList.size();j++){
+                        Trade trade = batchList.get(j);
+                        Long id = trade.getId();
+
+                        if(j == (batchList.size()-1)){
+                            ids = ids+String.valueOf(id);
+                        }else {
+                            ids = ids+String.valueOf(id)+",";
+                        }
+                    }
+
+                    TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
+                    transBtnTradeFail.setId(ids);
+                    transBtnTradeFail.setMessage(response.getMsg());
+                    transBtnTradeFailService.save(transBtnTradeFail);
+                }
+            }
+        }
     }
 
 
@@ -518,4 +728,115 @@ public class TransOrderServiceImpl implements TransOrderService {
         }
         return resMap;
     }
+
+
+    public static Map<Long,Long> storeIdMap(){
+
+        Map<Long, Long> storeIdMap = new HashMap<>();
+
+        // 数据初始化
+        storeIdMap.put(100150203L, 101130582L);
+        storeIdMap.put(100150190L, 101130570L);
+        storeIdMap.put(100150196L, 101130575L);
+        storeIdMap.put(100150195L, 101130574L);
+        storeIdMap.put(100150191L, 101130571L);
+        storeIdMap.put(100150187L, 101130567L);
+        storeIdMap.put(100150192L, 101130572L);
+        storeIdMap.put(100150188L, 101130568L);
+        storeIdMap.put(100150189L, 101130569L);
+        storeIdMap.put(100150202L, 101130581L);
+        storeIdMap.put(100150201L, 101130580L);
+        storeIdMap.put(100150186L, 101130566L);
+        storeIdMap.put(100186880L, 101130543L);
+        storeIdMap.put(100150204L, 101130583L);
+        storeIdMap.put(100150231L, 101130607L);
+        storeIdMap.put(100150215L, 101130594L);
+        storeIdMap.put(100150165L, 101130617L);
+        storeIdMap.put(100150207L, 101130586L);
+        storeIdMap.put(100150194L, 101130573L);
+        storeIdMap.put(100150217L, 101130596L);
+        storeIdMap.put(100150216L, 101130595L);
+        storeIdMap.put(100150170L, 101130553L);
+        storeIdMap.put(100150206L, 101130585L);
+        storeIdMap.put(100150200L, 101130579L);
+        storeIdMap.put(100150234L, 101130609L);
+        storeIdMap.put(100157262L, 101130549L);
+        storeIdMap.put(100150235L, 101130610L);
+        storeIdMap.put(100234651L, 101130540L);
+        storeIdMap.put(100186879L, 101130542L);
+        storeIdMap.put(100150210L, 101130589L);
+        storeIdMap.put(100150229L, 101130605L);
+        storeIdMap.put(100150230L, 101130606L);
+        storeIdMap.put(100150211L, 101130590L);
+        storeIdMap.put(100150166L, 101130620L);
+        storeIdMap.put(100156928L, 101092686L);
+        storeIdMap.put(100149662L, 101130619L);
+        storeIdMap.put(100150205L, 101130584L);
+        storeIdMap.put(100150214L, 101130593L);
+        storeIdMap.put(100150199L, 101130578L);
+        storeIdMap.put(100150197L, 101130576L);
+        storeIdMap.put(100150169L, 101130552L);
+        storeIdMap.put(100186877L, 101130547L);
+        storeIdMap.put(100150226L, 101130603L);
+        storeIdMap.put(100150212L, 101130591L);
+        storeIdMap.put(100150237L, 101130612L);
+        storeIdMap.put(100150180L, 101130561L);
+        storeIdMap.put(100150219L, 101130598L);
+        storeIdMap.put(100186881L, 101130544L);
+        storeIdMap.put(100150177L, 101130559L);
+        storeIdMap.put(100150221L, 101130599L);
+        storeIdMap.put(100150168L, 101130551L);
+        storeIdMap.put(100150172L, 101130555L);
+        storeIdMap.put(100150175L, 101130557L);
+        storeIdMap.put(100150182L, 101130563L);
+        storeIdMap.put(100150184L, 101130565L);
+        storeIdMap.put(100150183L, 101130564L);
+        storeIdMap.put(100150232L, 101130608L);
+        storeIdMap.put(100150173L, 101130556L);
+        storeIdMap.put(100150227L, 101130604L);
+        storeIdMap.put(100186878L, 101130548L);
+        storeIdMap.put(100150213L, 101130592L);
+        storeIdMap.put(100149663L, 101130621L);
+        storeIdMap.put(100149661L, 101130618L);
+        storeIdMap.put(100150241L, 101130615L);
+        storeIdMap.put(100150238L, 101130613L);
+        storeIdMap.put(100150198L, 101130577L);
+        storeIdMap.put(100150208L, 101130587L);
+        storeIdMap.put(100150209L, 101130588L);
+        storeIdMap.put(100150218L, 101130597L);
+        storeIdMap.put(100150240L, 101130614L);
+        storeIdMap.put(100150178L, 101130560L);
+        storeIdMap.put(100150181L, 101130562L);
+        storeIdMap.put(100150176L, 101130558L);
+        storeIdMap.put(100150171L, 101130554L);
+        storeIdMap.put(100186883L, 101130546L);
+        storeIdMap.put(100150223L, 101130601L);
+        storeIdMap.put(100186882L, 101130545L);
+        storeIdMap.put(100150222L, 101130600L);
+        storeIdMap.put(100150236L, 101130611L);
+        storeIdMap.put(100186884L, 101130541L);
+        storeIdMap.put(100150224L, 101130602L);
+        storeIdMap.put(100150553L, 101130616L);
+        storeIdMap.put(100149660L, 101130550L);
+        storeIdMap.put(100150083L, 101092685L);
+        storeIdMap.put(100150167L,101155855L);
+        storeIdMap.put(100150174L,101155856L);
+        storeIdMap.put(100150239L,101155864L);
+        storeIdMap.put(100150242L,101155865L);
+        storeIdMap.put(100150243L,101155866L);
+        storeIdMap.put(100150245L,101155868L);
+        storeIdMap.put(100156915L,101155854L);
+        storeIdMap.put(100150225L,101155861L);
+        storeIdMap.put(100150233L,101155863L);
+        storeIdMap.put(100150244L,101155867L);
+        storeIdMap.put(100150228L,101155862L);
+        storeIdMap.put(100150179L,101155857L);
+        storeIdMap.put(100150220L,101155860L);
+        storeIdMap.put(100150185L,101155858L);
+        storeIdMap.put(100150193L,101155859L);
+
+        return storeIdMap;
+    }
+
+
 }
