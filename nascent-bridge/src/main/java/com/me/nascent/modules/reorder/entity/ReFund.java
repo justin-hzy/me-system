@@ -93,7 +93,7 @@ public class ReFund {
     private String refuseReason;
 
     @TableField("shopId")
-    private int shopId;
+    private long shopId;
 
     @TableField("sid")
     private String sid;

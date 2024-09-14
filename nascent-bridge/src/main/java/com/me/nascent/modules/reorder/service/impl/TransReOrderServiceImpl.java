@@ -157,7 +157,7 @@ public class TransReOrderServiceImpl implements TransReOrderService {
             resMap.put("startDate",startDate);
             resMap.put("isNext",true);
         }else if("200".equals(response.getCode())){
-            //log.info(response.getBody());
+            log.info(response.getBody());
             List<RefundSynInfo> refundSynInfos = response.getResult();
 
             List<ReFund> insertReFunds = new ArrayList<>();
@@ -192,8 +192,6 @@ public class TransReOrderServiceImpl implements TransReOrderService {
                         if (CollUtil.isNotEmpty(nickInfos)){
 
                             for (NickInfo nickInfo : nickInfos){
-
-
                                 ReFundNickInfo reFundNickInfo = new ReFundNickInfo();
                                 BeanUtils.copyProperties(nickInfo,reFundNickInfo);
                                 reFundNickInfo.setMainid(refundSynInfo.getId());
@@ -232,16 +230,20 @@ public class TransReOrderServiceImpl implements TransReOrderService {
     public void putReOrder() throws Exception {
 
         ThirdRefundSaveRequest request = new ThirdRefundSaveRequest();
-        request.setServerUrl(nascentConfig.getServerUrl());
-        request.setAppKey(nascentConfig.getAppKey());
-        request.setAppSecret(nascentConfig.getAppSerect());
-        request.setGroupId(nascentConfig.getGroupID());
-        request.setAccessToken(tokenService.getToken());
+        request.setServerUrl(nascentConfig.getBtnServerUrl());
+        request.setAppKey(nascentConfig.getBtnAppKey());
+        request.setAppSecret(nascentConfig.getBtnAppSerect());
+        request.setGroupId(nascentConfig.getBtnGroupID());
+        request.setAccessToken(tokenService.getBtnToken());
 
-        List<ReFund> existReFund = reFundService.list();
+        QueryWrapper<ReFund> reFundQuery = new QueryWrapper<>();
+        reFundQuery.between("applyTime","2013-01-01 00:00:00","2013-12-31 23:59:59");
+        List<ReFund> existReFund = reFundService.list(reFundQuery);
 
-        int batchSize = 100; // 每次处理的数据量
-        int totalSize = existReFund.size(); // 总数据量
+        int batchSize = 1; // 每次处理的数据量
+        //int totalSize = existReFund.size(); // 总数据量
+
+        int totalSize = 1;
 
         int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
 
@@ -257,15 +259,19 @@ public class TransReOrderServiceImpl implements TransReOrderService {
             for (ReFund reFund : batchList) {
                 ThirdRefund thirdRefund = new ThirdRefund();
                 BeanUtils.copyProperties(reFund, thirdRefund);
-
+                thirdRefund.setCreated(reFund.getApplyTime());
+                thirdRefund.setRefundWay(reFund.getRefundWap());
                 refunds.add(thirdRefund);
             }
 
+            log.info(refunds.size()+"");
             request.setRefunds(refunds);
-
 
             ApiClient client = new ApiClientImpl(request);
             ThirdRefundSaveResponse response = client.execute(request);
+            log.info(response.getBody());
         }
+
+
     }
 }

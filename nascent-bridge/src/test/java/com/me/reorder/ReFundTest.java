@@ -75,7 +75,7 @@ public class ReFundTest {
 
         ExecutorService reFundExecutorService = reFundExecutor.getThreadPoolExecutor();
 
-        for (int month = 7; month <= 7; month++) {
+        for (int month = 2; month <= 2; month++) {
             cal.set(Calendar.YEAR, Integer.parseInt(year));
             cal.set(Calendar.MONTH, month - 1);
             cal.set(Calendar.DAY_OF_MONTH, 1);
