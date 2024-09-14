@@ -17,6 +17,7 @@
         <module>dms-bridge</module>
         <module>dms-data-job</module>
         <module>nascent-bridge</module>
+        <module>dms-k3-service</module>
     </modules>
     <groupId>com.me</groupId>
     <artifactId>me-system</artifactId>
