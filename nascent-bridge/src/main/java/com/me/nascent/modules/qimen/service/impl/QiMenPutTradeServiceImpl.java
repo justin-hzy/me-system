@@ -136,8 +136,8 @@ public class QiMenPutTradeServiceImpl implements QiMenPutTradeService {
             TradeSaveRequest request = new TradeSaveRequest();
             request.setTradeDetailVoList(tradeDetailVoList);
 
-            ApiClient client = new ApiClientImpl(request);
-            TradeSaveResponse response = client.execute(request);
+            /*ApiClient client = new ApiClientImpl(request);
+            TradeSaveResponse response = client.execute(request);*/
 
         }
     }

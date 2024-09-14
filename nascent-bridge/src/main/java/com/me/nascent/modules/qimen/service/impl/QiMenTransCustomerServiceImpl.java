@@ -30,29 +30,11 @@ public class QiMenTransCustomerServiceImpl implements QiMenTransCustomerService 
     private QiMenCustomerExtendService qiMenCustomerExtendService;
 
     @Override
-    public String transCustomer(QiMenDto dto) throws Exception {
+    public synchronized String transCustomer(QiMenDto dto) throws Exception {
 
         String message = dto.getMessage();
 
-        //message = "{\"city\":\"New York\",\"age\":30,\"name\":\"John\"}";
-
-        /*String sign = dto.getSign();*/
-
         JSONObject messageJsonObj = JSONObject.parseObject(message);
-
-
-        /*Map<String, String> messageMap = convertJsonToMap(message);
-
-
-        List<Map<String, String>> collectionM = new ArrayList<>();
-
-        collectionM.add(messageMap);
-
-        String result  = sortAndConcatenateParameters(collectionM);
-
-        String secret = "";
-
-        String stringSignTemp = secret+result;*/
 
         //转换对象
         QiMenCustomer qiMenCustomer = encCustomer(messageJsonObj);
@@ -60,76 +42,26 @@ public class QiMenTransCustomerServiceImpl implements QiMenTransCustomerService 
         //拓展信息
         JSONObject extendJsonObj = messageJsonObj.getJSONObject("extend");
 
-
-
         QueryWrapper<QiMenCustomer> qiMenCustomerQuery = new QueryWrapper<>();
-        if(qiMenCustomer.getNasOuid() !=null && qiMenCustomer.getOuid() == null){
-            qiMenCustomerQuery.eq("nasOuid",qiMenCustomer.getNasOuid())
-                    .eq("sellerNick",qiMenCustomer.getSellerNick());
-        }else if(qiMenCustomer.getNasOuid() ==null && qiMenCustomer != null){
-            qiMenCustomerQuery.eq("ouid",qiMenCustomer.getOuid())
-                    .eq("sellerNick",qiMenCustomer.getSellerNick());
-        }
+        qiMenCustomerQuery.eq("ouid",qiMenCustomer.getOuid())
+                .eq("sellerNick",qiMenCustomer.getSellerNick());
 
         QiMenCustomer existObj = qiMenCustomerService.getOne(qiMenCustomerQuery);
         if(existObj != null){
             String existFirstBindCardTime = existObj.getFirstBindCardTime();
-
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             Date existDate = sdf.parse(existFirstBindCardTime);
-
             Date newDate = sdf.parse(qiMenCustomer.getFirstBindCardTime());
 
             if(existDate.before(newDate)){
                 UpdateWrapper<QiMenCustomer> qiMenCustomerUpdate = new UpdateWrapper<>();
-                if(qiMenCustomer.getNasOuid() !=null && qiMenCustomer.getOuid() == null){
-                    qiMenCustomerQuery.eq("nasOuid",qiMenCustomer.getNasOuid())
-                            .eq("sellerNick",qiMenCustomer.getSellerNick());
-                }else if(qiMenCustomer.getNasOuid() ==null && qiMenCustomer != null){
-                    qiMenCustomerQuery.eq("ouid",qiMenCustomer.getOuid())
-                            .eq("sellerNick",qiMenCustomer.getSellerNick());
-                }
+                qiMenCustomerQuery.eq("ouid",qiMenCustomer.getOuid())
+                        .eq("sellerNick",qiMenCustomer.getSellerNick());
                 qiMenCustomerService.update(qiMenCustomer,qiMenCustomerUpdate);
-
-                if(!extendJsonObj.isEmpty()){
-                    QiMenCustomerExtend qiMenCustomerExtend = encExpand(extendJsonObj,qiMenCustomer);
-
-                    QueryWrapper<QiMenCustomerExtend> qiMenCustomerExtendQuery = new QueryWrapper<>();
-                    if(qiMenCustomerExtend.getNasOuid() != null && qiMenCustomerExtend.getOuid() == null ){
-                        qiMenCustomerExtendQuery.eq("nasOuid",qiMenCustomer.getNasOuid())
-                                .eq("sellerNick",qiMenCustomer.getSellerNick());
-                    }else if(qiMenCustomerExtend.getNasOuid() == null && qiMenCustomerExtend.getOuid() != null ){
-                        qiMenCustomerExtendQuery.eq("ouid",qiMenCustomer.getOuid())
-                                .eq("sellerNick",qiMenCustomer.getSellerNick());
-                    }
-                    QiMenCustomerExtend existQiMenCustomerExtend = qiMenCustomerExtendService.getOne(qiMenCustomerExtendQuery);
-
-                    if(existQiMenCustomerExtend != null){
-                        UpdateWrapper<QiMenCustomerExtend> qiMenCustomerExtendUpdate = new UpdateWrapper<>();
-
-                        if(qiMenCustomer.getNasOuid() !=null && qiMenCustomer.getOuid() == null){
-                            qiMenCustomerExtendUpdate.eq("nasOuid",qiMenCustomer.getNasOuid())
-                                    .eq("sellerNick",qiMenCustomer.getSellerNick());
-                        }else if(qiMenCustomer.getNasOuid() ==null && qiMenCustomer != null){
-                            qiMenCustomerExtendUpdate.eq("ouid",qiMenCustomer.getOuid())
-                                    .eq("sellerNick",qiMenCustomer.getSellerNick());
-                        }
-                        qiMenCustomerExtendService.update(qiMenCustomerExtend,qiMenCustomerExtendUpdate);
-                    }else {
-                        qiMenCustomerExtendService.save(qiMenCustomerExtend);
-                    }
-                }
             }
         }else {
-
-
             qiMenCustomerService.save(qiMenCustomer);
-
-            if(!extendJsonObj.isEmpty()){
-                QiMenCustomerExtend qiMenCustomerExtend = encExpand(extendJsonObj,qiMenCustomer);
-                qiMenCustomerExtendService.save(qiMenCustomerExtend);
-            }
         }
 
         JSONObject jsonObject = new JSONObject();

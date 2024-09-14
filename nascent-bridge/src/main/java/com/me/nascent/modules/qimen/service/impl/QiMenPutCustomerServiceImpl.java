@@ -1,5 +1,6 @@
 package com.me.nascent.modules.qimen.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.me.nascent.common.config.NascentConfig;
 import com.me.nascent.modules.qimen.entity.QiMenCustomer;
 import com.me.nascent.modules.qimen.service.QiMenCustomerService;
@@ -28,22 +29,27 @@ public class QiMenPutCustomerServiceImpl implements QiMenPutCustomerService {
     @Override
     public void putQiMenCustomer() throws Exception {
 
-        List<QiMenCustomer> qiMenCustomers = qiMenCustomerService.list();
+        QueryWrapper<QiMenCustomer> qiMenCustomerQuery = new QueryWrapper<>();
+        /*泊美官方旗舰店*/
+        qiMenCustomerQuery.eq("sellerNick","泊美官方旗舰店");
+        List<QiMenCustomer> qiMenCustomers = qiMenCustomerService.list(qiMenCustomerQuery);
 
         for (QiMenCustomer qiMenCustomer : qiMenCustomers){
-            String nasOuid = qiMenCustomer.getNasOuid();
-            if(nasOuid == null){
-                nasOuid = qiMenCustomer.getOuid();
+            String ouid = qiMenCustomer.getOuid();
+            if(ouid == null){
+                ouid = qiMenCustomer.getOuid();
             }
+
 
             CustomerSaveRequest request = new CustomerSaveRequest();
             request.setServerUrl(nascentConfig.getBtnServerUrl());
             request.setAppKey(nascentConfig.getBtnAppKey());
             request.setAppSecret(nascentConfig.getBtnAppSerect());
             request.setGroupId(nascentConfig.getGroupID());
-            request.setNasOuid(nasOuid);
+            request.setNasOuid(ouid);
             //平台号待完善
             request.setPlatform(7);
+            request.setSubPlatform(7);
 
             ApiClient client = new ApiClientImpl(request);
 
