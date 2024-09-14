@@ -155,8 +155,14 @@ public class TradeTest {
 
 
     @Test
-    public void putTradeByYear() throws Exception {
-        transOrderService.putTradeByYear();
+    public void putTradeByOne() throws Exception {
+        transOrderService.putTradeByOne();
 
+    }
+
+
+    @Test
+    public void putTradeByRange() throws Exception{
+        transOrderService.putTradeByRange();
     }
 }
