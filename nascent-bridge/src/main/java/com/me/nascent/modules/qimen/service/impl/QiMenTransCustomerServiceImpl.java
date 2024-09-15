@@ -48,7 +48,7 @@ public class QiMenTransCustomerServiceImpl implements QiMenTransCustomerService 
 
         QiMenCustomer existObj = qiMenCustomerService.getOne(qiMenCustomerQuery);
         if(existObj != null){
-            String existFirstBindCardTime = existObj.getFirstBindCardTime();
+            /*String existFirstBindCardTime = existObj.getFirstBindCardTime();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
             Date existDate = sdf.parse(existFirstBindCardTime);
@@ -59,7 +59,7 @@ public class QiMenTransCustomerServiceImpl implements QiMenTransCustomerService 
                 qiMenCustomerQuery.eq("ouid",qiMenCustomer.getOuid())
                         .eq("sellerNick",qiMenCustomer.getSellerNick());
                 qiMenCustomerService.update(qiMenCustomer,qiMenCustomerUpdate);
-            }
+            }*/
         }else {
             qiMenCustomerService.save(qiMenCustomer);
         }
