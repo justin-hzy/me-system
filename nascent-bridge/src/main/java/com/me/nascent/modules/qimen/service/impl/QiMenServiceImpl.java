@@ -34,7 +34,7 @@ public class QiMenServiceImpl implements QiMenService {
 
     @Override
     public synchronized String transQiMen(QiMenDto dto) throws Exception {
-        log.info(dto.toString());
+        //log.info(dto.toString());
 
         String dataType = dto.getDataType();
 
@@ -47,9 +47,9 @@ public class QiMenServiceImpl implements QiMenService {
             resJson = qiMenTransCustomerService.transCustomer(dto);
         }else if("TRADE".equals(dataType)){
             resJson = qiMenTransTradeService.transTrade(dto);
-        }else if("REFUND".equals(dataType)){
+        }/*else if("REFUND".equals(dataType)){
             resJson = qiMenTransReFundService.transReFund(dto);
-        }
+        }*/
 
         return resJson;
     }
