@@ -20,9 +20,9 @@
                     pattern="[%d{yyyy-MM-dd HH:mm:ss:SSS}][%X{traceId}][{%-5p}][%t:%r] %l : %m%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1"/>
-                <SizeBasedTriggeringPolicy size="30 MB"/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="1000"/>
+            <DefaultRolloverStrategy max="100000"/>
             <Filters>
                 <!-- [日志输出级别] -->
                 <ThresholdFilter level="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
