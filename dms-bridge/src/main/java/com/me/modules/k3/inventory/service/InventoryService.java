@@ -10,4 +10,9 @@ public interface InventoryService {
     public String getTWInventory(String sku, String stockNumber) throws Exception;
 
     String getBatTWInventory(List<String> skus,String stockNumber) throws Exception;
+
+    String getBatGyjInventory(List<String> skus,String stockNumber) throws Exception;
+
+    String getBatHkInventory(List<String> skus,String stockNumber) throws Exception;
+
 }

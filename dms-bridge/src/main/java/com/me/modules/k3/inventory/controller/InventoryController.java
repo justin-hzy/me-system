@@ -59,5 +59,19 @@ public class InventoryController {
         return resStr;
     }
 
+    @PostMapping("getBatchGyjInventory")
+    public String getGyjBatchInventory(@RequestBody GetBatInventoryReqDto dto) throws Exception {
+        String resStr = inventoryService.getBatGyjInventory(dto.getSkus(),dto.getStockNumber());
+        log.info("resStr="+resStr);
+        return resStr;
+    }
+
+    @PostMapping("getBatchHkInventory")
+    public String getHkBatchInventory(@RequestBody GetBatInventoryReqDto dto) throws Exception {
+        String resStr = inventoryService.getBatHkInventory(dto.getSkus(),dto.getStockNumber());
+        log.info("resStr="+resStr);
+        return resStr;
+    }
+
 
 }

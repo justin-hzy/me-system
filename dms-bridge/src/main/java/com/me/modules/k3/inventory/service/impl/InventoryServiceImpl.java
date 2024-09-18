@@ -107,5 +107,95 @@ public class InventoryServiceImpl implements InventoryService {
         return resJson.toJSONString();
     }
 
+    @Override
+    public String getBatGyjInventory(List<String> skuList, String stockNumber) throws Exception {
+        K3InventoryReqDto dto = new K3InventoryReqDto();
+
+        dto.setFormId("STK_Inventory");
+        dto.setFieldKeys("FStockId.fnumber,FStockId.fname,FBaseQty,FMaterialId.fnumber");
+
+        String skus = "";
+
+        for(String sku : skuList){
+            skus = skus + "'" + sku + "'"+",";
+        }
+
+        skus = skus.substring(0,skus.length()-1);
+
+        String FilterString = "FStockOrgId.fnumber in ('ZT030') and FMaterialId.fnumber in("+skus+") and FStockStatusId.fname='可用' and FStockId.fnumber = "+"'"+stockNumber+"'";
+        dto.setFilterString(FilterString);
+
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .create();
+        String json = gson.toJson(dto);
+
+        log.info("json="+json);
+
+        IdentifyInfo iden = new IdentifyInfo();
+        iden.setUserName(k3Config.getUserName());
+        iden.setAppId(k3Config.getAppId());
+        iden.setdCID(k3Config.getDCID());
+        iden.setAppSecret(k3Config.getAppSecret());
+
+        iden.setlCID(k3Config.getLCID());
+        iden.setServerUrl(k3Config.getServerUrl());
+
+        K3CloudApi api = new K3CloudApi(iden);
+
+        String resultJsonStr = String.valueOf(api.billQuery(json));
+        log.info("resultJsonStr="+resultJsonStr);
+
+        JSONObject resJson = new JSONObject();
+        resJson.put("code",200);
+        resJson.put("data",resultJsonStr);
+        return resJson.toJSONString();
+    }
+
+    @Override
+    public String getBatHkInventory(List<String> skuList, String stockNumber) throws Exception {
+        K3InventoryReqDto dto = new K3InventoryReqDto();
+
+        dto.setFormId("STK_Inventory");
+        dto.setFieldKeys("FStockId.fnumber,FStockId.fname,FBaseQty,FMaterialId.fnumber");
+
+        String skus = "";
+
+        for(String sku : skuList){
+            skus = skus + "'" + sku + "'"+",";
+        }
+
+        skus = skus.substring(0,skus.length()-1);
+
+        String FilterString = "FStockOrgId.fnumber in ('ZT026') and FMaterialId.fnumber in("+skus+") and FStockStatusId.fname='可用' and FStockId.fnumber = "+"'"+stockNumber+"'";
+        dto.setFilterString(FilterString);
+
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .create();
+        String json = gson.toJson(dto);
+
+        log.info("json="+json);
+
+        IdentifyInfo iden = new IdentifyInfo();
+        iden.setUserName(k3Config.getUserName());
+        iden.setAppId(k3Config.getAppId());
+        iden.setdCID(k3Config.getDCID());
+        iden.setAppSecret(k3Config.getAppSecret());
+
+        iden.setlCID(k3Config.getLCID());
+        iden.setServerUrl(k3Config.getServerUrl());
+
+        K3CloudApi api = new K3CloudApi(iden);
+
+        String resultJsonStr = String.valueOf(api.billQuery(json));
+        log.info("resultJsonStr="+resultJsonStr);
+
+        JSONObject resJson = new JSONObject();
+        resJson.put("code",200);
+        resJson.put("data",resultJsonStr);
+        return resJson.toJSONString();
+    }
+
 
 }
