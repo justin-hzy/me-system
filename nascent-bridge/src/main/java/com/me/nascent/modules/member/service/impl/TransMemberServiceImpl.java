@@ -13,8 +13,10 @@ import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
 import com.nascent.ecrp.opensdk.domain.customer.*;
 import com.nascent.ecrp.opensdk.domain.customer.wxFansStatus.BaseWxFansStatusVo;
 import com.nascent.ecrp.opensdk.request.customer.ActivateCustomerListSyncRequest;
+import com.nascent.ecrp.opensdk.request.customer.MemberQueryRequest;
 import com.nascent.ecrp.opensdk.request.customer.ShopActiveCustomerListSyncRequest;
 import com.nascent.ecrp.opensdk.response.customer.ActivateCustomerListSyncResponse;
+import com.nascent.ecrp.opensdk.response.customer.MemberQueryResponse;
 import com.nascent.ecrp.opensdk.response.customer.ShopActiveCustomerListSyncResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,6 +57,8 @@ public class TransMemberServiceImpl implements TransMemberService {
     private ShopActiveCustomerWeChatService shopActiveCustomerWeChat;
 
     private ShopActiveCustomerCardService shopActiveCustomerCardService;
+
+    private MemberTongService memberTongService;
 
     @Override
     public void TransPureMemberByRange(Date startDate,Date endDate) throws Exception {
@@ -105,6 +109,79 @@ public class TransMemberServiceImpl implements TransMemberService {
             log.info("nextId="+nextId);
             log.info("flag="+flag);
         }
+    }
+
+    @Override
+    public Map<String, Object> transMemberTong(Date start, Date end, Integer pageNo) throws Exception {
+
+
+        MemberQueryRequest request = new MemberQueryRequest();
+        request.setServerUrl(nascentConfig.getServerUrl());
+        request.setAppKey(nascentConfig.getAppKey());
+        request.setAppSecret(nascentConfig.getAppSerect());
+        request.setGroupId(nascentConfig.getGroupID());
+        request.setStartTime(start);
+        request.setEndTime(end);
+        request.setPageSize(200);
+        request.setPageNo(pageNo);
+        /*泊美官方旗舰店  za姬芮官方旗舰店 */
+        request.setSellerNick("za姬芮官方旗舰店");
+        request.setPlatform(1);
+        /* pcode-206261	泊美积分体系 pcode-206256	Za线上积分体系 pcode-206258 Za姬芮线下积分体系*/
+        request.setIntegralAccount("pcode-206256");
+
+        QueryWrapper<Token> tokenQuery = new QueryWrapper<>();
+        tokenQuery.eq("name","nascent");
+        List<Token> tokens = tokenService.list(tokenQuery);
+        request.setAccessToken(tokens.get(0).getToken());
+
+        ApiClient client = new ApiClientImpl(request);
+        MemberQueryResponse response = client.execute(request);
+
+        Map<String,Object> respMap = new HashMap<>();
+
+
+        if ("200".equals(response.getCode())){
+            if (response.getResult().size()>0){
+
+                List<MemberQueryInfo> memberQueryInfos = response.getResult();
+
+                List<MemberTong> insertList = new ArrayList<>();
+                for (MemberQueryInfo memberQueryInfo : memberQueryInfos){
+
+                    QueryWrapper<MemberTong> memberTongQuery = new QueryWrapper<>();
+                    memberTongQuery.eq("ouid",memberQueryInfo.getOuid())
+                            .eq("sellerNick",memberQueryInfo.getSellerNick());
+
+                    List<MemberTong> existMemberTongs = memberTongService.list(memberTongQuery);
+                    if(CollUtil.isEmpty(existMemberTongs)){
+                        MemberTong memberTong = new MemberTong();
+                        BeanUtils.copyProperties(memberQueryInfo,memberTong);
+                        insertList.add(memberTong);
+                    }
+                }
+
+                if(CollUtil.isNotEmpty(insertList)){
+                    memberTongService.saveBatch(insertList);
+                }
+
+
+                pageNo = pageNo + 1;
+                respMap.put("isNext",true);
+                respMap.put("pageNo",pageNo);
+            }else {
+                respMap.put("isNext",false);
+            }
+        }else {
+            respMap.put("isNext",true);
+            respMap.put("pageNo",pageNo);
+        }
+        return respMap;
+    }
+
+
+    private void saveMemberTong(Date start,Date end) throws Exception {
+
     }
 
     private Map<String, Object> savePureMember(Long nextId,Date startDate,Date endDate) throws Exception {
