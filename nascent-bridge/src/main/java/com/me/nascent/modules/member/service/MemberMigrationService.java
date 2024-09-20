@@ -10,5 +10,8 @@ public interface MemberMigrationService {
 
     void transPureStoreMemberByRange(Date startDate, Date endDate,Long shopId) throws Exception;
 
+
+    void transMemberTong(Date start,Date end) throws Exception;
+
     void putPureMember() throws Exception;
 }

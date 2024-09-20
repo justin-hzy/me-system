@@ -16,6 +16,7 @@ import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
 import com.nascent.ecrp.opensdk.domain.customer.CardReceiveInfo;
 import com.nascent.ecrp.opensdk.domain.customer.CustomerSaveInfo;
 import com.nascent.ecrp.opensdk.request.customer.BatchCustomerSaveRequest;
+import com.nascent.ecrp.opensdk.request.customer.MemberQueryRequest;
 import com.nascent.ecrp.opensdk.response.customer.BatchCustomerSaveResponse;
 import com.nascent.ecrp.opensdk.response.refund.ThirdRefundSaveResponse;
 import lombok.AllArgsConstructor;
@@ -29,6 +30,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @AllArgsConstructor
@@ -117,6 +119,21 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
 
             startDate = endDateOfWeek;  // 修改为1分钟
             //System.out.println("下一个开启时间:" + startDate);
+        }
+    }
+
+    @Override
+    public void transMemberTong(Date start,Date end) throws Exception {
+
+        boolean isNext = true;
+        Integer pageNo = 1;
+        while (isNext){
+            Map<String,Object> respMap = transMemberService.transMemberTong(start,end,pageNo);
+
+            isNext = (boolean) respMap.get("isNext");
+            if (isNext == true){
+                pageNo = (Integer) respMap.get("pageNo");
+            }
         }
     }
 
