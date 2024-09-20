@@ -39,7 +39,7 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
     private QIMenExpandCardInfoService qiMenExpandCardInfoService;
 
     @Override
-    public synchronized String transTrade(QiMenDto dto) throws Exception {
+    public synchronized String transTrade(QiMenDto dto){
 
         String message = dto.getMessage();
 
@@ -155,7 +155,7 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
             }*/
 
             //直接更新
-            UpdateWrapper<QiMenTrade> qiMenTradeUpdate = new UpdateWrapper();
+            /*UpdateWrapper<QiMenTrade> qiMenTradeUpdate = new UpdateWrapper();
             qiMenTradeUpdate.eq("tid",qiMenTrade.getTid()).eq("sellerNick",qiMenTrade.getSellerNick());
             qiMenTradeService.update(qiMenTrade,qiMenTradeUpdate);
 
@@ -170,7 +170,7 @@ public class QiMenTransTradeServiceImpl implements QiMenTransTradeService {
                 }else {
                     qiMenOrderService.save(qiMenOrder);
                 }
-            }
+            }*/
 
             /*if (CollUtil.isNotEmpty(qiMenPromotionDetails)){
                 for (QiMenPromotionDetail qiMenPromotionDetail : qiMenPromotionDetails){

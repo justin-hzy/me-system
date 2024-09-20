@@ -6,7 +6,7 @@ import java.text.ParseException;
 
 public interface QiMenService {
 
-    String transQiMen(QiMenDto dto) throws Exception;
+    String transQiMen(QiMenDto dto);
 
     void putQiMenCustomer() throws Exception;
 

@@ -30,7 +30,7 @@ public class QiMenTransCustomerServiceImpl implements QiMenTransCustomerService 
     private QiMenCustomerExtendService qiMenCustomerExtendService;
 
     @Override
-    public synchronized String transCustomer(QiMenDto dto) throws Exception {
+    public synchronized String transCustomer(QiMenDto dto) {
 
         String message = dto.getMessage();
 

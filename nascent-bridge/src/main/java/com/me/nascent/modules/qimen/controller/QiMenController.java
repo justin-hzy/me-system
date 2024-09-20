@@ -18,7 +18,7 @@ public class QiMenController {
     private QiMenService qiMenService;
 
     @PostMapping("transQiMen")
-    private String transOrder(@RequestBody QiMenDto dto) throws Exception {
+    private String transOrder(@RequestBody QiMenDto dto) {
         //log.info("dto="+dto.toString());
         /*return null;*/
 
