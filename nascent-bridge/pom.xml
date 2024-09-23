@@ -78,10 +78,10 @@
 
         <dependency>
             <groupId>com.me</groupId>
-            <artifactId>ecrp-open-sdk-9.12.0</artifactId>
+            <artifactId>ecrp-open-sdk-9.14.0</artifactId>
             <version>1.0</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/ecrp-open-sdk-9.12.0.jar</systemPath>
+            <systemPath>${basedir}/lib/ecrp-open-sdk-9.14.0.jar</systemPath>
         </dependency>
     </dependencies>
 
