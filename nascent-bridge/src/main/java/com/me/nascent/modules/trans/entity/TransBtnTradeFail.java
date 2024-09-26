@@ -9,8 +9,8 @@ import lombok.Data;
 @TableName("trans_btn_trade_fail")
 public class TransBtnTradeFail {
 
-    @TableId("id")
-    private String id;
+    @TableId("ids")
+    private String ids;
 
     @TableField("message")
     private String message;

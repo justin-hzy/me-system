@@ -27,7 +27,7 @@ public class Order {
     private Long shopId;
 
     @TableField("orderPrice")
-    private String orderPrice;
+    private BigDecimal orderPrice;
 
     @TableField("orderNum")
     private BigDecimal orderNum;

@@ -165,4 +165,9 @@ public class TradeTest {
     public void putTradeByRange() throws Exception{
         transOrderService.putTradeByRange();
     }
+
+    @Test
+    public void putFailTrade() throws Exception {
+        transOrderService.putFailTrade();
+    }
 }
