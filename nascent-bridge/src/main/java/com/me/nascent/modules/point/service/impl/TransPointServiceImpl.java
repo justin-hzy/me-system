@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.me.nascent.common.config.NascentConfig;
+import com.me.nascent.modules.member.entity.MemberTong;
 import com.me.nascent.modules.member.entity.PureMemberNickInfo;
 import com.me.nascent.modules.member.entity.ZaMemberNickInfo;
 import com.me.nascent.modules.member.mapper.PureMemberNickInfoMapper;
@@ -21,10 +22,15 @@ import com.me.nascent.modules.token.entity.Token;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
+import com.nascent.ecrp.opensdk.domain.customer.BaseNasOuid;
 import com.nascent.ecrp.opensdk.domain.customer.NickPlatform;
 import com.nascent.ecrp.opensdk.domain.point.CustomerAccountPointInfo;
+import com.nascent.ecrp.opensdk.domain.point.CustomerAvailablePointDetailInfo;
+import com.nascent.ecrp.opensdk.request.point.CustomerAvailablePointUpdateQueryRequest;
 import com.nascent.ecrp.opensdk.request.point.CustomerPointInfoQueryRequest;
 import com.nascent.ecrp.opensdk.request.point.PointAddRequest;
+import com.nascent.ecrp.opensdk.response.customer.CustomerGradeUpdateResponse;
+import com.nascent.ecrp.opensdk.response.point.CustomerAvailablePointUpdateQueryResponse;
 import com.nascent.ecrp.opensdk.response.point.CustomerPointInfoQueryResponse;
 import com.nascent.ecrp.opensdk.response.point.PointAddResponse;
 import lombok.AllArgsConstructor;
@@ -33,8 +39,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -289,8 +294,6 @@ public class TransPointServiceImpl implements TransPointService {
         for (PureMemberPoint pureMemberPoint : pureMemberPoints){
             request.setNasOuid(pureMemberPoint.getNasOuid());
             request.setPlatform(pureMemberPoint.getPlatform());
-            request.setIntegralAccount(pureMemberPoint.getIntegralAccount());
-            request.setPoint(pureMemberPoint.getScore());
             request.setSendType(1);
             request.setRemark("悦江积分初始化");
 
@@ -299,4 +302,103 @@ public class TransPointServiceImpl implements TransPointService {
         }
 
     }
+
+    @Override
+    public void transMemberPoint(Date start,Date end,String integralAccount) throws Exception {
+
+        boolean isNext = true;
+        Long nextId = 0L;
+
+        while (isNext){
+            Map<String,Object> respMap = savePurePoint(start,end,integralAccount,nextId);
+            isNext = (boolean) respMap.get("isNext");
+            if(isNext == true){
+                nextId = (Long) respMap.get("nextId");
+            }
+        }
+
+    }
+
+    Map<String,Object> savePurePoint(Date start, Date end, String integralAccount, Long nextId) throws Exception {
+        Long oriNextId = nextId;
+        Map<String,Object> respMap = new HashMap<>();
+
+        CustomerAvailablePointUpdateQueryRequest request = new CustomerAvailablePointUpdateQueryRequest();
+        request.setServerUrl(nascentConfig.getServerUrl());
+        request.setAppKey(nascentConfig.getAppKey());
+        request.setAppSecret(nascentConfig.getAppSerect());
+        request.setGroupId(nascentConfig.getGroupID());
+        request.setAccessToken(tokenService.getToken());
+        request.setPageSize(200);
+        request.setNextId(nextId);
+
+        request.setIntegralAccount(integralAccount);
+        request.setUpdateTimeStart(start);
+        request.setUpdateTimeEnd(end);
+
+
+        ApiClient apiClient = new ApiClientImpl(request);
+        CustomerAvailablePointUpdateQueryResponse response = apiClient.execute(request);
+
+        log.info(response.getBody());
+        if("200".equals(response.getCode())){
+            if (CollUtil.isNotEmpty(response.getResult().getCustomerAvailablePointDetailList())){
+                nextId = response.getResult().getNextId();
+                log.info(response.getResult().getCustomerAvailablePointDetailList().toString());
+
+                List<CustomerAvailablePointDetailInfo> customerAvailablePointDetailInfos = response.getResult().getCustomerAvailablePointDetailList();
+                List<PureMemberPoint> pureMemberPoints = new ArrayList<>();
+                for (CustomerAvailablePointDetailInfo customerAvailablePointDetailInfo : customerAvailablePointDetailInfos){
+                    BigDecimal availPoint = customerAvailablePointDetailInfo.getAvailPoint();
+                    List<BaseNasOuid> baseNasOuids = customerAvailablePointDetailInfo.getNickInfoList();
+
+                    for (BaseNasOuid baseNasOuid : baseNasOuids){
+                        String nasOuid = baseNasOuid.getNasOuid();
+                        Integer platform = baseNasOuid.getPlatform();
+
+                        QueryWrapper<PureMemberPoint> pureMemberPointQuery = new QueryWrapper<>();
+                        pureMemberPointQuery.eq("nasOuid",nasOuid).eq("platform",platform);
+
+                        List<PureMemberPoint> exists = pureMemberPointService.list(pureMemberPointQuery);
+                        if(CollUtil.isEmpty(exists)){
+                            PureMemberPoint pureMemberPoint = new PureMemberPoint();
+                            pureMemberPoint.setAvailPoint(availPoint);
+                            pureMemberPoint.setNasOuid(nasOuid);
+                            pureMemberPoint.setPlatform(platform);
+                            pureMemberPoint.setIntegralAccount(integralAccount);
+                            pureMemberPoints.add(pureMemberPoint);
+                        }
+                    }
+                }
+                if(CollUtil.isNotEmpty(pureMemberPoints)){
+                    pureMemberPointService.saveBatch(pureMemberPoints);
+                }
+                log.info("本次查询有数据,执行下页循环");
+                respMap.put("isNext",true);
+                respMap.put("nextId",nextId);
+                return respMap;
+            }else {
+                log.info("本次查询无数据,执行下次循环");
+                respMap.put("isNext",false);
+                return respMap;
+            }
+        }else {
+            Thread.sleep(5000);
+            log.info("接口执行错误，执行下次循环");
+            log.info(response.getBody());
+            respMap.put("isNext",true);
+            respMap.put("nextId",oriNextId);
+            return respMap;
+        }
+
+    }
+
+
+    @Override
+    public void testQueryPost() throws Exception {
+
+    }
+
+
+
 }

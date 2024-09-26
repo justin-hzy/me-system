@@ -6,6 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
+
 @SpringBootTest
 @Slf4j
 public class PointTest {
@@ -37,5 +44,68 @@ public class PointTest {
     @Test
     public void putPoint() throws Exception {
         transPointService.putPureMemberPoint();
+    }
+
+
+    @Test
+    public void transMemberTongPoint() throws Exception{
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        String year = "2023";
+
+        Calendar cal = Calendar.getInstance();
+
+        for (int month = 3; month <= 3; month++) {
+            cal.set(Calendar.YEAR, Integer.parseInt(year));
+            cal.set(Calendar.MONTH, month - 1);
+            cal.set(Calendar.DAY_OF_MONTH, 1);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MILLISECOND, 0);
+            Date startDate = cal.getTime();
+
+            cal.add(Calendar.MONTH, 1);
+            cal.add(Calendar.DAY_OF_MONTH, -1);
+            cal.set(Calendar.HOUR_OF_DAY, 23);
+            cal.set(Calendar.MINUTE, 59);
+            cal.set(Calendar.SECOND, 59);
+            cal.set(Calendar.MILLISECOND, 999);
+            Date endDate = cal.getTime();
+
+            String startStr = sdf.format(startDate);
+            String endStr = sdf.format(endDate);
+            System.out.println("同步会员数据: " + startStr + " 到 " + endStr);
+
+            while (startDate.before(endDate)) {
+                Date endDateOfWeek = new Date(startDate.getTime() + 15 * 60 * 1000); // 修改为30分钟
+                if (endDateOfWeek.after(endDate)) {
+                    endDateOfWeek = endDate;
+                }
+
+                String startStr1 = sdf.format(startDate);
+                String endStr2 = sdf.format(endDateOfWeek);
+                System.out.println("同步订单数据: " + startStr1 + " 到 " + endStr2);
+
+                //to do 执行接口
+                 /*
+                  pcode-206261	泊美积分体系
+                  pcode-206256	Za线上积分体系
+                  pcode-206258	Za姬芮线下积分体系
+                  */
+                String integralAccount = "pcode-206261";
+                transPointService.transMemberPoint(startDate,endDateOfWeek,integralAccount);
+                startDate = endDateOfWeek; // 修改为1分钟
+
+            }
+
+        }
+    }
+
+
+    @Test
+    public void point(){
+
     }
 }
