@@ -25,7 +25,7 @@ public class MemberTest {
 
 
 
-    @Test
+    /*@Test
     public void transPureMemberByRange() throws Exception {
 
         String year = "2024";
@@ -93,10 +93,10 @@ public class MemberTest {
         }
 
 
-    }
+    }*/
 
     @Test
-    public void transStoreMemberByRange() throws Exception {
+    public void transOnlineStoreMemberByRange() throws Exception {
         //String year = "2024";
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -142,14 +142,14 @@ public class MemberTest {
                 String endStr = sdf.format(endDate);
                 System.out.println("同步会员数据: " + startStr + " 到 " + endStr);
                 // 在这里调用处理会员数据的方法
-                memberMigrationService.transPureStoreMemberByRange(startDate, endDate,shopId);
+                memberMigrationService.transStoreMemberByRange(startDate, endDate,shopId);
             }
         }
     }
 
 
     @Test
-    public void transZaStoreMemberByRange() throws Exception {
+    public void transOffLineStoreMemberByRange() throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Calendar cal = Calendar.getInstance();
 
@@ -179,7 +179,7 @@ public class MemberTest {
                     String endStr = sdf.format(endDate);
                     System.out.println("同步会员数据: " + startStr + " 到 " + endStr);
                     // 在这里调用处理会员数据的方法
-                    memberMigrationService.transPureStoreMemberByRange(startDate, endDate,shopId);
+                    memberMigrationService.transStoreMemberByRange(startDate, endDate,shopId);
                 }
             }
         }
@@ -215,8 +215,8 @@ public class MemberTest {
     }
 
     @Test
-    public void putPureMember() throws Exception {
-        memberMigrationService.putPureMember();
+    public void putShopActiveCustomer() throws Exception {
+        memberMigrationService.putShopActiveCustomer();
     }
 
 
