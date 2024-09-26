@@ -21,7 +21,7 @@ public class GradeTest {
         //100000387 泊美  100000386	Za姬芮
         Long viewId = 100000387L;
 
-        transGradeService.TransPureGrade(viewId);
+
     }
 
     @Test
@@ -30,7 +30,13 @@ public class GradeTest {
         //100000387 泊美  100000386	Za姬芮
         Long viewId = 100000386L;
 
-        transGradeService.TransZaGrade(viewId);
+
+    }
+
+
+    @Test
+    public void transShopCustomerGradeTest() throws Exception {
+        transGradeService.transShopCustomerGrade();
     }
 
     @Test
@@ -42,5 +48,20 @@ public class GradeTest {
     @Test
     public void putGrade() throws Exception {
         transGradeService.putPureGrade();
+    }
+
+
+    @Test
+    public void putMemberTongGrade() throws Exception {
+        //100000387 泊美  100000386	Za姬芮
+        Long viewId = 100000387L;
+        transGradeService.putMemberTongGrade();
+    }
+
+    @Test
+    public void transMemberTongGrade() throws Exception {
+        //100000387 泊美  100000386	Za姬芮
+        Long viewId = 100000387L;
+        transGradeService.transMemberTongGrade(viewId);
     }
 }

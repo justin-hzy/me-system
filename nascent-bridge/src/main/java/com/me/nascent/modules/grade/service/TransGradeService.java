@@ -2,11 +2,13 @@ package com.me.nascent.modules.grade.service;
 
 public interface TransGradeService {
 
-    void TransPureGrade(Long viewId) throws Exception;
+    void putMemberTongGrade() throws Exception;
+
+    void transMemberTongGrade(Long viewId) throws Exception;
+
+    void transShopCustomerGrade() throws Exception;
 
     void putPureGrade() throws Exception;
-
-    void TransZaGrade(Long viewId) throws Exception;
 
     void checkPureGrade();
 }

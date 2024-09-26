@@ -13,5 +13,7 @@ public interface TransOrderService {
 
     void putTradeByRange() throws Exception;
 
+    void putFailTrade() throws Exception;
+
 
 }

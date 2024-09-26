@@ -1,19 +1,20 @@
 package com.me.nascent.modules.grade.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.me.nascent.common.config.NascentConfig;
-import com.me.nascent.modules.grade.entity.GradeCustomerCardReceiveInfo;
-import com.me.nascent.modules.grade.entity.GradeCustomerInfo;
-import com.me.nascent.modules.grade.entity.GradeFansStatusVo;
-import com.me.nascent.modules.grade.entity.ZaGradeCustomerInfo;
+import com.me.nascent.modules.grade.entity.*;
 import com.me.nascent.modules.grade.service.*;
 
+import com.me.nascent.modules.member.entity.MemberTong;
 import com.me.nascent.modules.member.entity.PureMember;
 import com.me.nascent.modules.member.entity.PureMemberNickInfo;
 import com.me.nascent.modules.member.entity.ZaMemberNickInfo;
 import com.me.nascent.modules.member.mapper.PureMemberNickInfoMapper;
+import com.me.nascent.modules.member.service.MemberTongService;
 import com.me.nascent.modules.member.service.PureMemberNickInfoService;
 import com.me.nascent.modules.member.service.ZaMemberNickInfoService;
 import com.me.nascent.modules.point.entity.PureMemberPoint;
@@ -24,21 +25,22 @@ import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
 
 import com.nascent.ecrp.opensdk.domain.customer.CustomerCardReceiveInfo;
 import com.nascent.ecrp.opensdk.domain.customer.CustomerGradeUpdateInfo;
-import com.nascent.ecrp.opensdk.domain.customer.systemCustomer.SystemCustomerInfo;
+import com.nascent.ecrp.opensdk.domain.customer.NickInfo;
+import com.nascent.ecrp.opensdk.domain.customer.NickPlatform;
 import com.nascent.ecrp.opensdk.domain.customer.wxFansStatus.BaseWxFansStatusVo;
 import com.nascent.ecrp.opensdk.request.customer.CustomerGradeUpdateRequest;
+import com.nascent.ecrp.opensdk.request.customer.CustomerInfoQueryRequest;
 import com.nascent.ecrp.opensdk.request.customer.SystemCustomerGetRequest;
 import com.nascent.ecrp.opensdk.response.customer.CustomerGradeUpdateResponse;
+import com.nascent.ecrp.opensdk.response.customer.CustomerInfoQueryResponse;
 import com.nascent.ecrp.opensdk.response.customer.SystemCustomerGetResponse;
+import com.nascent.ecrp.opensdk.response.customer.customerInfoQuery.SystemCustomerInfo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -50,109 +52,162 @@ public class TransGradeServiceImpl implements TransGradeService {
 
     private TokenService tokenService;
 
-    private ZaMemberNickInfoService zaMemberNickInfoService;
-
     private PureMemberNickInfoService pureMemberNickInfoService;
 
     private GradeCustomerInfoService gradeCustomerInfoService;
 
-    private ZaGradeCustomerInfoService zaGradeCustomerInfoService;
+    private MemberTongService memberTongService;
 
-    private GradeCustomerCardReceiveInfoService gradeCustomerCardReceiveInfoService;
-
-    private GradeFansStatusVoService gradeFansStatusVoService;
-
-    private PureMemberNickInfoMapper pureMemberNickInfoMapper;
-
-
+    private GradeMemberInfoService gradeMemberInfoService;
 
     @Override
-    public void TransPureGrade(Long viewId) throws Exception {
+    public void putMemberTongGrade() throws Exception {
 
-        SystemCustomerGetRequest request = new SystemCustomerGetRequest();
+        CustomerGradeUpdateRequest request = new CustomerGradeUpdateRequest();
+        request.setServerUrl(nascentConfig.getBtnServerUrl());
+        request.setAppKey(nascentConfig.getBtnAppKey());
+        request.setAppSecret(nascentConfig.getBtnAppSerect());
+        request.setGroupId(nascentConfig.getBtnGroupID());
+        request.setAccessToken(tokenService.getBtnToken());
+
+        QueryWrapper<MemberTong> memberTongQuery = new QueryWrapper<>();
+
+        memberTongQuery.ne("bindStatus",-1)
+                .isNotNull("ouid")
+                .eq("sellerNick","泊美官方旗舰店");
+
+        List<MemberTong> memberTongs = memberTongService.list(memberTongQuery);
+
+        int batchSize = 1; // 每次处理的数据量
+        int totalSize  = 1; // 总数据量;
+        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+
+        for (int i = 0; i < loopCount; i++) {
+            int start = i * batchSize; // 开始索引
+            int end = Math.min((i + 1) * batchSize, totalSize); // 结束索引，确保不超过总数据量
+            List<MemberTong> batchList = memberTongs.subList(start, end);
+
+            List<CustomerGradeUpdateInfo> customerGradeUpdateInfoList = new ArrayList<>();
+            for (MemberTong memberTong : batchList){
+                String extendObj = memberTong.getExtendObj();
+                JSONObject extendJson = JSONObject.parseObject(extendObj);
+                String level = extendJson.getString("level");
+                if (StrUtil.isEmpty(level)){
+                    level = "0";
+                }
+
+                CustomerGradeUpdateInfo customerGradeUpdateInfo = new CustomerGradeUpdateInfo();
+                customerGradeUpdateInfo.setNasOuid(memberTong.getOuid());
+                customerGradeUpdateInfo.setGrade(Integer.valueOf(level));
+                customerGradeUpdateInfoList.add(customerGradeUpdateInfo);
+
+            }
+
+
+            request.setCustomerGradeUpdateInfoList(customerGradeUpdateInfoList);
+            request.setPlatform(1);
+            //泊美 101130619L Za 101130616L
+            request.setShopId(101130619L);
+
+
+            ApiClient apiClient =new ApiClientImpl(request);
+            CustomerGradeUpdateResponse response = apiClient.execute(request);
+
+            log.info(response.getBody());
+
+        }
+    }
+
+    @Override
+    public void transMemberTongGrade(Long viewId) throws Exception {
+
+        CustomerInfoQueryRequest request = new CustomerInfoQueryRequest();
         request.setServerUrl(nascentConfig.getServerUrl());
         request.setAppKey(nascentConfig.getAppKey());
         request.setAppSecret(nascentConfig.getAppSerect());
         request.setGroupId(nascentConfig.getGroupID());
         request.setAccessToken(tokenService.getToken());
 
-        request.setViewId(viewId);
+        QueryWrapper<MemberTong> memberTongQuery = new QueryWrapper<>();
 
-        QueryWrapper<PureMemberNickInfo> pureMemberNickInfoQuery = new QueryWrapper<>();
-        //pureMemberNickInfoQuery.isNull("isTransGrade")
-                //.last("limit 25")
-        ;
-        //List<PureMemberNickInfo> pureMemberNickInfos = pureMemberNickInfoService.list(pureMemberNickInfoQuery);
+        memberTongQuery.ne("bindStatus",-1)
+                .isNotNull("ouid")
+                .eq("sellerNick","泊美官方旗舰店");
 
-        List<PureMemberNickInfo> pureMemberNickInfos = pureMemberNickInfoMapper.findNotInGradeCustomerInfo();
+        List<MemberTong> memberTongs = memberTongService.list(memberTongQuery);
 
 
+        int batchSize = 100; // 每次处理的数据量
+        int totalSize  = memberTongs.size(); // 总数据量;
+        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
 
-        int size = pureMemberNickInfos.size(); // 总数据量
+        for (int i = 0; i < loopCount; i++) {
+            int start = i * batchSize; // 开始索引
+            int end = Math.min((i + 1) * batchSize, totalSize); // 结束索引，确保不超过总数据量
+            List<MemberTong> batchList = memberTongs.subList(start, end);
+
+            List<NickPlatform> nickList = new ArrayList<>();
+            for (MemberTong memberTong : batchList) {
+                String ouid = memberTong.getOuid();
+
+                NickPlatform nickPlatform = new NickPlatform();
+                nickPlatform.setNasOuid(ouid);
+                nickPlatform.setPlatform(1);
+                nickList.add(nickPlatform);
+            }
+            request.setNickList(nickList);
+            //100149662 泊美 100149660 Za
+            request.setShopId(100149662L);
+            request.setViewId(viewId);
+            ApiClient apiClient =new ApiClientImpl(request);
+
+            CustomerInfoQueryResponse response = apiClient.execute(request);
+            if("200".equals(response.getCode())){
+                List<SystemCustomerInfo> systemCustomerInfos = response.getResult();
+                List<GradeMemberInfo> gradeMemberInfos = new ArrayList<>();
+                for (SystemCustomerInfo systemCustomerInfo : systemCustomerInfos){
+                    Integer grade = systemCustomerInfo.getGrade();
+                    String gradeName = systemCustomerInfo.getGradeName();
+                    Date updateTime = systemCustomerInfo.getUpdateTime();
 
 
-        List<GradeCustomerInfo> saveList = new ArrayList<>();
+                    Long shopId = systemCustomerInfo.getShopId();
+                    Long customerId = systemCustomerInfo.getCustomerId();
 
-        List<PureMemberNickInfo> pureMemberNickUpdateList = new ArrayList<>();
+                    List<NickInfo> nickInfoList = systemCustomerInfo.getNickInfoList();
+                    for (NickInfo nick : nickInfoList){
+                        String nasOuid = nick.getNasOuid();
+                        Integer platform = systemCustomerInfo.getPlatform();
 
-        log.info(pureMemberNickUpdateList.toString());
-        for (int i = 0; i < size; i++) {
+                        QueryWrapper<GradeMemberInfo> gradeMemberInfoQuery = new QueryWrapper<>();
+                        gradeMemberInfoQuery.eq("nasOuid",nasOuid);
+                        gradeMemberInfoQuery.eq("platform",platform);
+                        List<GradeMemberInfo> exist = gradeMemberInfoService.list(gradeMemberInfoQuery);
 
-            PureMemberNickInfo pureMemberNickInfo = pureMemberNickInfos.get(i);
-
-            String nasOuid = pureMemberNickInfo.getNasOuid();
-            int platform = pureMemberNickInfo.getPlatform();
-            Long mainId = pureMemberNickInfo.getMainId();
-
-            request.setNasOuid(nasOuid);
-            request.setPlatform(platform);
-
-            ApiClient client = new ApiClientImpl(request);
-
-            SystemCustomerGetResponse response = client.execute(request);
-
-
-
-            if("60001".equals(response.getCode())){
-                UpdateWrapper<Token> updateWrapper = new UpdateWrapper<>();
-                updateWrapper.eq("name","nascent").set("token",tokenService.getToken());
-                tokenService.update(updateWrapper);
-            }else if("200".equals(response.getCode())) {
-                log.info(response.getBody());
-                SystemCustomerInfo systemCustomerInfo = response.getResult();
-                if (systemCustomerInfo != null){
-                    GradeCustomerInfo gradeCustomerInfo = new GradeCustomerInfo();
-
-                    BeanUtils.copyProperties(systemCustomerInfo,gradeCustomerInfo);
-                    gradeCustomerInfo.setNasOuid(pureMemberNickInfo.getNasOuid());
-                    gradeCustomerInfo.setMainId(mainId);
-
-                    QueryWrapper<GradeCustomerInfo> gradeCustomerInfoQuery = new QueryWrapper();
-                    gradeCustomerInfoQuery.eq("nasOuid",nasOuid)
-                            .eq("platform",platform)
-                            .eq("mainId",mainId);
-                    GradeCustomerInfo existObj = gradeCustomerInfoService.getOne(gradeCustomerInfoQuery);
-                    if (existObj != null){
-                        UpdateWrapper<GradeCustomerInfo> gradeCustomerInfoUpdate = new UpdateWrapper<>();
-                        gradeCustomerInfoUpdate.eq("nasOuid",nasOuid)
-                                .eq("platform",platform)
-                                .eq("mainId",mainId);
-                        gradeCustomerInfoService.update(gradeCustomerInfo,gradeCustomerInfoUpdate);
-                    }else {
-                        saveList.add(gradeCustomerInfo);
-                        pureMemberNickInfo.setIsTransGrade("1");
-                        pureMemberNickUpdateList.add(pureMemberNickInfo);
-                        //gradeCustomerInfoService.save(gradeCustomerInfo);
+                        if (CollUtil.isEmpty(exist)){
+                            GradeMemberInfo gradeMemberInfo = new GradeMemberInfo();
+                            gradeMemberInfo.setCustomerId(customerId);
+                            gradeMemberInfo.setGradeName(gradeName);
+                            gradeMemberInfo.setGrade(grade);
+                            gradeMemberInfo.setPlatform(platform);
+                            gradeMemberInfo.setNasOuid(nasOuid);
+                            gradeMemberInfo.setShopId(shopId);
+                            gradeMemberInfo.setUpdateTime(updateTime);
+                            gradeMemberInfos.add(gradeMemberInfo);
+                        }
                     }
                 }
-            }
-
-            if(saveList.size() == pureMemberNickInfos.size()){
-                gradeCustomerInfoService.saveBatch(saveList);
-                saveList.clear();
+                gradeMemberInfoService.saveBatch(gradeMemberInfos);
             }
         }
+
     }
+
+    @Override
+    public void transShopCustomerGrade() throws Exception {
+
+    }
+
 
     @Override
     public void putPureGrade() throws Exception {
@@ -196,81 +251,7 @@ public class TransGradeServiceImpl implements TransGradeService {
         }
     }
 
-    @Override
-    public void TransZaGrade(Long viewId) throws Exception {
 
-        SystemCustomerGetRequest request = new SystemCustomerGetRequest();
-        request.setServerUrl(nascentConfig.getServerUrl());
-        request.setAppKey(nascentConfig.getAppKey());
-        request.setAppSecret(nascentConfig.getAppSerect());
-        request.setGroupId(nascentConfig.getGroupID());
-        request.setAccessToken(tokenService.getToken());
-
-        request.setViewId(viewId);
-
-        QueryWrapper<ZaMemberNickInfo> zaMemberNickInfoQueryWrapper = new QueryWrapper<>();
-        //zaMemberNickInfoQueryWrapper.last("limit 0,129")
-                ;
-
-        List<ZaMemberNickInfo> zaMemberNickInfos = zaMemberNickInfoService.list(zaMemberNickInfoQueryWrapper);
-
-        int size = zaMemberNickInfos.size();
-
-        List<ZaGradeCustomerInfo> saveList = new ArrayList<>();
-
-        for (int i = 0; i < size; i++) {
-            ZaMemberNickInfo zaMemberNickInfo = zaMemberNickInfos.get(i);
-
-            String nasOuid = zaMemberNickInfo.getNasOuid();
-            int platform = zaMemberNickInfo.getPlatform();
-            Long mainId = zaMemberNickInfo.getMainId();
-
-            request.setNasOuid(nasOuid);
-            request.setPlatform(platform);
-
-            ApiClient client = new ApiClientImpl(request);
-
-            SystemCustomerGetResponse response = client.execute(request);
-
-            if("60001".equals(response.getCode())){
-                UpdateWrapper<Token> updateWrapper = new UpdateWrapper<>();
-                updateWrapper.eq("name","nascent").set("token",tokenService.getToken());
-                tokenService.update(updateWrapper);
-            }else if("200".equals(response.getCode())) {
-                log.info(response.getBody());
-                SystemCustomerInfo systemCustomerInfo = response.getResult();
-                if (systemCustomerInfo != null){
-                    ZaGradeCustomerInfo zaGradeCustomerInfo = new ZaGradeCustomerInfo();
-
-                    BeanUtils.copyProperties(systemCustomerInfo,zaGradeCustomerInfo);
-                    zaGradeCustomerInfo.setNasOuid(zaMemberNickInfo.getNasOuid());
-                    zaGradeCustomerInfo.setMainId(mainId);
-
-                    QueryWrapper<ZaGradeCustomerInfo> gradeCustomerInfoQuery = new QueryWrapper();
-                    gradeCustomerInfoQuery.eq("nasOuid",nasOuid)
-                            .eq("platform",platform)
-                            .eq("mainId",mainId);
-                    ZaGradeCustomerInfo existObj = zaGradeCustomerInfoService.getOne(gradeCustomerInfoQuery);
-
-                    if (existObj != null){
-//                        UpdateWrapper<ZaGradeCustomerInfo> zaGradeCustomerInfoUpdate = new UpdateWrapper<>();
-//                        zaGradeCustomerInfoUpdate.eq("nasOuid",nasOuid)
-//                                .eq("platform",platform)
-//                                .eq("mainId",mainId);
-//                        zaGradeCustomerInfoService.update(zaGradeCustomerInfo,zaGradeCustomerInfoUpdate);
-                    }else {
-                        saveList.add(zaGradeCustomerInfo);
-                    }
-                }
-            }
-
-            if(saveList.size() == 100000 || i == (size-1)){
-                zaGradeCustomerInfoService.saveBatch(saveList);
-                saveList.clear();
-            }
-        }
-
-    }
 
     @Override
     public void checkPureGrade() {
