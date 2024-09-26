@@ -14,4 +14,6 @@ public interface MemberMigrationService {
     void transMemberTong(Date start,Date end) throws Exception;
 
     void putPureMember() throws Exception;
+
+    void putMemberTong() throws Exception;
 }

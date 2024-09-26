@@ -1,12 +1,16 @@
 package com.me.member;
 
 import com.me.nascent.modules.member.service.MemberMigrationService;
+import com.me.nascent.modules.member.service.TransMemberService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,6 +22,7 @@ public class MemberTest {
 
     @Autowired
     private MemberMigrationService memberMigrationService;
+
 
 
     @Test
@@ -183,12 +188,47 @@ public class MemberTest {
 
 
     @Test
+    public void transMemberTong() throws Exception {
+
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        LocalDate startDate = LocalDate.of(2022, 1, 1);
+        LocalDate endDate = LocalDate.of(2022, 12, 31);
+
+        while (!startDate.isAfter(endDate)) {
+            LocalDateTime startDateTime = startDate.atStartOfDay();
+            LocalDateTime endDateTime = startDate.atTime(23, 59, 59);
+
+            Date start = Date.from(startDateTime.atZone(ZoneId.systemDefault()).toInstant());
+            Date end = Date.from(endDateTime.atZone(ZoneId.systemDefault()).toInstant());
+
+            String startStr = sdf.format(start);
+            String endStr = sdf.format(end);
+
+            System.out.println("当天起始时间: " + startStr+",当天结束时间: " + endStr);
+
+            startDate = startDate.plusDays(1);
+
+            memberMigrationService.transMemberTong(start,end);
+        }
+    }
+
+    @Test
     public void putPureMember() throws Exception {
         memberMigrationService.putPureMember();
     }
 
+
+
+    @Test
+    public void putMemberTong() throws Exception {
+        memberMigrationService.putMemberTong();
+    }
+
+
     public static List<Long> getOffLineStoreId(){
-// 创建一个ArrayList实例
+        // 创建一个ArrayList实例
        List<Long> numbers = new ArrayList<>();
 
         // 定义要添加到列表中的整数

@@ -3,13 +3,12 @@ package com.me.nascent.modules.member.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.me.nascent.common.config.NascentConfig;
+import com.me.nascent.modules.member.entity.MemberTong;
 import com.me.nascent.modules.member.entity.PureCardReceiveInfo;
 import com.me.nascent.modules.member.entity.PureMember;
-import com.me.nascent.modules.member.service.MemberMigrationService;
-import com.me.nascent.modules.member.service.PureCardReceiveInfoService;
-import com.me.nascent.modules.member.service.PureMemberService;
-import com.me.nascent.modules.member.service.TransMemberService;
+import com.me.nascent.modules.member.service.*;
 import com.me.nascent.modules.reorder.entity.ReFund;
+import com.me.nascent.modules.token.entity.Token;
 import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
@@ -46,6 +45,8 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
     private PureMemberService pureMemberService;
 
     private PureCardReceiveInfoService pureCardReceiveInfoService;
+
+    private MemberTongService memberTongService;
 
     @Override
     public void transPureMemberByRange(Date startDate, Date endDate) throws Exception {
@@ -187,6 +188,65 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
 
             ApiClient client = new ApiClientImpl(request);
             BatchCustomerSaveResponse response = client.execute(request);
+
+        }
+    }
+
+    @Override
+    public void putMemberTong() throws Exception {
+
+        /*tokenService.getBtnToken();*/
+
+
+        BatchCustomerSaveRequest request = new BatchCustomerSaveRequest();
+        request.setServerUrl(nascentConfig.getBtnServerUrl());
+        request.setAppKey(nascentConfig.getBtnAppKey());
+        request.setAppSecret(nascentConfig.getBtnAppSerect());
+        request.setGroupId(nascentConfig.getBtnGroupID());
+
+        QueryWrapper<Token> tokenQuery = new QueryWrapper<>();
+        tokenQuery.eq("name","btn");
+        Token token = tokenService.getOne(tokenQuery);
+        request.setAccessToken(token.getToken());
+
+        QueryWrapper<MemberTong> memberTongQuery = new QueryWrapper<>();
+        memberTongQuery.isNotNull("ouid").eq("sellerNick","za姬芮官方旗舰店");
+        List<MemberTong> memberTongs = memberTongService.list(memberTongQuery);
+
+        int batchSize = 100; // 每次处理的数据量
+        int totalSize = memberTongs.size(); // 总数据量
+
+        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+
+        for (int i = 0; i < loopCount; i++) {
+            int start = i * batchSize; // 开始索引
+            int end = Math.min((i + 1) * batchSize, totalSize);
+
+            List<MemberTong> batchList = memberTongs.subList(start, end);
+
+            List<CustomerSaveInfo> customerSaveInfos = new ArrayList<>();
+            for (MemberTong memberTong :  batchList){
+                CustomerSaveInfo customerSaveInfo = new CustomerSaveInfo();
+                customerSaveInfo.setSubPlatform(1);
+                customerSaveInfo.setPlatform(1);
+                customerSaveInfo.setNasOuid(memberTong.getOuid());
+                customerSaveInfos.add(customerSaveInfo);
+            }
+
+            if (CollUtil.isNotEmpty(customerSaveInfos)){
+                request.setCustomerSaveList(customerSaveInfos);
+                /*泊美 101130619L Za 101130616L*/
+                request.setShopId(101130616L);
+
+                ApiClient client = new ApiClientImpl(request);
+                BatchCustomerSaveResponse response = client.execute(request);
+                if ("200".equals(response.getCode())){
+                    log.info(response.getMsg());
+                }else {
+                    log.info(response.getBody());
+                }
+                log.info("进入下个循环");
+            }
 
         }
     }

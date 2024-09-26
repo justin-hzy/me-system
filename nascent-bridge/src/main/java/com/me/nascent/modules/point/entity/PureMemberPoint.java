@@ -16,15 +16,9 @@ public class PureMemberPoint {
     @TableField("platform")
     private int platform;
 
+    @TableField("availPoint")
+    private BigDecimal availPoint;
+
     @TableField("integralAccount")
     private String integralAccount;
-
-    @TableField("bindMobile")
-    private String bindMobile;
-
-    @TableField("memberCard")
-    private String memberCard;
-
-    @TableField("score")
-    private BigDecimal score;
 }
