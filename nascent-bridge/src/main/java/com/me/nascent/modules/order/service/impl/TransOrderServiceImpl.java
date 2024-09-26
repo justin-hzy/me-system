@@ -690,8 +690,9 @@ public class TransOrderServiceImpl implements TransOrderService {
         request.setAppSecret(nascentConfig.getAppSerect());
         request.setGroupId(nascentConfig.getGroupID());
 
-
-        List<Token> tokens = tokenService.list();
+        QueryWrapper<Token> tokenQuery = new QueryWrapper<>();
+        tokenQuery.eq("name","nascent");
+        List<Token> tokens = tokenService.list(tokenQuery);
         request.setAccessToken(tokens.get(0).getToken());
 
         request.setTimeType(1);
@@ -703,7 +704,7 @@ public class TransOrderServiceImpl implements TransOrderService {
 
         ApiClient client = new ApiClientImpl(request);
         TradeSynResponse response = client.execute(request);
-        log.info(response.getBody());
+        //log.info(response.getBody());
         List<TradesVo> tradesVos = response.getResult();
         List<Trade> insertTrades = new ArrayList<>();
 
@@ -736,11 +737,11 @@ public class TransOrderServiceImpl implements TransOrderService {
                     if(tradeResult!=null){
                         //进入更新集合
                         //updateTrades.add(trade);
-                        UpdateWrapper<Trade> tradeUpdate = new UpdateWrapper<>();
+                        /*UpdateWrapper<Trade> tradeUpdate = new UpdateWrapper<>();
                         tradeUpdate.eq("id",id);
                         tradeService.update(trade,tradeUpdate);
 
-                        List<NickInfo> nickInfos = tradesVo.getNickInfoList();
+                        List<NickInfo> nickInfos = tradesVo.getNickInfoList();*/
 
 
                         /*if(CollUtil.isNotEmpty(nickInfos)){
@@ -760,7 +761,7 @@ public class TransOrderServiceImpl implements TransOrderService {
                             nickService.saveBatch(nicks);
                         }*/
 
-                        List<PromotionsVo> promotionsVos = tradesVo.getPromotionVos();
+                        /*List<PromotionsVo> promotionsVos = tradesVo.getPromotionVos();
 
                         if(CollUtil.isNotEmpty(promotionsVos)){
 
@@ -798,7 +799,7 @@ public class TransOrderServiceImpl implements TransOrderService {
 
                             }
                             orderService.saveBatch(orders);
-                        }
+                        }*/
 
 
 
