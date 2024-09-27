@@ -3,9 +3,7 @@ package com.me.nascent.modules.member.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.me.nascent.common.config.NascentConfig;
-import com.me.nascent.modules.member.entity.MemberTong;
-import com.me.nascent.modules.member.entity.PureCardReceiveInfo;
-import com.me.nascent.modules.member.entity.PureMember;
+import com.me.nascent.modules.member.entity.*;
 import com.me.nascent.modules.member.service.*;
 import com.me.nascent.modules.reorder.entity.ReFund;
 import com.me.nascent.modules.token.entity.Token;
@@ -26,10 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -47,6 +42,10 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
     private PureCardReceiveInfoService pureCardReceiveInfoService;
 
     private MemberTongService memberTongService;
+
+    private ShopActiveCustomerService shopActiveCustomerService;
+
+    private ShopActiveCustomerNickService shopActiveCustomerNickService;
 
     @Override
     public void transPureMemberByRange(Date startDate, Date endDate) throws Exception {
@@ -103,7 +102,7 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
     }
 
     @Override
-    public void transPureStoreMemberByRange(Date startDate, Date endDate,Long shopId) throws Exception {
+    public void transStoreMemberByRange(Date startDate, Date endDate,Long shopId) throws Exception {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         while (startDate.before(endDate)) {
@@ -139,57 +138,78 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
     }
 
     @Override
-    public void putPureMember() throws Exception {
+    public void putShopActiveCustomer() throws Exception {
         BatchCustomerSaveRequest request = new BatchCustomerSaveRequest();
-        request.setServerUrl(nascentConfig.getServerUrl());
-        request.setAppKey(nascentConfig.getAppKey());
-        request.setAppSecret(nascentConfig.getAppSerect());
-        request.setGroupId(nascentConfig.getGroupID());
-        request.setAccessToken(tokenService.getToken());
+        request.setServerUrl(nascentConfig.getBtnServerUrl());
+        request.setAppKey(nascentConfig.getBtnAppKey());
+        request.setAppSecret(nascentConfig.getBtnAppSerect());
+        request.setGroupId(nascentConfig.getBtnGroupID());
+        request.setAccessToken(tokenService.getBtnToken());
 
-        List<PureMember> pureMembers = pureMemberService.list();
-
-        int batchSize = 100; // 每次处理的数据量
-        int totalSize = pureMembers.size(); // 总数据量
-
-        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
-
-        for (int i = 0; i < loopCount; i++) {
-            int start = i * batchSize; // 开始索引
-            int end = Math.min((i + 1) * batchSize, totalSize);
-
-            List<PureMember> batchList = pureMembers.subList(start, end);
-            log.info("batchList=" + batchList.toString());
-
-            List<CustomerSaveInfo> customerSaveInfos = new ArrayList<>();
-
-            for (PureMember pureMember :  batchList){
-                CustomerSaveInfo customerSaveInfo = new CustomerSaveInfo();
-                BeanUtils.copyProperties(pureMember,customerSaveInfo);
-
-                //List<CardReceiveInfo> cardReceiveInfos = customerSaveInfo.getCardReceiveInfoList();
-
-                List<CardReceiveInfo> cardReceiveInfos = new ArrayList<>();
-
-                QueryWrapper<PureCardReceiveInfo> pureCardReceiveInfoQuery = new QueryWrapper<>();
-                pureCardReceiveInfoQuery.eq("mainid",pureMember.getId());
-
-
-                List<PureCardReceiveInfo> pureCardReceiveInfos  = pureCardReceiveInfoService.list(pureCardReceiveInfoQuery);
-                if (CollUtil.isNotEmpty(pureCardReceiveInfos)){
-                    for (PureCardReceiveInfo pureCardReceiveInfo : pureCardReceiveInfos){
-                        CardReceiveInfo cardReceiveInfo = new CardReceiveInfo();
-                        BeanUtils.copyProperties(pureCardReceiveInfo,cardReceiveInfo);
-                        cardReceiveInfos.add(cardReceiveInfo);
-                    }
-                }
-                customerSaveInfos.add(customerSaveInfo);
+        List<ShopActiveCustomer> shopActiveCustomers = shopActiveCustomerService.list();
+        Map<Long,List<ShopActiveCustomer>> shopActiveCustomerMap = new LinkedHashMap<>();
+        for (ShopActiveCustomer shopActiveCustomer : shopActiveCustomers ){
+            Long shopId = shopActiveCustomer.getShopId();
+            if(shopActiveCustomerMap.containsKey(shopId)){
+                List<ShopActiveCustomer> shopActiveCustomerList = shopActiveCustomerMap.get(shopId);
+                shopActiveCustomerList.add(shopActiveCustomer);
+            }else {
+                List<ShopActiveCustomer> shopActiveCustomerList = new ArrayList<>();
+                shopActiveCustomerList.add(shopActiveCustomer);
+                shopActiveCustomerMap.put(shopId,shopActiveCustomerList);
             }
-
-            ApiClient client = new ApiClientImpl(request);
-            BatchCustomerSaveResponse response = client.execute(request);
-
         }
+
+
+        Set<Long> keys = shopActiveCustomerMap.keySet();
+
+        for (Long key : keys){
+            List<ShopActiveCustomer> shopActiveCustomerList = shopActiveCustomerMap.get(key);
+            /*for (ShopActiveCustomer shopActiveCustomer  : shopActiveCustomerList){
+                if(!key.equals(shopActiveCustomer.getShopId())){
+                    log.info(key+"");
+                    log.info(shopActiveCustomer.getShopId()+"");
+                    log.info("接口逻辑错误");
+                }
+            }*/
+
+            int batchSize = 100; // 每次处理的数据量
+            int totalSize = shopActiveCustomerList.size(); // 总数据量
+
+            int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+
+            for (int i = 0; i < loopCount; i++) {
+                int start = i * batchSize; // 开始索引
+                int end = Math.min((i + 1) * batchSize, totalSize);
+
+                List<ShopActiveCustomer> batchList = shopActiveCustomerList.subList(start, end);
+                //log.info("batchList=" + batchList.toString());
+
+                List<CustomerSaveInfo> customerSaveInfos = new ArrayList<>();
+
+                for (ShopActiveCustomer shopActiveCustomer :  batchList){
+                    CustomerSaveInfo customerSaveInfo = new CustomerSaveInfo();
+                    QueryWrapper<ShopActiveCustomerNick> shopActiveCustomerNickQuery = new QueryWrapper<>();
+                    /*shopActiveCustomerNickService.l
+                    customerSaveInfo.setPlatform();*/
+
+
+                }
+            }
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     @Override

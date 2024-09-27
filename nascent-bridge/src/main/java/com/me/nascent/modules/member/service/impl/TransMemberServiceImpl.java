@@ -512,9 +512,9 @@ public class TransMemberServiceImpl implements TransMemberService {
                     shopActiveCustomerQuery.eq("id",id);
                     ShopActiveCustomer existObj = shopActiveCustomerService.getOne(shopActiveCustomerQuery);
                     if (existObj != null){
-                        UpdateWrapper<ShopActiveCustomer> shopActiveCustomerUpdate = new UpdateWrapper<>();
+                        /*UpdateWrapper<ShopActiveCustomer> shopActiveCustomerUpdate = new UpdateWrapper<>();
                         shopActiveCustomerUpdate.eq("id",id);
-                        shopActiveCustomerService.update(shopActiveCustomer,shopActiveCustomerUpdate);
+                        shopActiveCustomerService.update(shopActiveCustomer,shopActiveCustomerUpdate);*/
                     }else {
                         shopActiveCustomerInfos.add(shopActiveCustomer);
 
