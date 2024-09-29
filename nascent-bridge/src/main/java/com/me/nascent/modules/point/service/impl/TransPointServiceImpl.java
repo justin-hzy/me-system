@@ -279,27 +279,10 @@ public class TransPointServiceImpl implements TransPointService {
         request.setGroupId(nascentConfig.getGroupID());
         request.setAccessToken(tokenService.getToken());
 
+        QueryWrapper<PureMemberPoint> pureMemberPointQuery = new QueryWrapper<>();
         List<PureMemberPoint> pureMemberPoints = pureMemberPointService.list();
 
-        /*int batchSize = 100; // 每次处理的数据量
-        int totalSize = pureMemberPoints.size(); // 总数据量
 
-        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
-
-        for (int i = 0; i < loopCount; i++) {
-
-
-        }*/
-
-        for (PureMemberPoint pureMemberPoint : pureMemberPoints){
-            request.setNasOuid(pureMemberPoint.getNasOuid());
-            request.setPlatform(pureMemberPoint.getPlatform());
-            request.setSendType(1);
-            request.setRemark("悦江积分初始化");
-
-            ApiClient client = new ApiClientImpl(request);
-            PointAddResponse response = client.execute(request);
-        }
 
     }
 
