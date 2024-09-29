@@ -1,6 +1,7 @@
 package com.me.nascent.modules.member.service;
 
 import java.util.Date;
+import java.util.List;
 
 public interface MemberMigrationService {
 
@@ -13,7 +14,9 @@ public interface MemberMigrationService {
 
     void transMemberTong(Date start,Date end) throws Exception;
 
-    void putShopActiveCustomer() throws Exception;
+    void putOnLineShopActiveCustomer() throws Exception;
+
+    void putOffLineShopActiveCustomer(List<Long> shopIds) throws Exception;
 
     void putMemberTong() throws Exception;
 }

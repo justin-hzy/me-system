@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.me.nascent.modules.member.mapper.ShopActiveCustomerMapper">
+    <select id="queryMemberVos" parameterType="java.lang.String" resultType="com.me.nascent.modules.member.vo.QueryMemberVo">
+
+        SELECT
+            id,
+            updateTime,
+            activateTime AS activateTime,
+            bindTime AS bindTime,
+            shopId AS shopId,
+            customerName AS customerName,
+            customerHeadImage AS customerHeadImage,
+            customerFrom AS customerFrom,
+            customerRemark AS customerRemark,
+            sex,
+            qq,
+            outAlias AS outAlias,
+            birthday,
+            mobile,
+            email,
+            buyerAlipayNo AS buyerAlipayNo,
+            marryStatus AS marryStatus,
+            subPlatform AS subPlatform,
+            isActivate AS isActivate,
+            babyName AS babyName,
+            babySex AS babySex,
+            babyBirthday AS babyBirthday,
+            country,
+            province,
+            city,
+            district,
+            address,
+            nick,
+            nasOuid AS nasOuid,
+            platform
+        FROM
+            shop_active_customer as customer inner join shop_active_customer_nick as nick on customer.id = nick.mainId
+
+            where   shopId in
+            <foreach item="id"  collection="list" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+            and platform = 111 and id = 9079630
+    </select>
+
+    <select id="queryMemberVos1" parameterType="java.lang.String" resultType="com.me.nascent.modules.member.vo.QueryMemberVo">
+
+        SELECT
+            nasOuid,
+            platform
+        FROM
+        shop_active_customer as customer inner join shop_active_customer_nick as nick on customer.id = nick.mainId
+
+        where   shopId in
+        <foreach item="id"  collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        and platform = 11
+    </select>
+
+    <select id="queryOffLineMemberVos" parameterType="java.lang.String" resultType="com.me.nascent.modules.member.vo.QueryMemberVo">
+
+        SELECT
+        id,
+        updateTime,
+        activateTime AS activateTime,
+        bindTime AS bindTime,
+        shopId AS shopId,
+        customerName AS customerName,
+        customerHeadImage AS customerHeadImage,
+        customerFrom AS customerFrom,
+        customerRemark AS customerRemark,
+        sex,
+        qq,
+        outAlias AS outAlias,
+        birthday,
+        mobile,
+        email,
+        buyerAlipayNo AS buyerAlipayNo,
+        marryStatus AS marryStatus,
+        subPlatform AS subPlatform,
+        isActivate AS isActivate,
+        babyName AS babyName,
+        babySex AS babySex,
+        babyBirthday AS babyBirthday,
+        country,
+        province,
+        city,
+        district,
+        address,
+        nick,
+        nasOuid AS nasOuid,
+        platform
+        FROM
+        shop_active_customer as customer inner join shop_active_customer_nick as nick on customer.id = nick.mainId
+
+        where   shopId in
+        <foreach item="id"  collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        and platform = 0
+    </select>
+</mapper>

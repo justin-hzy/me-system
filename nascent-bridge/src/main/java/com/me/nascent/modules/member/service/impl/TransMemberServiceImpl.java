@@ -472,7 +472,9 @@ public class TransMemberServiceImpl implements TransMemberService {
         request.setAppSecret(nascentConfig.getAppSerect());
         request.setGroupId(nascentConfig.getGroupID());
 
-        List<Token> tokens = tokenService.list();
+        QueryWrapper<Token> tokenQuery = new QueryWrapper<>();
+        tokenQuery.eq("name","nascent");
+        List<Token> tokens = tokenService.list(tokenQuery);
         request.setAccessToken(tokens.get(0).getToken());
         request.setStartTime(startDate);
         request.setEndTime(endDate);

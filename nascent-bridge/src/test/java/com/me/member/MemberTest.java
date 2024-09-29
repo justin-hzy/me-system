@@ -109,16 +109,15 @@ public class MemberTest {
         最早入会的时间
 
         100149663L 抖音泊美官方旗舰店 2024-07-16 到 2024-07-17 开始有数据
-        100150166L 泊美品牌商城 2023年有数据
+        100150166L 泊美品牌商城-有赞 2023年有数据
         100156928L 泊美会员中心 2024年有数据
 
         100150083L Za会员中心
-        100149660L Za姬芮官方旗舰店
         100149661L 抖音Za姬芮官方旗舰店
         100150165L 有赞Za姬芮官方旗舰店
 
         */
-        Long shopId = 100149661L;
+        Long shopId = 100150166L;
         for (int year = 2023;year<=2024;year++){
             for (int month = 1; month <= 12; month++) {
                 cal.set(Calendar.YEAR, year);
@@ -214,17 +213,24 @@ public class MemberTest {
         }
     }
 
+    //暂时除去 淘宝系列会员
     @Test
-    public void putShopActiveCustomer() throws Exception {
-        memberMigrationService.putShopActiveCustomer();
+    public void putOnLineShopActiveCustomer() throws Exception {
+        memberMigrationService.putOnLineShopActiveCustomer();
     }
 
 
+    @Test
+    public void putOffLineShopActiveCustomer() throws Exception {
+        List<Long> shopIds = getOffLineStoreId();
+        memberMigrationService.putOffLineShopActiveCustomer(shopIds);
+    }
 
     @Test
     public void putMemberTong() throws Exception {
         memberMigrationService.putMemberTong();
     }
+
 
 
     public static List<Long> getOffLineStoreId(){
