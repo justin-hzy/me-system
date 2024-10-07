@@ -427,7 +427,7 @@ public class TransGradeServiceImpl implements TransGradeService {
 
         QueryWrapper<GradeMemberInfo> gradeMemberInfoQuery = new QueryWrapper<>();
 
-        gradeMemberInfoQuery.in("shopId",shopIds).eq("platform","111");
+        gradeMemberInfoQuery.in("shopId",shopIds).eq("platform","0");
 
         List<GradeMemberInfo> gradeMemberInfos = gradeMemberInfoService.list(gradeMemberInfoQuery);
 
@@ -477,6 +477,69 @@ public class TransGradeServiceImpl implements TransGradeService {
             log.info("执行下次循环");
         }
 
+    }
+
+    @Override
+    public void putOffLineShopActiveCustomerGrade(List<Long> shopIds) throws Exception {
+        CustomerGradeUpdateRequest request = new CustomerGradeUpdateRequest();
+        request.setServerUrl(nascentConfig.getBtnServerUrl());
+        request.setAppKey(nascentConfig.getBtnAppKey());
+        request.setAppSecret(nascentConfig.getBtnAppSerect());
+        request.setGroupId(nascentConfig.getBtnGroupID());
+        request.setAccessToken(tokenService.getBtnToken());
+
+
+        QueryWrapper<GradeMemberInfo> gradeMemberInfoQuery = new QueryWrapper<>();
+
+        gradeMemberInfoQuery.in("shopId",shopIds).eq("platform","0");
+
+        List<GradeMemberInfo> gradeMemberInfos = gradeMemberInfoService.list(gradeMemberInfoQuery);
+
+        int batchSize = 100; // 每次处理的数据量
+        int totalSize  = gradeMemberInfos.size(); // 总数据量;
+        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+
+        for (int i = 0; i < loopCount; i++) {
+            int start = i * batchSize; // 开始索引
+            int end = Math.min((i + 1) * batchSize, totalSize); // 结束索引，确保不超过总数据量
+            List<GradeMemberInfo> batchList = gradeMemberInfos.subList(start, end);
+
+            List<CustomerGradeUpdateInfo> customerGradeUpdateInfoList = new ArrayList<>();
+            for (GradeMemberInfo gradeMemberInfo : batchList){
+
+                CustomerGradeUpdateInfo customerGradeUpdateInfo = new CustomerGradeUpdateInfo();
+                customerGradeUpdateInfo.setNasOuid(gradeMemberInfo.getNasOuid());
+                customerGradeUpdateInfo.setGrade(gradeMemberInfo.getGrade());
+                customerGradeUpdateInfoList.add(customerGradeUpdateInfo);
+
+            }
+
+
+            request.setCustomerGradeUpdateInfoList(customerGradeUpdateInfoList);
+            request.setPlatform(0);
+
+
+            Map<Long,Long> storeIdMap= storeIdMap();
+            Long shopId = shopIds.get(0);
+            request.setShopId(storeIdMap.get(shopId));
+
+
+            ApiClient apiClient =new ApiClientImpl(request);
+            CustomerGradeUpdateResponse response = apiClient.execute(request);
+
+            if ("200".equals(response.getCode())){
+                log.info(response.getMsg());
+            }else {
+                log.info(response.getBody());
+                TransBtnCustomerFail transBtnCustomerFail = new TransBtnCustomerFail();
+                transBtnCustomerFail.setId(customerGradeUpdateInfoList.get(0).getNasOuid());
+                transBtnCustomerFail.setMessage(response.getBody());
+                transBtnCustomerFail.setType("grade");
+                transBtnCustomerFailService.save(transBtnCustomerFail);
+            }
+
+            log.info("执行下次循环");
+        }
     }
 
 

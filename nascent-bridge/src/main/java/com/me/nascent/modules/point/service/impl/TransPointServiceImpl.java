@@ -3,6 +3,7 @@ package com.me.nascent.modules.point.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.google.protobuf.Api;
 import com.me.nascent.common.config.NascentConfig;
 import com.me.nascent.modules.member.entity.MemberTong;
 import com.me.nascent.modules.member.entity.PureMemberNickInfo;
@@ -270,18 +271,101 @@ public class TransPointServiceImpl implements TransPointService {
     }
 
     @Override
-    public void putPureMemberPoint() throws Exception {
+    public void putPureMemberPoint(String integralAccount,String platform) throws Exception {
 
         PointAddRequest request = new PointAddRequest();
-        request.setServerUrl(nascentConfig.getServerUrl());
-        request.setAppKey(nascentConfig.getAppKey());
-        request.setAppSecret(nascentConfig.getAppSerect());
-        request.setGroupId(nascentConfig.getGroupID());
-        request.setAccessToken(tokenService.getToken());
+        if ("pcode-206261".equals(integralAccount)){
+            //泊美积分账号
+            request.setIntegralAccount("pcode-216174");
+        }else if("pcode-206256".equals(integralAccount)){
+            //Za 积分账号
+            request.setIntegralAccount("pcode-216062");
+        }
+        request.setServerUrl(nascentConfig.getBtnServerUrl());
+        request.setAppKey(nascentConfig.getBtnAppKey());
+        request.setAppSecret(nascentConfig.getBtnAppSerect());
+        request.setGroupId(nascentConfig.getBtnGroupID());
+        request.setAccessToken(tokenService.getBtnToken());
 
         QueryWrapper<PureMemberPoint> pureMemberPointQuery = new QueryWrapper<>();
-        List<PureMemberPoint> pureMemberPoints = pureMemberPointService.list();
+        pureMemberPointQuery.eq("integralAccount",integralAccount).eq("isFinsih","0").eq("platform",platform);
+        List<PureMemberPoint> pureMemberPoints = pureMemberPointService.list(pureMemberPointQuery);
 
+        for (PureMemberPoint pureMemberPoint : pureMemberPoints){
+            request.setNasOuid(pureMemberPoint.getNasOuid());
+
+            request.setPlatform(pureMemberPoint.getPlatform());
+            request.setPoint(pureMemberPoint.getAvailPoint());
+            request.setSendType(1);
+            request.setRemark("积分初始化");
+
+            if ("pcode-206261".equals(integralAccount) && "19".equals(platform)){
+                //泊美会员
+                request.setShopId(101092686L);
+            }else if("pcode-206261".equals(integralAccount) && "111".equals(platform)){
+                //泊美 抖音
+                request.setShopId(101130621L);
+            }else if("pcode-206261".equals(integralAccount) && "11".equals(platform)){
+                //泊美 有赞
+                request.setShopId(101130620L);
+            }else if("pcode-206261".equals(integralAccount) && "703212".equals(platform)){
+                //泊美 淘宝 101130619
+                request.setShopId(101130619L);
+                request.setPlatform(703212);
+            }else if("pcode-206256".equals(integralAccount) && "19".equals(platform)){
+                //Za会员
+                request.setShopId(101092685L);
+            }else if("pcode-206256".equals(integralAccount) && "111".equals(platform)){
+                //Za 抖音
+                request.setShopId(101130618L);
+            }else if("pcode-206256".equals(integralAccount) && "11".equals(platform)){
+                //Za 有赞
+                request.setShopId(101130617L);
+            }
+
+            ApiClient client = new ApiClientImpl(request);
+            PointAddResponse response = client.execute(request);
+
+            log.info(response.getBody());
+
+            if ("200".equals(response.getCode())){
+                UpdateWrapper<PureMemberPoint> updateWrapper = new UpdateWrapper<>();
+                updateWrapper.eq("nasOuid",pureMemberPoint.getNasOuid())
+                        .eq("platform",pureMemberPoint.getPlatform())
+                        .eq("integralAccount",integralAccount)
+                        .set("isFinsih","1");
+
+                pureMemberPointService.update(updateWrapper);
+            }
+        }
+
+        /*PureMemberPoint pureMemberPoint = pureMemberPoints.get(0);
+        request.setNasOuid(pureMemberPoint.getNasOuid());
+
+        request.setPlatform(pureMemberPoint.getPlatform());
+        request.setPoint(pureMemberPoint.getAvailPoint());
+        request.setSendType(1);
+        request.setRemark("积分初始化");
+
+        if ("pcode-206261".equals(integralAccount) && "19".equals(platform)){
+            //泊美会员
+            request.setShopId(101092686L);
+        }
+
+        ApiClient client = new ApiClientImpl(request);
+        PointAddResponse response = client.execute(request);
+
+        log.info(response.getBody());
+
+        if ("200".equals(response.getCode())){
+            UpdateWrapper<PureMemberPoint> updateWrapper = new UpdateWrapper<>();
+            updateWrapper.eq("nasOuid",pureMemberPoint.getNasOuid())
+                    .eq("platform",pureMemberPoint.getPlatform())
+                    .eq("integralAccount",integralAccount)
+                    .set("isFinsih","1");
+
+            pureMemberPointService.update(updateWrapper);
+        }*/
 
 
     }
@@ -335,12 +419,32 @@ public class TransPointServiceImpl implements TransPointService {
                     BigDecimal availPoint = customerAvailablePointDetailInfo.getAvailPoint();
                     List<BaseNasOuid> baseNasOuids = customerAvailablePointDetailInfo.getNickInfoList();
 
-                    for (BaseNasOuid baseNasOuid : baseNasOuids){
+                    /*for (BaseNasOuid baseNasOuid : baseNasOuids){
                         String nasOuid = baseNasOuid.getNasOuid();
                         Integer platform = baseNasOuid.getPlatform();
 
                         QueryWrapper<PureMemberPoint> pureMemberPointQuery = new QueryWrapper<>();
-                        pureMemberPointQuery.eq("nasOuid",nasOuid).eq("platform",platform);
+                        pureMemberPointQuery.eq("nasOuid",nasOuid).eq("platform",platform).eq("integralAccount",integralAccount);
+
+                        List<PureMemberPoint> exists = pureMemberPointService.list(pureMemberPointQuery);
+                        if(CollUtil.isEmpty(exists)){
+                            PureMemberPoint pureMemberPoint = new PureMemberPoint();
+                            pureMemberPoint.setAvailPoint(availPoint);
+                            pureMemberPoint.setNasOuid(nasOuid);
+                            pureMemberPoint.setPlatform(platform);
+                            pureMemberPoint.setIntegralAccount(integralAccount);
+                            pureMemberPoints.add(pureMemberPoint);
+                        }
+                    }*/
+
+                    if(availPoint.compareTo(BigDecimal.ZERO)>0){
+                        BaseNasOuid baseNasOuid = baseNasOuids.get(0);
+
+                        String nasOuid = baseNasOuid.getNasOuid();
+                        Integer platform = baseNasOuid.getPlatform();
+
+                        QueryWrapper<PureMemberPoint> pureMemberPointQuery = new QueryWrapper<>();
+                        pureMemberPointQuery.eq("nasOuid",nasOuid).eq("platform",platform).eq("integralAccount",integralAccount);
 
                         List<PureMemberPoint> exists = pureMemberPointService.list(pureMemberPointQuery);
                         if(CollUtil.isEmpty(exists)){
@@ -353,6 +457,7 @@ public class TransPointServiceImpl implements TransPointService {
                         }
                     }
                 }
+
                 if(CollUtil.isNotEmpty(pureMemberPoints)){
                     pureMemberPointService.saveBatch(pureMemberPoints);
                 }

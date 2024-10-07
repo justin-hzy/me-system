@@ -155,10 +155,10 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
 
         List<Long> shopIds = new ArrayList<>();
         /*泊美 抖音*/
-        shopIds.add(100149663L);
+        //shopIds.add(100149663L);
 
         //泊美有赞
-        //shopIds.add(100150166L);
+        shopIds.add(100150166L);
         //会员中心 平台id 19
 //        shopIds.add(100156928L);
 //        shopIds.add(100150083L);

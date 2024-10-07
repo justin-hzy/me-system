@@ -10,7 +10,7 @@ public interface TransPointService {
 
     void getZaOfflinePoint(String integralAccount,Long viewId) throws Exception;
 
-    void putPureMemberPoint() throws Exception;
+    void putPureMemberPoint(String integralAccount,String platform) throws Exception;
 
     void transMemberPoint(Date start, Date end,String integralAccount) throws Exception;
 

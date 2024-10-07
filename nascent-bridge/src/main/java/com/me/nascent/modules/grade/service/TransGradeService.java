@@ -14,6 +14,8 @@ public interface TransGradeService {
 
     void putShopActiveCustomerGrade(List<Long> shopId) throws Exception;
 
+    void putOffLineShopActiveCustomerGrade(List<Long> shopIds) throws Exception;
+
     void putPureGrade() throws Exception;
 
     void checkPureGrade();

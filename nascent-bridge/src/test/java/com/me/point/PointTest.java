@@ -10,8 +10,10 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @SpringBootTest
 @Slf4j
@@ -43,7 +45,27 @@ public class PointTest {
 
     @Test
     public void putPoint() throws Exception {
-        transPointService.putPureMemberPoint();
+        List<String> integralAccounts = new ArrayList<>();
+        /*
+          pcode-206261	泊美积分体系
+          pcode-206256	Za线上积分体系
+          pcode-206258	Za姬芮线下积分体系
+        */
+        integralAccounts.add("pcode-206256");
+        /*
+        * 平台id
+        * 19 会员
+        * 111 抖音
+        * 11 有赞
+        * 703212 泊美淘宝
+        * 703184 Za淘宝
+        * */
+        String platform = "11";
+
+        for (String integralAccount : integralAccounts){
+            transPointService.putPureMemberPoint(integralAccount,platform);
+
+        }
     }
 
 
@@ -52,11 +74,11 @@ public class PointTest {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        String year = "2023";
+        String year = "2024";
 
         Calendar cal = Calendar.getInstance();
 
-        for (int month = 3; month <= 3; month++) {
+        for (int month = 1; month <= 10; month++) {
             cal.set(Calendar.YEAR, Integer.parseInt(year));
             cal.set(Calendar.MONTH, month - 1);
             cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -94,7 +116,7 @@ public class PointTest {
                   pcode-206256	Za线上积分体系
                   pcode-206258	Za姬芮线下积分体系
                   */
-                String integralAccount = "pcode-206261";
+                String integralAccount = "pcode-206256";
                 transPointService.transMemberPoint(startDate,endDateOfWeek,integralAccount);
                 startDate = endDateOfWeek; // 修改为1分钟
 
@@ -103,9 +125,4 @@ public class PointTest {
         }
     }
 
-
-    @Test
-    public void point(){
-
-    }
 }
