@@ -311,7 +311,7 @@ public class TransPointServiceImpl implements TransPointService {
             }else if("pcode-206261".equals(integralAccount) && "703212".equals(platform)){
                 //泊美 淘宝 101130619
                 request.setShopId(101130619L);
-                request.setPlatform(703212);
+                request.setPlatform(800007);
             }else if("pcode-206256".equals(integralAccount) && "19".equals(platform)){
                 //Za会员
                 request.setShopId(101092685L);
@@ -321,6 +321,9 @@ public class TransPointServiceImpl implements TransPointService {
             }else if("pcode-206256".equals(integralAccount) && "11".equals(platform)){
                 //Za 有赞
                 request.setShopId(101130617L);
+            }else if("pcode-206256".equals(integralAccount) && "11".equals(platform)){
+                //Za 淘系
+                request.setShopId(101130616L);
             }
 
             ApiClient client = new ApiClientImpl(request);

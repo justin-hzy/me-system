@@ -51,7 +51,7 @@ public class PointTest {
           pcode-206256	Za线上积分体系
           pcode-206258	Za姬芮线下积分体系
         */
-        integralAccounts.add("pcode-206256");
+        integralAccounts.add("pcode-206261");
         /*
         * 平台id
         * 19 会员
@@ -60,7 +60,7 @@ public class PointTest {
         * 703212 泊美淘宝
         * 703184 Za淘宝
         * */
-        String platform = "11";
+        String platform = "703212";
 
         for (String integralAccount : integralAccounts){
             transPointService.putPureMemberPoint(integralAccount,platform);
