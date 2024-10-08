@@ -323,6 +323,7 @@ public class TransPointServiceImpl implements TransPointService {
                 request.setShopId(101130617L);
             }else if("pcode-206256".equals(integralAccount) && "703184".equals(platform)){
                 //Za 淘系
+                request.setPlatform(800006);
                 request.setShopId(101130616L);
             }
 
