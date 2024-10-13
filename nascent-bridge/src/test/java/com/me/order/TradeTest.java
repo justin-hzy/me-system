@@ -194,11 +194,11 @@ public class TradeTest {
     }
 
     @Test
-    public void putTradeByRange_1() throws Exception {
+    public void putTradeByRange_2022_12() throws Exception {
         Map<Long,Long> storeIdMap = storeIdMap();
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        shopQueryWrapper.likeRight("created","2023-12")
+        shopQueryWrapper.likeRight("created","2022-12")
                 //.in("shopId","100149660")
                 .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928")
                 .isNotNull("consignTime");
@@ -367,7 +367,7 @@ public class TradeTest {
 
                     TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
                     transBtnTradeFail.setIds(ids);
-                    transBtnTradeFail.setMessage(response.getMsg());
+                    transBtnTradeFail.setMessage(response.getBody());
                     transBtnTradeFailService.save(transBtnTradeFail);
                 }
                 else {
@@ -386,7 +386,7 @@ public class TradeTest {
 
                     TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
                     transBtnTradeFail.setIds(ids);
-                    transBtnTradeFail.setMessage(response.getMsg());
+                    transBtnTradeFail.setMessage(response.getBody());
                     transBtnTradeFailService.save(transBtnTradeFail);
                 }
             }
@@ -394,11 +394,11 @@ public class TradeTest {
     }
 
     @Test
-    public void putTradeByRange_2() throws Exception {
+    public void putTradeByRange_2023_02() throws Exception {
         Map<Long,Long> storeIdMap = storeIdMap();
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        shopQueryWrapper.likeRight("created","2023-10")
+        shopQueryWrapper.likeRight("created","2023-02")
                 //.in("shopId","100149660")
                 .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928")
                 .isNotNull("consignTime");
