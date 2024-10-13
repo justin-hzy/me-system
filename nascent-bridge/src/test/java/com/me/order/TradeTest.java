@@ -193,7 +193,7 @@ public class TradeTest {
         transOrderService.putFailTrade();
     }
 
-
+    @Test
     public void putTradeByRange_1() throws Exception {
         Map<Long,Long> storeIdMap = storeIdMap();
 
@@ -393,6 +393,205 @@ public class TradeTest {
         }
     }
 
+    @Test
+    public void putTradeByRange_2() throws Exception {
+        Map<Long,Long> storeIdMap = storeIdMap();
+
+        QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
+        shopQueryWrapper.likeRight("created","2023-10")
+                //.in("shopId","100149660")
+                .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928")
+                .isNotNull("consignTime");
+        List<Trade> trades = tradeService.list(shopQueryWrapper);
+
+        HashMap<Long,List<Trade>> tradeHashMap = new LinkedHashMap<>();
+        for (Trade trade : trades){
+            Long shopId = trade.getShopId();
+            if(tradeHashMap.containsKey(shopId)){
+                List<Trade> tradeList = tradeHashMap.get(shopId);
+                tradeList.add(trade);
+            }else {
+                List<Trade> tradeList = new ArrayList<>();
+                tradeList.add(trade);
+                tradeHashMap.put(shopId,tradeList);
+            }
+        }
+
+
+        Set<Long> keys = tradeHashMap.keySet();
+        for (long key : keys){
+            List<Trade> list = tradeHashMap.get(key);
+            int batchSize = 100; // 每次处理的数据量
+            int totalSize = list.size(); // 总数据量
+            //int totalSize = 1;
+            int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+
+            for (int i = 0; i < loopCount; i++) {
+                int start = i * batchSize; // 开始索引
+                int end = Math.min((i + 1) * batchSize, totalSize);
+
+                List<Trade> batchList = list.subList(start, end);
+                //log.info("batchList=" + batchList.toString());
+
+                List<TradeDetailVo> tradeDetailVoList = new ArrayList<>();
+                for (Trade trade : batchList) {
+                    Long id = trade.getId();
+                    log.info("id="+id);
+
+                    TradeDetailVo tradeDetailVo = new TradeDetailVo();
+                    BeanUtils.copyProperties(trade,tradeDetailVo);
+
+                    if(trade.getShippingType() == null){
+                        tradeDetailVo.setShippingType("free");
+                    }else {
+                        tradeDetailVo.setShippingType(trade.getShippingType());
+                    }
+                    tradeDetailVo.setRefundStatus(0);
+                    if(!"TRADE_CLOSED_BY_TAOBAO".equals(trade.getTradeStatus())){
+                        tradeDetailVo.setPayTime(trade.getPayTime());
+                    }
+                    tradeDetailVo.setIsCalIntegral(true);
+                    tradeDetailVo.setRealPointFee(null);
+                    tradeDetailVo.setSysCustomerId(null);
+                    tradeDetailVo.setNasOuid(trade.getOutNick());
+                    tradeDetailVo.setPlatform(null);
+                    tradeDetailVo.setReceiverPhone("");
+                    tradeDetailVo.setReceiverMobile("");
+                    tradeDetailVo.setDiscountFee(trade.getDiscountFee().abs());
+
+                    /*tradeDetailVo.setTotalFee(trade.getTotalFee());
+                    tradeDetailVo.setPayment(trade.getPayment());
+                    tradeDetailVo.setShippingType(trade.getShippingType());
+                    tradeDetailVo.setOutTradeId(trade.getOutTradeId());
+                    tradeDetailVo.setNasOuid(trade.getOutNick());
+                    tradeDetailVo.setTradeStatus(trade.getTradeStatus());
+                    tradeDetailVo.setTradeType(trade.getTradeType());
+                    tradeDetailVo.setCreated(trade.getCreated());
+                    tradeDetailVo.setNum(trade.getNum());
+                    tradeDetailVo.setConsignTime(trade.getConsignTime());
+                    tradeDetailVo.setPayType(trade.getPayType());
+                    tradeDetailVo.setTradeFrom(trade.getTradeFrom());
+                    tradeDetailVo.setEndTime(trade.getEndTime());*/
+
+
+                    List<OrderDetailVo> orderDetailVos = new ArrayList<>();
+
+                    QueryWrapper<Order> orderQuery = new QueryWrapper<>();
+                    orderQuery.eq("mainid",id);
+                    List<Order> existOrders = orderService.list(orderQuery);
+                    if(CollUtil.isNotEmpty(existOrders)){
+                        for (Order order : existOrders){
+                            OrderDetailVo orderDetailVo  = new OrderDetailVo();
+                            BeanUtils.copyProperties(order,orderDetailVo);
+                            orderDetailVo.setOrderDiscountFee(orderDetailVo.getOrderDiscountFee().abs());
+                            /*orderDetailVo.setOutOrderId(order.getOutOrderId());
+                            orderDetailVo.setOrderStatus(order.getOrderStatus());
+                            orderDetailVo.setTitle(order.getTitle());
+                            orderDetailVo.setOutItemId(order.getOutItemId());
+                            orderDetailVo.setOrderNum(order.getOrderNum());
+                            orderDetailVo.setOrderTotalFee(order.getOrderTotalFee());
+                            orderDetailVo.setOrderPayment(order.getOrderPayment());
+                            BigDecimal bigDecimal_1 = new BigDecimal(order.getOrderPrice());
+                            orderDetailVo.setOrderPrice(bigDecimal_1);*/
+                            orderDetailVos.add(orderDetailVo);
+                        }
+                        tradeDetailVo.setOrderDetailVoList(orderDetailVos);
+                    }
+
+                    List<PromotionDetailVo> promotionDetailVos = new ArrayList<>();
+
+                    QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
+                    promotionQuery.eq("mainid",id);
+                    List<Promotion> existPromotions = promotionService.list(promotionQuery);
+
+                    if (CollUtil.isNotEmpty(existPromotions)){
+                        for (Promotion promotion : existPromotions){
+                            PromotionDetailVo promotionDetailVo = new PromotionDetailVo();
+                            BeanUtils.copyProperties(promotion,promotionDetailVo);
+                            /*if(StrUtil.isEmpty(promotionDetailVo.getPromotionToolId())){
+                                promotionDetailVo.setPromotionToolId("优惠卷");
+                            }*/
+
+                            promotionDetailVo.setPromotionToolId(null);
+
+                            promotionDetailVos.add(promotionDetailVo);
+                        }
+                        tradeDetailVo.setPromotionDetailVoList(promotionDetailVos);
+                    }
+
+                    tradeDetailVoList.add(tradeDetailVo);
+                }
+
+                log.info(tradeDetailVoList.size()+"");
+                TradeSaveRequest request = new TradeSaveRequest();
+                request.setServerUrl(nascentConfig.getBtnServerUrl());
+                request.setAppKey(nascentConfig.getBtnAppKey());
+                request.setAppSecret(nascentConfig.getBtnAppSerect());
+                request.setGroupId(nascentConfig.getBtnGroupID());
+
+                QueryWrapper<Token> tokenQuery = new QueryWrapper<>();
+                tokenQuery.eq("name","btn");
+                List<Token> tokens = tokenService.list(tokenQuery);
+
+                request.setAccessToken(tokens.get(0).getToken());
+
+                log.info("悦江shopid="+key);
+                log.info("贝泰妮shopid="+storeIdMap.get(key));
+
+                request.setShopId(storeIdMap.get(key));
+                request.setTradeDetailVoList(tradeDetailVoList);
+
+                ApiClient client = new ApiClientImpl(request);
+
+                TradeSaveResponse response = client.execute(request);
+                log.info(response.getCode());
+                log.info(response.getMsg());
+                if("200".equals(response.getCode())){
+                    log.info(response.getBody());
+                }else if("60001".equals(response.getCode()) || "103".equals(response.getCode())){
+                    UpdateWrapper<Token> updateWrapper = new UpdateWrapper<>();
+                    updateWrapper.eq("name","btn").set("token",tokenService.getBtnToken());
+                    tokenService.update(updateWrapper);
+
+                    String ids = "";
+                    for (int j = 0 ; j<batchList.size();j++){
+                        Trade trade = batchList.get(j);
+                        Long id = trade.getId();
+
+                        if(j == (batchList.size()-1)){
+                            ids = ids+String.valueOf(id);
+                        }else {
+                            ids = ids+String.valueOf(id)+",";
+                        }
+                    }
+
+                    TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
+                    transBtnTradeFail.setIds(ids);
+                    transBtnTradeFail.setMessage(response.getMsg());
+                    transBtnTradeFailService.save(transBtnTradeFail);
+                }
+                else {
+                    log.info(response.getBody());
+                    String ids = "";
+                    for (int j = 0 ; j<batchList.size();j++){
+                        Trade trade = batchList.get(j);
+                        Long id = trade.getId();
+
+                        if(j == (batchList.size()-1)){
+                            ids = ids+String.valueOf(id);
+                        }else {
+                            ids = ids+String.valueOf(id)+",";
+                        }
+                    }
+
+                    TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
+                    transBtnTradeFail.setIds(ids);
+                    transBtnTradeFail.setMessage(response.getMsg());
+                    transBtnTradeFailService.save(transBtnTradeFail);
+                }
+            }
+        }
+    }
     public static Map<Long,Long> storeIdMap(){
 
         Map<Long, Long> storeIdMap = new HashMap<>();
