@@ -1,6 +1,7 @@
 package com.me.order;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.me.nascent.common.config.NascentConfig;
@@ -166,11 +167,11 @@ public class TradeTest {
     }
 
     @Test
-    public void putTradeByRange_2024_09() throws Exception {
+    public void putTradeByRange_2024_07() throws Exception {
         Map<Long,Long> storeIdMap = storeIdMap();
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        shopQueryWrapper.likeRight("created","2024-09")
+        shopQueryWrapper.likeRight("created","2024-07")
                 //.in("shopId","100149660")
                 .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928");
         List<Trade> trades = tradeService.list(shopQueryWrapper);
@@ -253,7 +254,7 @@ public class TradeTest {
                             OrderDetailVo orderDetailVo  = new OrderDetailVo();
                             BeanUtils.copyProperties(order,orderDetailVo);
                             orderDetailVo.setOrderDiscountFee(orderDetailVo.getOrderDiscountFee().abs());
-                            if(order.getTitle().equals(null)){
+                            if(StrUtil.isEmpty(order.getTitle())){
                                 orderDetailVo.setTitle("-");
                             }
                             orderDetailVos.add(orderDetailVo);
@@ -357,11 +358,11 @@ public class TradeTest {
     }
 
     @Test
-    public void putTradeByRange_2024_08() throws Exception {
+    public void putTradeByRange_2024_06() throws Exception {
         Map<Long,Long> storeIdMap = storeIdMap();
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        shopQueryWrapper.likeRight("created","2024-08")
+        shopQueryWrapper.likeRight("created","2024-06")
                 //.in("shopId","100149660")
                 .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928");
         List<Trade> trades = tradeService.list(shopQueryWrapper);
@@ -444,7 +445,7 @@ public class TradeTest {
                             OrderDetailVo orderDetailVo  = new OrderDetailVo();
                             BeanUtils.copyProperties(order,orderDetailVo);
                             orderDetailVo.setOrderDiscountFee(orderDetailVo.getOrderDiscountFee().abs());
-                            if(order.getTitle().equals(null)){
+                            if(StrUtil.isEmpty(order.getTitle())){
                                 orderDetailVo.setTitle("-");
                             }
                             orderDetailVos.add(orderDetailVo);
