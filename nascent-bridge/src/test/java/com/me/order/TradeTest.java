@@ -145,34 +145,6 @@ public class TradeTest {
             }
 
         }
-
-
-
-        /*try {
-            Date startDate = sdf.parse("2023-12-01 00:00:00");
-            Date endDate = sdf.parse("2023-12-31 17:59:59");
-
-            while (startDate.before(endDate)) {
-                Date endDateOfWeek = new Date(startDate.getTime() + 30 * 60 * 1000); // 修改为30分钟
-                if (endDateOfWeek.after(endDate)) {
-                    endDateOfWeek = endDate;
-                }
-
-                String startStr = sdf.format(startDate);
-                String endStr = sdf.format(endDateOfWeek);
-                System.out.println("同步订单数据: " + startStr + " 到 " + endStr);
-
-                transOrderService.transOrder(startDate, endDateOfWeek);
-
-                startDate = endDateOfWeek; // 修改为1分钟
-                //System.out.println("下一个开启时间:" + startDate);
-            }
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }*/
-
-
-
     }
 
 
@@ -194,14 +166,13 @@ public class TradeTest {
     }
 
     @Test
-    public void putTradeByRange_2022_12() throws Exception {
+    public void putTradeByRange_2024_09() throws Exception {
         Map<Long,Long> storeIdMap = storeIdMap();
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        shopQueryWrapper.likeRight("created","2022-12")
+        shopQueryWrapper.likeRight("created","2024-09")
                 //.in("shopId","100149660")
-                .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928")
-                .isNotNull("consignTime");
+                .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928");
         List<Trade> trades = tradeService.list(shopQueryWrapper);
 
         HashMap<Long,List<Trade>> tradeHashMap = new LinkedHashMap<>();
@@ -231,7 +202,6 @@ public class TradeTest {
                 int end = Math.min((i + 1) * batchSize, totalSize);
 
                 List<Trade> batchList = list.subList(start, end);
-                //log.info("batchList=" + batchList.toString());
 
                 List<TradeDetailVo> tradeDetailVoList = new ArrayList<>();
                 for (Trade trade : batchList) {
@@ -250,6 +220,16 @@ public class TradeTest {
                     if(!"TRADE_CLOSED_BY_TAOBAO".equals(trade.getTradeStatus())){
                         tradeDetailVo.setPayTime(trade.getPayTime());
                     }
+
+                    if("TRADE_FINISHED".equals(trade.getTradeStatus())){
+                        tradeDetailVo.setConsignTime(tradeDetailVo.getPayTime());
+                    }
+
+                    if("TRADE_CLOSED".equals(trade.getTradeStatus())){
+                        tradeDetailVo.setPayTime(trade.getCreated());
+                    }
+
+
                     tradeDetailVo.setIsCalIntegral(true);
                     tradeDetailVo.setRealPointFee(null);
                     tradeDetailVo.setSysCustomerId(null);
@@ -258,20 +238,9 @@ public class TradeTest {
                     tradeDetailVo.setReceiverPhone("");
                     tradeDetailVo.setReceiverMobile("");
                     tradeDetailVo.setDiscountFee(trade.getDiscountFee().abs());
+                    tradeDetailVo.setAvailableConfirmFee(null);
 
-                    /*tradeDetailVo.setTotalFee(trade.getTotalFee());
-                    tradeDetailVo.setPayment(trade.getPayment());
-                    tradeDetailVo.setShippingType(trade.getShippingType());
-                    tradeDetailVo.setOutTradeId(trade.getOutTradeId());
-                    tradeDetailVo.setNasOuid(trade.getOutNick());
-                    tradeDetailVo.setTradeStatus(trade.getTradeStatus());
-                    tradeDetailVo.setTradeType(trade.getTradeType());
-                    tradeDetailVo.setCreated(trade.getCreated());
-                    tradeDetailVo.setNum(trade.getNum());
-                    tradeDetailVo.setConsignTime(trade.getConsignTime());
-                    tradeDetailVo.setPayType(trade.getPayType());
-                    tradeDetailVo.setTradeFrom(trade.getTradeFrom());
-                    tradeDetailVo.setEndTime(trade.getEndTime());*/
+
 
 
                     List<OrderDetailVo> orderDetailVos = new ArrayList<>();
@@ -284,15 +253,9 @@ public class TradeTest {
                             OrderDetailVo orderDetailVo  = new OrderDetailVo();
                             BeanUtils.copyProperties(order,orderDetailVo);
                             orderDetailVo.setOrderDiscountFee(orderDetailVo.getOrderDiscountFee().abs());
-                            /*orderDetailVo.setOutOrderId(order.getOutOrderId());
-                            orderDetailVo.setOrderStatus(order.getOrderStatus());
-                            orderDetailVo.setTitle(order.getTitle());
-                            orderDetailVo.setOutItemId(order.getOutItemId());
-                            orderDetailVo.setOrderNum(order.getOrderNum());
-                            orderDetailVo.setOrderTotalFee(order.getOrderTotalFee());
-                            orderDetailVo.setOrderPayment(order.getOrderPayment());
-                            BigDecimal bigDecimal_1 = new BigDecimal(order.getOrderPrice());
-                            orderDetailVo.setOrderPrice(bigDecimal_1);*/
+                            if(order.getTitle().equals(null)){
+                                orderDetailVo.setTitle("-");
+                            }
                             orderDetailVos.add(orderDetailVo);
                         }
                         tradeDetailVo.setOrderDetailVoList(orderDetailVos);
@@ -394,14 +357,13 @@ public class TradeTest {
     }
 
     @Test
-    public void putTradeByRange_2022_11() throws Exception {
+    public void putTradeByRange_2024_08() throws Exception {
         Map<Long,Long> storeIdMap = storeIdMap();
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        shopQueryWrapper.likeRight("created","2022-11")
+        shopQueryWrapper.likeRight("created","2024-08")
                 //.in("shopId","100149660")
-                .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928")
-                .isNotNull("consignTime");
+                .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928");
         List<Trade> trades = tradeService.list(shopQueryWrapper);
 
         HashMap<Long,List<Trade>> tradeHashMap = new LinkedHashMap<>();
@@ -431,7 +393,6 @@ public class TradeTest {
                 int end = Math.min((i + 1) * batchSize, totalSize);
 
                 List<Trade> batchList = list.subList(start, end);
-                //log.info("batchList=" + batchList.toString());
 
                 List<TradeDetailVo> tradeDetailVoList = new ArrayList<>();
                 for (Trade trade : batchList) {
@@ -450,6 +411,16 @@ public class TradeTest {
                     if(!"TRADE_CLOSED_BY_TAOBAO".equals(trade.getTradeStatus())){
                         tradeDetailVo.setPayTime(trade.getPayTime());
                     }
+
+                    if("TRADE_FINISHED".equals(trade.getTradeStatus())){
+                        tradeDetailVo.setConsignTime(tradeDetailVo.getPayTime());
+                    }
+
+                    if("TRADE_CLOSED".equals(trade.getTradeStatus())){
+                        tradeDetailVo.setPayTime(trade.getCreated());
+                    }
+
+
                     tradeDetailVo.setIsCalIntegral(true);
                     tradeDetailVo.setRealPointFee(null);
                     tradeDetailVo.setSysCustomerId(null);
@@ -458,20 +429,9 @@ public class TradeTest {
                     tradeDetailVo.setReceiverPhone("");
                     tradeDetailVo.setReceiverMobile("");
                     tradeDetailVo.setDiscountFee(trade.getDiscountFee().abs());
+                    tradeDetailVo.setAvailableConfirmFee(null);
 
-                    /*tradeDetailVo.setTotalFee(trade.getTotalFee());
-                    tradeDetailVo.setPayment(trade.getPayment());
-                    tradeDetailVo.setShippingType(trade.getShippingType());
-                    tradeDetailVo.setOutTradeId(trade.getOutTradeId());
-                    tradeDetailVo.setNasOuid(trade.getOutNick());
-                    tradeDetailVo.setTradeStatus(trade.getTradeStatus());
-                    tradeDetailVo.setTradeType(trade.getTradeType());
-                    tradeDetailVo.setCreated(trade.getCreated());
-                    tradeDetailVo.setNum(trade.getNum());
-                    tradeDetailVo.setConsignTime(trade.getConsignTime());
-                    tradeDetailVo.setPayType(trade.getPayType());
-                    tradeDetailVo.setTradeFrom(trade.getTradeFrom());
-                    tradeDetailVo.setEndTime(trade.getEndTime());*/
+
 
 
                     List<OrderDetailVo> orderDetailVos = new ArrayList<>();
@@ -484,15 +444,9 @@ public class TradeTest {
                             OrderDetailVo orderDetailVo  = new OrderDetailVo();
                             BeanUtils.copyProperties(order,orderDetailVo);
                             orderDetailVo.setOrderDiscountFee(orderDetailVo.getOrderDiscountFee().abs());
-                            /*orderDetailVo.setOutOrderId(order.getOutOrderId());
-                            orderDetailVo.setOrderStatus(order.getOrderStatus());
-                            orderDetailVo.setTitle(order.getTitle());
-                            orderDetailVo.setOutItemId(order.getOutItemId());
-                            orderDetailVo.setOrderNum(order.getOrderNum());
-                            orderDetailVo.setOrderTotalFee(order.getOrderTotalFee());
-                            orderDetailVo.setOrderPayment(order.getOrderPayment());
-                            BigDecimal bigDecimal_1 = new BigDecimal(order.getOrderPrice());
-                            orderDetailVo.setOrderPrice(bigDecimal_1);*/
+                            if(order.getTitle().equals(null)){
+                                orderDetailVo.setTitle("-");
+                            }
                             orderDetailVos.add(orderDetailVo);
                         }
                         tradeDetailVo.setOrderDetailVoList(orderDetailVos);
@@ -592,6 +546,12 @@ public class TradeTest {
             }
         }
     }
+
+
+
+
+
+
     public static Map<Long,Long> storeIdMap(){
 
         Map<Long, Long> storeIdMap = new HashMap<>();

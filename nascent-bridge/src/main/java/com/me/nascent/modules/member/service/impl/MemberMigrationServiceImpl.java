@@ -155,13 +155,14 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
 
         List<Long> shopIds = new ArrayList<>();
         /*泊美 抖音*/
-        //shopIds.add(100149663L);
+        shopIds.add(100149663L);
 
         //泊美有赞
-        shopIds.add(100150166L);
+        //shopIds.add(100150166L);
         //会员中心 平台id 19
-//        shopIds.add(100156928L);
-//        shopIds.add(100150083L);
+        //泊美会员
+        //shopIds.add(100156928L);
+        //shopIds.add(100150083L);
         //淘宝 100149660
         //shopIds.add(100149660L);
         //抖店 100149661 平台id 111 改执行sql
@@ -213,8 +214,14 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
 
                     CustomerSaveInfo customerSaveInfo = new CustomerSaveInfo();
                     BeanUtils.copyProperties(queryMemberVo,customerSaveInfo);
-                    customerSaveInfo.setBindMobile("");
-                    customerSaveInfo.setMobile("");
+                    if (queryMemberVo.getMobile() != null){
+                        if(queryMemberVo.getMobile().length() == 10){
+                            customerSaveInfo.setBindMobile("");
+                        }else {
+                            customerSaveInfo.setBindMobile(queryMemberVo.getMobile());
+                        }
+                    }
+
                     if (customerSaveInfo.getCustomerName().length()>100){
                         customerSaveInfo.setCustomerName("");
                     }
@@ -273,7 +280,7 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
 
                 BatchCustomerSaveResponse response = apiClient.execute(request);
                 if ("200".equals(response.getCode())){
-                    log.info(response.getMsg());
+                    log.info(response.getBody());
                 }else if("500".equals(response.getCode())){
                     log.info(response.getBody());
                     boolean flag = true;
@@ -340,8 +347,12 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
 
                     CustomerSaveInfo customerSaveInfo = new CustomerSaveInfo();
                     BeanUtils.copyProperties(queryMemberVo,customerSaveInfo);
-                    customerSaveInfo.setBindMobile("");
-                    customerSaveInfo.setMobile("");
+                    if(customerSaveInfo.getMobile().length()==0){
+                        customerSaveInfo.setBindMobile("");
+                    }else {
+                        customerSaveInfo.setBindMobile(queryMemberVo.getMobile());
+                    }
+
                     if (customerSaveInfo.getCustomerName().length()>100){
                         customerSaveInfo.setCustomerName("");
                     }
@@ -558,6 +569,33 @@ public class MemberMigrationServiceImpl implements MemberMigrationService {
         storeIdMap.put(100149660L, 101130616L);
         storeIdMap.put(100150083L, 101092685L);
         storeIdMap.put(100150165L,101130617L);
+        storeIdMap.put(100150189L,101130569L);
+        storeIdMap.put(100150190L,101130570L);
+        storeIdMap.put(100150170L,101130553L);
+        storeIdMap.put(100150186L,101130566L);
+        storeIdMap.put(100150193L,101155859L);
+        storeIdMap.put(100150203L,101130582L);
+        storeIdMap.put(100150185L,101155858L);
+        storeIdMap.put(100150196L,101130575L);
+        storeIdMap.put(100150195L,101130574L);
+        storeIdMap.put(100150191L,101130571L);
+        storeIdMap.put(100150187L,101130567L);
+        storeIdMap.put(100150192L,101130572L);
+        storeIdMap.put(100150188L,101130568L);
+        storeIdMap.put(100150202L,101130581L);
+        storeIdMap.put(100150201L,101130580L);
+        storeIdMap.put(100186880L,101130543L);
+        storeIdMap.put(100150204L,101130583L);
+        storeIdMap.put(100150231L,101130607L);
+        storeIdMap.put(100150215L,101130594L);
+        storeIdMap.put(100150207L,101130586L);
+        storeIdMap.put(100150194L,101130573L);
+        storeIdMap.put(100150220L,101155860L);
+        storeIdMap.put(100150217L,101130596L);
+        storeIdMap.put(100150216L,101130595L);
+        storeIdMap.put(100150206L,101130585L);
+        storeIdMap.put(100150200L,101130579L);
+
         return storeIdMap;
     }
 }

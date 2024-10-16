@@ -227,10 +227,15 @@ public class TransOrderServiceImpl implements TransOrderService {
         Map<Long,Long> storeIdMap = storeIdMap();
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        shopQueryWrapper.likeRight("created","2023-04").in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928");
+        shopQueryWrapper
+                //.likeRight("created","2021-06")
+                //.in("shopId","100149660")
+                .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928")
+                .in("outTradeId","1318866636481989787");
+
         List<Trade> trades = tradeService.list(shopQueryWrapper);
 
-        HashMap<Long,List<Trade>> tradeHashMap = new HashMap<>();
+        HashMap<Long,List<Trade>> tradeHashMap = new LinkedHashMap<>();
         for (Trade trade : trades){
             Long shopId = trade.getShopId();
             if(tradeHashMap.containsKey(shopId)){
@@ -242,121 +247,184 @@ public class TransOrderServiceImpl implements TransOrderService {
                 tradeHashMap.put(shopId,tradeList);
             }
         }
+
+
         Set<Long> keys = tradeHashMap.keySet();
-        /*
-
-        int sum = 0;
-        for (Long key : keys){
+        for (long key : keys){
             List<Trade> list = tradeHashMap.get(key);
-            log.info("key="+key+",list="+list.size());
-            sum = sum + list.size();
-        }
-        log.info(sum+"");*/
+            int batchSize = 100; // 每次处理的数据量
+            int totalSize = list.size(); // 总数据量
+            //int totalSize = 1;
+            int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
 
-        for (Trade trade : trades){
-            List<TradeDetailVo> tradeDetailVoList = new ArrayList<>();
-            Long id = trade.getId();
-            log.info("id="+id);
+            for (int i = 0; i < loopCount; i++) {
+                int start = i * batchSize; // 开始索引
+                int end = Math.min((i + 1) * batchSize, totalSize);
+
+                List<Trade> batchList = list.subList(start, end);
+                //log.info("batchList=" + batchList.toString());
+
+                List<TradeDetailVo> tradeDetailVoList = new ArrayList<>();
+                for (Trade trade : batchList) {
+                    Long id = trade.getId();
+                    log.info("id="+id);
+
+                    TradeDetailVo tradeDetailVo = new TradeDetailVo();
+                    BeanUtils.copyProperties(trade,tradeDetailVo);
+
+                    if(trade.getShippingType() == null){
+                        tradeDetailVo.setShippingType("free");
+                    }else {
+                        tradeDetailVo.setShippingType(trade.getShippingType());
+                    }
+                    tradeDetailVo.setRefundStatus(0);
+                    if(!"TRADE_CLOSED_BY_TAOBAO".equals(trade.getTradeStatus())){
+                        tradeDetailVo.setPayTime(trade.getPayTime());
+                    }
+
+                    if("TRADE_CLOSED".equals(trade.getTradeStatus())){
+                        tradeDetailVo.setPayTime(trade.getCreated());
+                    }
+
+                    tradeDetailVo.setIsCalIntegral(true);
+                    tradeDetailVo.setRealPointFee(null);
+                    tradeDetailVo.setSysCustomerId(null);
+                    tradeDetailVo.setNasOuid(trade.getOutNick());
+                    tradeDetailVo.setPlatform(null);
+                    tradeDetailVo.setReceiverPhone("");
+                    tradeDetailVo.setReceiverMobile("");
+                    tradeDetailVo.setDiscountFee(trade.getDiscountFee().abs());
+
+                    /*tradeDetailVo.setTotalFee(trade.getTotalFee());
+                    tradeDetailVo.setPayment(trade.getPayment());
+                    tradeDetailVo.setShippingType(trade.getShippingType());
+                    tradeDetailVo.setOutTradeId(trade.getOutTradeId());
+                    tradeDetailVo.setNasOuid(trade.getOutNick());
+                    tradeDetailVo.setTradeStatus(trade.getTradeStatus());
+                    tradeDetailVo.setTradeType(trade.getTradeType());
+                    tradeDetailVo.setCreated(trade.getCreated());
+                    tradeDetailVo.setNum(trade.getNum());
+                    tradeDetailVo.setConsignTime(trade.getConsignTime());
+                    tradeDetailVo.setPayType(trade.getPayType());
+                    tradeDetailVo.setTradeFrom(trade.getTradeFrom());
+                    tradeDetailVo.setEndTime(trade.getEndTime());*/
 
 
-            TradeDetailVo tradeDetailVo = new TradeDetailVo();
-            /*BeanUtils.copyProperties(trade,tradeDetailVo);*/
-            tradeDetailVo.setTotalFee(trade.getTotalFee());
-            tradeDetailVo.setPayment(trade.getPayment());
-            tradeDetailVo.setShippingType(trade.getShippingType());
-            if(trade.getShippingType() == null){
-                tradeDetailVo.setShippingType("free");
-            }else {
-                tradeDetailVo.setShippingType(trade.getShippingType());
-            }
-            tradeDetailVo.setOutTradeId(trade.getOutTradeId());
-            tradeDetailVo.setNasOuid(trade.getOutNick());
-            tradeDetailVo.setTradeStatus(trade.getTradeStatus());
-            tradeDetailVo.setTradeType(trade.getTradeType());
-            tradeDetailVo.setCreated(trade.getCreated());
-            tradeDetailVo.setNum(trade.getNum());
-            tradeDetailVo.setRefundStatus(0);
-            if(!"TRADE_CLOSED_BY_TAOBAO".equals(trade.getTradeStatus())){
-                tradeDetailVo.setPayTime(trade.getPayTime());
-            }
-            tradeDetailVo.setConsignTime(trade.getConsignTime());
-            tradeDetailVo.setPayType(trade.getPayType());
-            tradeDetailVo.setTradeFrom(trade.getTradeFrom());
-            tradeDetailVo.setEndTime(trade.getEndTime());
-            tradeDetailVo.setIsCalIntegral(true);
-                    /*tradeDetailVo.setRealPointFee(null);
-                    tradeDetailVo.setSysCustomerId(null);*/
+                    List<OrderDetailVo> orderDetailVos = new ArrayList<>();
 
+                    QueryWrapper<Order> orderQuery = new QueryWrapper<>();
+                    orderQuery.eq("mainid",id);
+                    List<Order> existOrders = orderService.list(orderQuery);
+                    if(CollUtil.isNotEmpty(existOrders)){
+                        for (Order order : existOrders){
+                            OrderDetailVo orderDetailVo  = new OrderDetailVo();
+                            BeanUtils.copyProperties(order,orderDetailVo);
+                            orderDetailVo.setOrderDiscountFee(orderDetailVo.getOrderDiscountFee().abs());
+                            /*orderDetailVo.setOutOrderId(order.getOutOrderId());
+                            orderDetailVo.setOrderStatus(order.getOrderStatus());
+                            orderDetailVo.setTitle(order.getTitle());
+                            orderDetailVo.setOutItemId(order.getOutItemId());
+                            orderDetailVo.setOrderNum(order.getOrderNum());
+                            orderDetailVo.setOrderTotalFee(order.getOrderTotalFee());
+                            orderDetailVo.setOrderPayment(order.getOrderPayment());
+                            BigDecimal bigDecimal_1 = new BigDecimal(order.getOrderPrice());
+                            orderDetailVo.setOrderPrice(bigDecimal_1);*/
+                            orderDetailVos.add(orderDetailVo);
+                        }
+                        tradeDetailVo.setOrderDetailVoList(orderDetailVos);
+                    }
 
-            List<OrderDetailVo> orderDetailVos = new ArrayList<>();
+                    List<PromotionDetailVo> promotionDetailVos = new ArrayList<>();
 
-            QueryWrapper<Order> orderQuery = new QueryWrapper<>();
-            orderQuery.eq("mainid",id);
-            List<Order> existOrders = orderService.list(orderQuery);
-            if(CollUtil.isNotEmpty(existOrders)){
-                for (Order order : existOrders){
-                    OrderDetailVo orderDetailVo  = new OrderDetailVo();
-                    orderDetailVo.setOutOrderId(order.getOutOrderId());
-                    orderDetailVo.setOrderStatus(order.getOrderStatus());
-                    orderDetailVo.setTitle(order.getTitle());
-                    orderDetailVo.setOutItemId(order.getOutItemId());
-                    orderDetailVo.setOrderNum(order.getOrderNum());
-                    orderDetailVo.setOrderTotalFee(order.getOrderTotalFee());
-                    orderDetailVo.setOrderPayment(order.getOrderPayment());
-                    orderDetailVo.setOrderPrice(order.getOrderPrice());
+                    QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
+                    promotionQuery.eq("mainid",id);
+                    List<Promotion> existPromotions = promotionService.list(promotionQuery);
 
-                    orderDetailVos.add(orderDetailVo);
-                }
-                tradeDetailVo.setOrderDetailVoList(orderDetailVos);
-
-            }
-
-            List<PromotionDetailVo> promotionDetailVos = new ArrayList<>();
-
-            QueryWrapper<Promotion> promotionQuery = new QueryWrapper<>();
-            promotionQuery.eq("mainid",id);
-            List<Promotion> existPromotions = promotionService.list(promotionQuery);
-
-            if (CollUtil.isNotEmpty(existPromotions)){
-                for (Promotion promotion : existPromotions){
-                    PromotionDetailVo promotionDetailVo = new PromotionDetailVo();
-                    BeanUtils.copyProperties(promotion,promotionDetailVo);
+                    if (CollUtil.isNotEmpty(existPromotions)){
+                        for (Promotion promotion : existPromotions){
+                            PromotionDetailVo promotionDetailVo = new PromotionDetailVo();
+                            BeanUtils.copyProperties(promotion,promotionDetailVo);
                             /*if(StrUtil.isEmpty(promotionDetailVo.getPromotionToolId())){
                                 promotionDetailVo.setPromotionToolId("优惠卷");
                             }*/
 
-                    promotionDetailVo.setPromotionToolId(null);
+                            promotionDetailVo.setPromotionToolId(null);
 
-                    promotionDetailVos.add(promotionDetailVo);
+                            promotionDetailVos.add(promotionDetailVo);
+                        }
+                        tradeDetailVo.setPromotionDetailVoList(promotionDetailVos);
+                    }
+
+                    tradeDetailVoList.add(tradeDetailVo);
                 }
-                tradeDetailVo.setPromotionDetailVoList(promotionDetailVos);
-            }
-            tradeDetailVoList.add(tradeDetailVo);
 
-            log.info(tradeDetailVoList.size()+"");
-            TradeSaveRequest request = new TradeSaveRequest();
-            request.setServerUrl(nascentConfig.getBtnServerUrl());
-            request.setAppKey(nascentConfig.getBtnAppKey());
-            request.setAppSecret(nascentConfig.getBtnAppSerect());
-            request.setGroupId(nascentConfig.getBtnGroupID());
-            request.setAccessToken(tokenService.getBtnToken());
+                log.info(tradeDetailVoList.size()+"");
+                TradeSaveRequest request = new TradeSaveRequest();
+                request.setServerUrl(nascentConfig.getBtnServerUrl());
+                request.setAppKey(nascentConfig.getBtnAppKey());
+                request.setAppSecret(nascentConfig.getBtnAppSerect());
+                request.setGroupId(nascentConfig.getBtnGroupID());
 
-            request.setShopId(storeIdMap.get(trade.getShopId()));
-            request.setTradeDetailVoList(tradeDetailVoList);
+                QueryWrapper<Token> tokenQuery = new QueryWrapper<>();
+                tokenQuery.eq("name","btn");
+                List<Token> tokens = tokenService.list(tokenQuery);
 
-            ApiClient client = new ApiClientImpl(request);
+                request.setAccessToken(tokens.get(0).getToken());
 
-            TradeSaveResponse response = client.execute(request);
+                log.info("悦江shopid="+key);
+                log.info("贝泰妮shopid="+storeIdMap.get(key));
 
-            if("200".equals(response.getCode())){
-                log.info(response.getBody());
-            }else {
-                log.info(response.getBody());
+                request.setShopId(storeIdMap.get(key));
+                request.setTradeDetailVoList(tradeDetailVoList);
 
-                TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
-                transBtnTradeFail.setIds(String.valueOf(trade.getId()));
-                transBtnTradeFail.setMessage(response.getMsg());
-                transBtnTradeFailService.save(transBtnTradeFail);
+                ApiClient client = new ApiClientImpl(request);
+
+                TradeSaveResponse response = client.execute(request);
+                log.info(response.getCode());
+                log.info(response.getMsg());
+                if("200".equals(response.getCode())){
+                    log.info(response.getBody());
+                }else if("60001".equals(response.getCode()) || "103".equals(response.getCode())){
+                    UpdateWrapper<Token> updateWrapper = new UpdateWrapper<>();
+                    updateWrapper.eq("name","btn").set("token",tokenService.getBtnToken());
+                    tokenService.update(updateWrapper);
+
+                    String ids = "";
+                    for (int j = 0 ; j<batchList.size();j++){
+                        Trade trade = batchList.get(j);
+                        Long id = trade.getId();
+
+                        if(j == (batchList.size()-1)){
+                            ids = ids+String.valueOf(id);
+                        }else {
+                            ids = ids+String.valueOf(id)+",";
+                        }
+                    }
+
+                    TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
+                    transBtnTradeFail.setIds(ids);
+                    transBtnTradeFail.setMessage(response.getBody());
+                    transBtnTradeFailService.save(transBtnTradeFail);
+                }
+                else {
+                    log.info(response.getBody());
+                    String ids = "";
+                    for (int j = 0 ; j<batchList.size();j++){
+                        Trade trade = batchList.get(j);
+                        Long id = trade.getId();
+
+                        if(j == (batchList.size()-1)){
+                            ids = ids+String.valueOf(id);
+                        }else {
+                            ids = ids+String.valueOf(id)+",";
+                        }
+                    }
+
+                    TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
+                    transBtnTradeFail.setIds(ids);
+                    transBtnTradeFail.setMessage(response.getBody());
+                    transBtnTradeFailService.save(transBtnTradeFail);
+                }
             }
         }
 
@@ -367,7 +435,8 @@ public class TransOrderServiceImpl implements TransOrderService {
         Map<Long,Long> storeIdMap = storeIdMap();
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        shopQueryWrapper.likeRight("created","2023-03")
+        shopQueryWrapper
+                .likeRight("created","2024-05")
                 //.in("shopId","100149660")
                 .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928")
                 .isNotNull("consignTime");
@@ -390,7 +459,7 @@ public class TransOrderServiceImpl implements TransOrderService {
         Set<Long> keys = tradeHashMap.keySet();
         for (long key : keys){
             List<Trade> list = tradeHashMap.get(key);
-            int batchSize = 100; // 每次处理的数据量
+            int batchSize = 1; // 每次处理的数据量
             int totalSize = list.size(); // 总数据量
             //int totalSize = 1;
             int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
@@ -517,6 +586,7 @@ public class TransOrderServiceImpl implements TransOrderService {
                 log.info(response.getMsg());
                 if("200".equals(response.getCode())){
                     log.info(response.getBody());
+                    log.info("进入下次循环");
                 }else if("60001".equals(response.getCode()) || "103".equals(response.getCode())){
                     UpdateWrapper<Token> updateWrapper = new UpdateWrapper<>();
                     updateWrapper.eq("name","btn").set("token",tokenService.getBtnToken());
@@ -569,8 +639,11 @@ public class TransOrderServiceImpl implements TransOrderService {
     public void putFailTrade() throws Exception {
 
         Map<Long,Long> storeIdMap = storeIdMap();
+        QueryWrapper<TransBtnTradeFail> transBtnTradeFailQuery = new QueryWrapper<>();
+        transBtnTradeFailQuery.isNull("is_finish").eq("ids","2932036,2932034,2932050,2932060,2932046,2932058,2932064,2932044,2932039,2932072,2932051,2932073,2932041,2932070,2932065,2932042,2932049,2932063,2932043,2932040,2932038,2932069,2932074,2932068,2932052,2932057,2932067,2932080,2932066,2932071,2932077,2932079,2932076,2932075,2932035,2932047,2932033,2932053,2932078,2932054,2932061,2932062,2932055,2932152,2932138,2932160,2932151,2932180,2932169,2932132,2932161,2932175,2932133,2932136,2932168,2932155,2932167,2932150,2932166,2932173,2932142,2932179,2932178,2932140,2932165,2932147,2932131,2932163,2932135,2932159,2932164,2932157,2932174,2932141,2932148,2932172,2932154,2932145,2932156,2932177,2932144,2932171,2932146,2932149,2932137,2932153,2932139,2932170,2932143,2932176,2932162,2932158,2932134,2932257,2932247,2932280,2932260,2932242,2932258,2932234");
         List<TransBtnTradeFail> transBtnTradeFails = transBtnTradeFailService.list();
         for (TransBtnTradeFail transBtnTradeFail : transBtnTradeFails){
+            boolean flag = false;
             String ids = transBtnTradeFail.getIds();
 
             QueryWrapper<Trade> tradeQuery = new QueryWrapper<>();
@@ -665,12 +738,23 @@ public class TransOrderServiceImpl implements TransOrderService {
 
                 if ("200".equals(response.getCode())){
                     log.info(response.getBody());
+                    flag = true;
                 }else {
                     log.info(response.getBody());
+                    break;
                 }
 
+                if(flag == true){
+                    UpdateWrapper<TransBtnTradeFail> updateWrapper = new UpdateWrapper<>();
+                    updateWrapper.eq("ids",ids).set("is_finish","1");
+                    transBtnTradeFailService.update(updateWrapper);
+                }
                 log.info("同步下一个数据");
             }
+
+
+
+
 
         }
 
