@@ -5,9 +5,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.kingdee.bos.webapi.entity.IdentifyInfo;
 import com.kingdee.bos.webapi.sdk.K3CloudApi;
+import com.me.common.config.K3Config;
 import com.me.modules.k3.price.dto.K3PriceReqDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -16,6 +18,9 @@ import java.util.List;
 @SpringBootTest
 @Slf4j
 public class PriceTest {
+
+    @Autowired
+    K3Config k3Config;
 
     @Test
     void getPrice() throws Exception {
@@ -51,13 +56,15 @@ public class PriceTest {
         String json = gson.toJson(dto);
 
         IdentifyInfo iden = new IdentifyInfo();
-        iden.setUserName("何子毅");
-        iden.setAppId("271221_x66IRZvH7ICWQYxEQeQPTYVr4uS9RtME");
-        iden.setdCID("640c1e4c514f43");
-        iden.setAppSecret("ebb3fd34a06d46f09105be5c44fba9e8");
+        iden.setUserName(k3Config.getUserName());
+        iden.setAppId(k3Config.getAppId());
+        iden.setdCID(k3Config.getDCID());
+        iden.setAppSecret(k3Config.getAppSecret());
+        iden.setlCID(k3Config.getLCID());
+        iden.setServerUrl(k3Config.getServerUrl());
 
         K3CloudApi api = new K3CloudApi(iden);
-
+        log.info("json="+json);
         String resultJson = String.valueOf(api.billQuery(json));
         log.info("resultJson="+resultJson);
 
@@ -65,8 +72,6 @@ public class PriceTest {
 
         for (int i = 0; i<jsonArray.size();i++){
             JSONObject jsonObject = jsonArray.getJSONObject(i);
-
         }
-
     }
 }
