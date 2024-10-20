@@ -174,6 +174,8 @@ public class TradeTest {
         shopQueryWrapper.likeRight("created","2021-01")
                 //.in("shopId","100149660")
                 .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928")
+                .gt("num",0.00)
+                .isNotNull("tradeFrom")
                 .last("AND length(outNick) > 0");
         List<Trade> trades = tradeService.list(shopQueryWrapper);
 
@@ -224,11 +226,19 @@ public class TradeTest {
                     }
 
                     if("TRADE_FINISHED".equals(trade.getTradeStatus())){
-                        tradeDetailVo.setConsignTime(tradeDetailVo.getPayTime());
+                        if(tradeDetailVo.getConsignTime() == null && tradeDetailVo.getPayTime() != null){
+                            tradeDetailVo.setConsignTime(tradeDetailVo.getPayTime());
+                        }
+
+                        if(tradeDetailVo.getConsignTime() == null && tradeDetailVo.getPayTime() == null){
+                            tradeDetailVo.setConsignTime(trade.getCreated());
+                        }
                     }
 
-                    if("TRADE_CLOSED".equals(trade.getTradeStatus())){
-                        tradeDetailVo.setPayTime(trade.getCreated());
+                    if("TRADE_CLOSED".equals(trade.getTradeStatus()) || "TRADE_FINISHED".equals(trade.getTradeStatus())){
+                        if(tradeDetailVo.getPayTime() == null){
+                            tradeDetailVo.setPayTime(trade.getCreated());
+                        }
                     }
 
 
@@ -364,8 +374,12 @@ public class TradeTest {
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
         shopQueryWrapper.likeRight("created","2024-06")
-                //.in("shopId","100149660")
-                .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928");
+                .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928")
+                .gt("num",0.00)
+                .isNotNull("tradeFrom")
+                .last("AND length(outNick) > 0");
+
+
         List<Trade> trades = tradeService.list(shopQueryWrapper);
 
         HashMap<Long,List<Trade>> tradeHashMap = new LinkedHashMap<>();
