@@ -167,13 +167,14 @@ public class TradeTest {
     }
 
     @Test
-    public void putTradeByRange_2024_07() throws Exception {
+    public void putTradeByRange_2021_01() throws Exception {
         Map<Long,Long> storeIdMap = storeIdMap();
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        shopQueryWrapper.likeRight("created","2024-07")
+        shopQueryWrapper.likeRight("created","2021-01")
                 //.in("shopId","100149660")
-                .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928");
+                .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928")
+                .last("AND length(outNick) > 0");
         List<Trade> trades = tradeService.list(shopQueryWrapper);
 
         HashMap<Long,List<Trade>> tradeHashMap = new LinkedHashMap<>();
@@ -331,7 +332,7 @@ public class TradeTest {
 
                     TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
                     transBtnTradeFail.setIds(ids);
-                    transBtnTradeFail.setMessage(response.getBody());
+                    transBtnTradeFail.setMessage(response.getRequestId());
                     transBtnTradeFailService.save(transBtnTradeFail);
                 }
                 else {
@@ -350,7 +351,7 @@ public class TradeTest {
 
                     TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
                     transBtnTradeFail.setIds(ids);
-                    transBtnTradeFail.setMessage(response.getBody());
+                    transBtnTradeFail.setMessage(response.getRequestId());
                     transBtnTradeFailService.save(transBtnTradeFail);
                 }
             }
@@ -414,11 +415,19 @@ public class TradeTest {
                     }
 
                     if("TRADE_FINISHED".equals(trade.getTradeStatus())){
-                        tradeDetailVo.setConsignTime(tradeDetailVo.getPayTime());
+                        if(tradeDetailVo.getConsignTime() == null && tradeDetailVo.getPayTime() != null){
+                            tradeDetailVo.setConsignTime(tradeDetailVo.getPayTime());
+                        }
+
+                        if(tradeDetailVo.getConsignTime() == null && tradeDetailVo.getPayTime() == null){
+                            tradeDetailVo.setConsignTime(trade.getCreated());
+                        }
                     }
 
-                    if("TRADE_CLOSED".equals(trade.getTradeStatus())){
-                        tradeDetailVo.setPayTime(trade.getCreated());
+                    if("TRADE_CLOSED".equals(trade.getTradeStatus()) || "TRADE_FINISHED".equals(trade.getTradeStatus())){
+                        if(tradeDetailVo.getPayTime() == null){
+                            tradeDetailVo.setPayTime(trade.getCreated());
+                        }
                     }
 
 
@@ -522,7 +531,7 @@ public class TradeTest {
 
                     TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
                     transBtnTradeFail.setIds(ids);
-                    transBtnTradeFail.setMessage(response.getBody());
+                    transBtnTradeFail.setMessage(response.getRequestId());
                     transBtnTradeFailService.save(transBtnTradeFail);
                 }
                 else {
@@ -541,7 +550,7 @@ public class TradeTest {
 
                     TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
                     transBtnTradeFail.setIds(ids);
-                    transBtnTradeFail.setMessage(response.getBody());
+                    transBtnTradeFail.setMessage(response.getRequestId());
                     transBtnTradeFailService.save(transBtnTradeFail);
                 }
             }
