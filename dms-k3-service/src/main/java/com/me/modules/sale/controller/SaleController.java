@@ -29,9 +29,9 @@ public class SaleController {
         return resJsonStr;
     }
 
-    @PostMapping("putHkSale")
-    public String putHkSale(@RequestBody PutSaleReqDto dto) throws Exception {
-        String resJsonStr = tranService.tranHkSaleOrder(dto);
+    @PostMapping("putTWSale")
+    public String putTWSale(@RequestBody PutSaleReqDto dto) throws Exception {
+        String resJsonStr = tranService.tranTWSaleOrder(dto);
         return resJsonStr;
     }
 }

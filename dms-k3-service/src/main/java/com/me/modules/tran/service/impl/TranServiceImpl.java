@@ -105,7 +105,7 @@ public class TranServiceImpl implements TranService {
     }
 
     @Override
-    public String tranHkSaleOrder(PutSaleReqDto dto) throws Exception {
+    public String tranTWSaleOrder(PutSaleReqDto dto) throws Exception {
         String param = jsonService.getSaveSaleJsons(dto);
 
 
@@ -253,6 +253,60 @@ public class TranServiceImpl implements TranService {
             return resJson.toJSONString();
         }
 
+    }
+
+    @Override
+    public String tranTwPurchase(PutPurReqDto dto) throws Exception {
+        String param = jsonService.getSavePurchaseJsons(dto);
+
+
+        log.info("param="+param);
+
+        //业务对象标识
+        String formId = "STK_InStock";
+
+        //调用金蝶销售出库保存接口 没有测试环境以下代码暂时注释
+        IdentifyInfo iden = new IdentifyInfo();
+        iden.setAppId(k3Config.getAppId());
+        iden.setdCID(k3Config.getDCID());
+        iden.setAppSecret(k3Config.getAppSecret());
+        iden.setlCID(k3Config.getLCID());
+        iden.setServerUrl(k3Config.getServerUrl());
+        iden.setUserName(k3Config.getUserName());
+        K3CloudApi client = new K3CloudApi(iden);
+
+        //调用接口
+        String resultJson = client.save(formId,param);
+
+        //用于记录结果
+        Gson gson = new Gson();
+        RepoRet repoRet = gson.fromJson(resultJson, RepoRet.class);
+        String result = gson.toJson(repoRet.getResult());
+        //log.info(result);
+        if (repoRet.getResult().getResponseStatus().isIsSuccess()) {
+            System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
+            //更新主表状态
+            JSONObject resJson = new JSONObject();
+            log.info("同步成功");
+            log.info("result="+result);
+            resJson.put("code",200);
+            return resJson.toJSONString();
+
+            //更新中间表
+
+
+        } else {
+            List<RepoError> errors = repoRet.getResult().getResponseStatus().getErrors();
+            //更新主表状态
+            JSONObject resJson = new JSONObject();
+            resJson.put("code",500);
+
+            saveErrorLog(errors,dto.getFbillno());
+
+            log.info("接口返回结果: " + gson.toJson(repoRet.getResult().getResponseStatus()));
+
+            return resJson.toJSONString();
+        }
     }
 
     @Override

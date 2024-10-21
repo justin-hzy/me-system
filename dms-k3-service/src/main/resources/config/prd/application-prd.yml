@@ -92,3 +92,11 @@ K3:
   userName: admin1
   lCID: 2052
   serverUrl: http://kd.za-cosmetics.com/k3Cloud/
+
+twk3:
+  twAppId: 292841_S6eq6xCI3kH92+yv7e2Myx1Fzi7VRCrG
+  twDCID: 6710da19a7abef
+  twAppSecret: d34572a11101458d85fd0670076f49c9
+  twUserName: admin1
+  lCID: 2052
+  serverUrl: http://kd.za-cosmetics.com/k3Cloud/

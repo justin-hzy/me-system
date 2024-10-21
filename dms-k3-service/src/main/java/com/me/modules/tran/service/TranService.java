@@ -12,11 +12,13 @@ public interface TranService {
 
     String tranSaleOrder(PutSaleReqDto dto) throws Exception;
 
-    String tranHkSaleOrder(PutSaleReqDto dto) throws Exception;
+    String tranTWSaleOrder(PutSaleReqDto dto) throws Exception;
 
     String tranSaleReOrder(PutReSaleReqDto dto) throws Exception;
 
     String tranPurchase(PutPurReqDto dto) throws Exception;
+
+    String tranTwPurchase(PutPurReqDto dto) throws Exception;
 
     String tranRetPur(GetPutRePurReqDto dto) throws Exception;
 
