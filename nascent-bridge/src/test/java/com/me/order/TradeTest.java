@@ -167,11 +167,11 @@ public class TradeTest {
     }
 
     @Test
-    public void putTradeByRange_2021_01() throws Exception {
+    public void putTradeByRange_2024_01() throws Exception {
         Map<Long,Long> storeIdMap = storeIdMap();
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        shopQueryWrapper.likeRight("created","2021-01")
+        shopQueryWrapper.likeRight("created","2024-01")
                 //.in("shopId","100149660")
                 .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928")
                 .gt("num",0.00)
@@ -342,7 +342,7 @@ public class TradeTest {
 
                     TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
                     transBtnTradeFail.setIds(ids);
-                    transBtnTradeFail.setMessage(response.getRequestId());
+                    transBtnTradeFail.setMessage(response.getMsg()+","+response.getRequestId());
                     transBtnTradeFailService.save(transBtnTradeFail);
                 }
                 else {
@@ -361,7 +361,7 @@ public class TradeTest {
 
                     TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
                     transBtnTradeFail.setIds(ids);
-                    transBtnTradeFail.setMessage(response.getRequestId());
+                    transBtnTradeFail.setMessage(response.getMsg()+","+response.getRequestId());
                     transBtnTradeFailService.save(transBtnTradeFail);
                 }
             }
@@ -545,7 +545,7 @@ public class TradeTest {
 
                     TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
                     transBtnTradeFail.setIds(ids);
-                    transBtnTradeFail.setMessage(response.getRequestId());
+                    transBtnTradeFail.setMessage(response.getMsg()+","+response.getRequestId());
                     transBtnTradeFailService.save(transBtnTradeFail);
                 }
                 else {
@@ -564,7 +564,7 @@ public class TradeTest {
 
                     TransBtnTradeFail transBtnTradeFail = new TransBtnTradeFail();
                     transBtnTradeFail.setIds(ids);
-                    transBtnTradeFail.setMessage(response.getRequestId());
+                    transBtnTradeFail.setMessage(response.getMsg()+","+response.getRequestId());
                     transBtnTradeFailService.save(transBtnTradeFail);
                 }
             }
