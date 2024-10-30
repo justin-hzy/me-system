@@ -67,6 +67,9 @@ public class TradeTest {
     @Autowired
     OrderService orderService;
 
+    @Autowired
+    NickService nickService;
+
 
     @Test
     public void getOrderByDay() throws Exception {
@@ -167,16 +170,15 @@ public class TradeTest {
     }
 
     @Test
-    public void putTradeByRange_2024_01() throws Exception {
+    public void putTradeByRange_1() throws Exception {
         Map<Long,Long> storeIdMap = storeIdMap();
 
         QueryWrapper<Trade> shopQueryWrapper = new QueryWrapper<>();
-        shopQueryWrapper.likeRight("created","2024-01")
-                //.in("shopId","100149660")
+        shopQueryWrapper
+                .likeRight("created","2011")
                 .in("shopId","100149660","100150165","100149661","100150083","100149662","100150166","100149663","100156928")
                 .gt("num",0.00)
-                .isNotNull("tradeFrom")
-                .last("AND length(outNick) > 0");
+                .last("AND length(outNick) = 0");
         List<Trade> trades = tradeService.list(shopQueryWrapper);
 
         HashMap<Long,List<Trade>> tradeHashMap = new LinkedHashMap<>();
@@ -201,7 +203,7 @@ public class TradeTest {
             //int totalSize = 1;
             int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
 
-            for (int i = 0; i < loopCount; i++) {
+                for (int i = 0; i < loopCount; i++) {
                 int start = i * batchSize; // 开始索引
                 int end = Math.min((i + 1) * batchSize, totalSize);
 
@@ -245,13 +247,26 @@ public class TradeTest {
                     tradeDetailVo.setIsCalIntegral(true);
                     tradeDetailVo.setRealPointFee(null);
                     tradeDetailVo.setSysCustomerId(null);
-                    tradeDetailVo.setNasOuid(trade.getOutNick());
+
+                    QueryWrapper<Nick> nickQueryWrapper = new QueryWrapper<>();
+                    nickQueryWrapper.eq("mainid",trade.getId());
+                    List<Nick> nicks = nickService.list(nickQueryWrapper);
+
+                    if(CollUtil.isNotEmpty(nicks)){
+                        tradeDetailVo.setNasOuid(nicks.get(0).getNick());
+                    }else {
+                        tradeDetailVo.setNasOuid(trade.getOutNick());
+                    }
+
                     tradeDetailVo.setPlatform(null);
                     tradeDetailVo.setReceiverPhone("");
                     tradeDetailVo.setReceiverMobile("");
                     tradeDetailVo.setDiscountFee(trade.getDiscountFee().abs());
                     tradeDetailVo.setAvailableConfirmFee(null);
 
+                    if(StrUtil.isEmpty(tradeDetailVo.getTradeFrom())){
+                        tradeDetailVo.setTradeFrom("WAP");
+                    }
 
 
 
@@ -268,7 +283,17 @@ public class TradeTest {
                             if(StrUtil.isEmpty(order.getTitle())){
                                 orderDetailVo.setTitle("-");
                             }
+                            //商品库id
+                            if (key == 100150083 || key == 100149660 || key == 100149661 || key == 100150165){
+                                orderDetailVo.setGoodsLibId(100000650L);
+                            }
+                            if (key == 100149663 || key == 100149662 || key == 100150166 || key == 100156928){
+                                orderDetailVo.setGoodsLibId(100000652L);
+                            }
+
                             orderDetailVos.add(orderDetailVo);
+
+
                         }
                         tradeDetailVo.setOrderDetailVoList(orderDetailVos);
                     }

@@ -36,9 +36,10 @@ public class ReFundTest {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+        /* 2024-09-01 23:30:00 到 2024-09-02 00:00:00 */
         try {
-            Date startDate = sdf.parse("2024-08-01 00:00:00");
-            Date endDate = sdf.parse("2024-08-31 23:59:59");
+            Date startDate = sdf.parse("2024-09-01 00:00:00");
+            Date endDate = sdf.parse("2024-09-30 23:59:59");
 
             while (startDate.before(endDate)) {
                 Date endDateOfWeek = new Date(startDate.getTime() +  30 * 60 * 1000); // 一小时
@@ -60,8 +61,8 @@ public class ReFundTest {
 
 
     @Test
-    public void saveReOrder() throws Exception {
-        transReOrderService.putReOrder();
+    public void putReOrder() throws Exception {
+            transReOrderService.putReOrder();
 
     }
 

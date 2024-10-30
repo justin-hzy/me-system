@@ -1,196 +1,149 @@
 {
-  "code": "200",
-  "msg": "成功",
-  "success": true,
-  "result": [
-    {
-      "id": 1905559,
-      "outRefundId": "7250628439655416120",
-      "sysCustomerId": 3019535297,
-      "refundWap": 0,
-      "refundType": 0,
-      "outTradeId": "6919763875476477014",
-      "sysTradeId": "965018393320000013",
-      "title": "【Za官方旗舰店】Za姬芮美白隔离霜防晒霜素颜霜妆前乳提亮肤色",
-      "picUrl": "https://p9-aio.ecombdimg.com/obj/ecom-shop-material/cYBenyXQ_m_564a6147d1d1d992dcb17670f0cb47f0_sx_596394_www800-800",
-      "price": 118.00,
-      "number": 1.00,
-      "outOrderId": "6919763875476477014",
-      "shopId": 100149661,
-      "totalFee": 118.00,
-      "refundFee": 118.00,
-      "refundNum": 1.00,
-      "refundStatus": "SUCCESS",
-      "reason": "商品信息拍错（规格/尺码/颜色等）",
-      "reasonStr": "商品信息拍错（规格/尺码/颜色等）",
-      "applyTime": "2023-07-01 07:41:28",
-      "refundDesc": null,
-      "companyName": null,
-      "sid": null,
-      "address": null,
-      "refundName": null,
-      "mobile": null,
-      "refuseReason": null,
-      "refundRemindTimeout": null,
-      "outerId": null,
-      "modified": "2023-07-01 07:41:30",
-      "updateTime": "2023-07-01 07:45:00",
-      "skuOuterId": "ZADY2023011623",
-      "nickInfos": [
-        {
-          "nasOuid": "1@#X+p9czWr0t7FNrkSs6x0U5l3Lj1Lzd2A3j4VEiYibvrXGLX406ipg/MIuRkQN3I9sHM=",
-          "nick": "1@#X+p9czWr0t7FNrkSs6x0U5l3Lj1Lzd2A3j4VEiYibvrXGLX406ipg/MIuRkQN3I9sHM=",
-          "platform": 111,
-          "id": 9479593,
-          "order": null
-        }
-      ],
-      "goodsLibId": null,
-      "refundGenre": 0,
-      "refundShopId": 0,
-      "platform": 111
+  "NeedUpDateFields": [],
+  "NeedReturnFields": [],
+  "IsDeleteEntry": "true",
+  "SubSystemId": "0",
+  "IsVerifyBaseDataField": "false",
+  "IsEntryBatchFill": "true",
+  "ValidateFlag": "true",
+  "NumberSearch": "true",
+  "IsAutoAdjustField": "false",
+  "IsAutoSubmitAndAudit": "true",
+  "InterationFlags": "STK_InvCheckDetailMessage",
+  "IgnoreInterationFlag": "",
+  "IsControlPrecision": "false",
+  "ValidateRepeatJson": "false",
+  "Model": {
+    "FID": "0",
+    "FBillTypeID": {
+      "FNumber": "XSCKD01_SYS"
     },
-    {
-      "id": 1905562,
-      "outRefundId": "7250629368316166458",
-      "sysCustomerId": 3019545330,
-      "refundWap": 0,
-      "refundType": 0,
-      "outTradeId": "6919763867156289492",
-      "sysTradeId": "648018393420000017",
-      "title": "【Za官方旗舰店】Za姬芮美白隔离霜防晒霜素颜霜妆前乳提亮肤色",
-      "picUrl": "https://p9-aio.ecombdimg.com/obj/ecom-shop-material/cYBenyXQ_m_6f2478b693cb71ec21e6b326893d2fdf_sx_246089_www800-800",
-      "price": 69.00,
-      "number": 1.00,
-      "outOrderId": "6919763867156289492",
-      "shopId": 100149661,
-      "totalFee": 69.00,
-      "refundFee": 69.00,
-      "refundNum": 1.00,
-      "refundStatus": "SUCCESS",
-      "reason": "商品信息拍错（规格/尺码/颜色等）",
-      "reasonStr": "商品信息拍错（规格/尺码/颜色等）",
-      "applyTime": "2023-07-01 07:45:04",
-      "refundDesc": null,
-      "companyName": null,
-      "sid": null,
-      "address": null,
-      "refundName": null,
-      "mobile": null,
-      "refuseReason": null,
-      "refundRemindTimeout": null,
-      "outerId": null,
-      "modified": "2023-07-01 07:45:06",
-      "updateTime": "2023-07-01 07:51:00",
-      "skuOuterId": "ZADY2023011627",
-      "nickInfos": [
-        {
-          "nasOuid": "1@#jCY4YxH/7GFQyKX2p0U1pTCSjy+RRtGvVkhT4AjKsNY82lH1tSM73GRiBsMni/digQQ=",
-          "nick": "1@#jCY4YxH/7GFQyKX2p0U1pTCSjy+RRtGvVkhT4AjKsNY82lH1tSM73GRiBsMni/digQQ=",
-          "platform": 111,
-          "id": 9479608,
-          "order": null
-        }
-      ],
-      "goodsLibId": null,
-      "refundGenre": 0,
-      "refundShopId": 0,
-      "platform": 111
+    "FBillNo": "TW_TWTEST2024090306",
+    "FDate": "2024-09-05",
+    "FStockOrgId": {
+      "FNumber": "ZT026"
     },
-    {
-      "id": 1905567,
-      "outRefundId": "7250630587747254531",
-      "sysCustomerId": 3019549874,
-      "refundWap": 0,
-      "refundType": 0,
-      "outTradeId": "6919748512072733714",
-      "sysTradeId": "215018393480000021",
-      "title": "【Za官方旗舰店】Za姬芮美白隔离霜防晒霜素颜霜妆前乳提亮肤色",
-      "picUrl": "https://p9-aio.ecombdimg.com/obj/ecom-shop-material/cYBenyXQ_m_f6206dcff907a6665e3e4d66b8a2fc16_sx_245900_www800-800",
-      "price": 69.00,
-      "number": 1.00,
-      "outOrderId": "6919748512072733714",
-      "shopId": 100149661,
-      "totalFee": 69.00,
-      "refundFee": 69.00,
-      "refundNum": 1.00,
-      "refundStatus": "SUCCESS",
-      "reason": "不想要了",
-      "reasonStr": "不想要了",
-      "applyTime": "2023-07-01 07:49:48",
-      "refundDesc": null,
-      "companyName": null,
-      "sid": null,
-      "address": null,
-      "refundName": null,
-      "mobile": null,
-      "refuseReason": null,
-      "refundRemindTimeout": null,
-      "outerId": null,
-      "modified": "2023-07-01 07:50:10",
-      "updateTime": "2023-07-01 07:54:01",
-      "skuOuterId": "ZADY2023011626",
-      "nickInfos": [
-        {
-          "nasOuid": "1@#OGWyQnSh3dFgsj21f2tEB312mZqS9ig2mj+RrMBbNty5OwWePzf+dr4UExZ2sjD7or5K7ZxKrA==",
-          "nick": "1@#OGWyQnSh3dFgsj21f2tEB312mZqS9ig2mj+RrMBbNty5OwWePzf+dr4UExZ2sjD7or5K7ZxKrA==",
-          "platform": 111,
-          "id": 9479621,
-          "order": null
-        }
-      ],
-      "goodsLibId": null,
-      "refundGenre": 0,
-      "refundShopId": 0,
-      "platform": 111
+    "FSaleOrgId": {
+      "FNumber": "ZT026"
     },
-    {
-      "id": 1905569,
-      "outRefundId": "7250631561769484555",
-      "sysCustomerId": 3019551451,
-      "refundWap": 0,
-      "refundType": 0,
-      "outTradeId": "6919757457107260926",
-      "sysTradeId": "988018393500000012",
-      "title": "【Za官方旗舰店】Za姬芮美白隔离霜防晒霜素颜霜妆前乳提亮肤色",
-      "picUrl": "https://p6-aio.ecombdimg.com/obj/ecom-shop-material/cYBenyXQ_m_d018473891f277d188156aa9b32cb206_sx_246051_www800-800",
-      "price": 69.00,
-      "number": 1.00,
-      "outOrderId": "6919757457107260926",
-      "shopId": 100149661,
-      "totalFee": 69.00,
-      "refundFee": 69.00,
-      "refundNum": 1.00,
-      "refundStatus": "SUCCESS",
-      "reason": "3",
-      "reasonStr": "其他",
-      "applyTime": "2023-07-01 07:53:35",
-      "refundDesc": null,
-      "companyName": null,
-      "sid": null,
-      "address": null,
-      "refundName": null,
-      "mobile": null,
-      "refuseReason": null,
-      "refundRemindTimeout": null,
-      "outerId": null,
-      "modified": "2023-07-01 07:53:39",
-      "updateTime": "2023-07-01 07:57:01",
-      "skuOuterId": "ZADY2023011629",
-      "nickInfos": [
-        {
-          "nasOuid": "1@#NLK9mMrBoy44hvw6zL27ar0dhLQKQu2iV1Ewf+L5BCqbI64R5bam3L+TZef4hZlBaHE=",
-          "nick": "1@#NLK9mMrBoy44hvw6zL27ar0dhLQKQu2iV1Ewf+L5BCqbI64R5bam3L+TZef4hZlBaHE=",
-          "platform": 111,
-          "id": 9479624,
-          "order": null
-        }
-      ],
-      "goodsLibId": null,
-      "refundGenre": 0,
-      "refundShopId": 0,
-      "platform": 111
-    }
-  ],
-  "requestId": "c00e0527-75e8-48db-8b14-6cf5913b5218"
+    "FOwnerTypeIdHead": "业务组织",
+    "FCUSTOMERID": {
+      "FNumber": "CUST0293"
+    },
+    "F_DSG_Base": {
+      "FNumber": "ZT026"
+    },
+    "F_DSG_FLLX": "留空",
+    "F_DSG_Text1": "",
+    "FReceiveAddress": "屈臣氏後龍門市",
+    "SubHeadEntity": {
+      "FSettleOrgID": {
+        "FNumber": "ZT026"
+      },
+      "fSettleCurrID": {
+        "FNumber": "PRE005"
+      },
+      "FThirdBillNo": "TWTEST2024090306"
+    },
+    "FEntity": [
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632457505-1"
+        },
+        "FEntryTaxRate": "5.00",
+        "FRealQty": "1",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "",
+        "FSoorDerno": "TW_TWTEST2024090306",
+        "F_DSG_srcoid": "TW_TWTEST2024090306"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632457512-1"
+        },
+        "FEntryTaxRate": "5.00",
+        "FRealQty": "1",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "",
+        "FSoorDerno": "TW_TWTEST2024090306",
+        "F_DSG_srcoid": "TW_TWTEST2024090306"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632457529-1"
+        },
+        "FEntryTaxRate": "5.00",
+        "FRealQty": "1",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "",
+        "FSoorDerno": "TW_TWTEST2024090306",
+        "F_DSG_srcoid": "TW_TWTEST2024090306"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4711401210573-1"
+        },
+        "FEntryTaxRate": "5.00",
+        "FRealQty": "1",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "",
+        "FSoorDerno": "TW_TWTEST2024090306",
+        "F_DSG_srcoid": "TW_TWTEST2024090306"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4711401210597-1"
+        },
+        "FEntryTaxRate": "5.00",
+        "FRealQty": "1",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "",
+        "FSoorDerno": "TW_TWTEST2024090306",
+        "F_DSG_srcoid": "TW_TWTEST2024090306"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4711401210641-1"
+        },
+        "FEntryTaxRate": "5.00",
+        "FRealQty": "1",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "",
+        "FSoorDerno": "TW_TWTEST2024090306",
+        "F_DSG_srcoid": "TW_TWTEST2024090306"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4711401210658-1"
+        },
+        "FEntryTaxRate": "5.00",
+        "FRealQty": "1",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "",
+        "FSoorDerno": "TW_TWTEST2024090306",
+        "F_DSG_srcoid": "TW_TWTEST2024090306"
+      }
+    ]
+  }
 }

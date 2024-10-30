@@ -225,7 +225,7 @@ public class TransGradeServiceImpl implements TransGradeService {
 
         List<Long> shopIds = new ArrayList<>();
         //抖店 泊美 平台id 111 改执行sql
-        //shopIds.add(100149663L);
+        shopIds.add(100149663L);
         //有赞 泊美 平台 id 11
         //shopIds.add(100150166L);
         //会员中心 平台id 19
@@ -236,7 +236,7 @@ public class TransGradeServiceImpl implements TransGradeService {
         //抖店Za 100149661 平台id 111 改执行sql
         //shopIds.add(100149661L);
         //有赞Za 100150165 平台 id 11
-        shopIds.add(100150165L);
+        //shopIds.add(100150165L);
 
 
         List<QueryMemberVo> queryMemberVos = shopActiveCustomerMapper.queryMemberVos1(shopIds);
@@ -427,7 +427,30 @@ public class TransGradeServiceImpl implements TransGradeService {
 
         QueryWrapper<GradeMemberInfo> gradeMemberInfoQuery = new QueryWrapper<>();
 
-        gradeMemberInfoQuery.in("shopId",shopIds).eq("platform","0");
+        gradeMemberInfoQuery.in("shopId",shopIds).eq("platform","111")
+                .in("nasOuid","1@#yJt7dWzZHWjSe1n+ID6z7Z8HJ3WtxITjEUOJzIDKOMuRz1EdWZGlOj+YryUqyXny3Q==",
+                "1@#kOQ+lPEox2LFsf17lKgEYXlVyqUZqXIyMZlOQoLagyZiCG+qdqxl9jBgoSn48EJNzaQ5aOPs",
+                "1@#Q+y1lSDhHItmXNd2kdT0S6aSaEyj2hjankZ2+Bko7Pw4pc5BuQLqhj1kS0yigYzYmv/aazE2",
+                "1@#JR/DRCDuMPp3jG/tvGnxaz8rbV4Svi7eyrTXxPYQiCkCZkLOt70X94gXuyb6PnjSgA==",
+                "1@#ANIJ03A5A01Rm5QfVkQ2cdZBmGLJEQne3JqRvsE07CjKSiQQyCo/IpX/Em3smkA2nQ==",
+                "1@#iqcOe4wqO/zxpExONIagptbJqNnXQbMXVRQh8+K0hRkMXhNdQsYI/XuwrAPLyTkABEKwOBmW",
+                "1@#mkIQ2RamVcwccMbwmOctIXE4NhrrDuN2EOmKEaBm+6j3jnbFeHiKYu5W+NKmkRFxNrYuPDxQ",
+                "1@#aKPyN8y2HArDUzTNsVJg7LtJbzPcn/j94XwOUYKVo+8VTog7RrIhFVdCUvb4YS9WSg==",
+                "1@#RQ+mnkMa+FGSqYrZWVxl45wftHpDC5f7LMeks5WZZncxdPgEBR5u823zZqu4bHfnjdg/qqBC",
+                "1@#QRlEI7nIMAmMebnUfDtI+/JQE1yClv6POGE4kdclsJcAlzdwjecre6doP7h4yIxzUMlJTeGe",
+                "1@#XN9RqCu7Er/OviRCMNdiYcyzjfpsI+1m2px5nm99939zKroZLdDvnwmFQ+GfGYuYTg==",
+                "1@#RYpS39/o/+qN0n3+7A/+Bea+tbv2mGhYdHa7ccA+XuSgAeWmomDTkqz1tARM7dWetVTSzydn",
+                "1@#3gUSZ+bb8srNWpsk0XizB6VWc/RjX1ozh3pV8O+hm3PRPPJRbanKVQi3sUUHHhQzJw==",
+                "1@#KPv+QKcoTaNEF3ccocdHI4c2NIEr3siQDmuJmHWqQVofx+yf6fcNdyWwT7w9zn+Iid3swx4=",
+                "1@#sJdZoaPFwz6l9Z8M9RrW9IbKf3jcALQo+6lpEq20rv9IM7iapeswzMBw+SMbI51U3g==",
+                "1@#izGdfsauyFmMwA6VliuipnOVZVVhqPtjtVuan0qY2xTQpEcJOnnCBfHC5r19WjPqtQ==",
+                "1@#P4iddKyRvnIoQm8VEXFOxEJ7MKDOvt57GB/cOuMC3dLTs8hwPFUCLXdHJfv8OTZkS11o22k/",
+                "1@#kkzmwt/RbzES8RPOywzVJNOpV4xh9wtoiEuuZum2X7lSRtMs5PyDoSi9jtTiJG+OndaZJv+j",
+                "1@#KhEH+wanfToL+WtzhFIPKC8RuUj0AEYHdi+DURcv+yW5F8LIFyujea0TWt8KxwNGZp3LjFw=",
+                "1@#cft5zhwjO7ayF+qX7sJhfhWLyNNp8lA/MVUi+J/PnIOX6KHWeZLUg0e2QFw7W+nPsQ==",
+                "1@#XN8XQWS6tRJrTleecGe7FXqvgXnmbINK1h8zSa20sckMyj0cOuVSFBXJMwTQQrjllSXZqv1k",
+                "1@#HCiX6v5LZX7pVJPQ5iKP6Fql2feLtCXPnm4DzhHXrmS4vfEF7IWfaqrm9D7BqaSRCw==",
+                "1@#ULd42s/hRdwQbnMJ/55TBMU4OQqwxPTOFBC4q/+Ftox/JUkWtjIKePeOEHzNnVxac1w3olDw");
 
         List<GradeMemberInfo> gradeMemberInfos = gradeMemberInfoService.list(gradeMemberInfoQuery);
 
@@ -462,7 +485,7 @@ public class TransGradeServiceImpl implements TransGradeService {
 
             ApiClient apiClient =new ApiClientImpl(request);
             CustomerGradeUpdateResponse response = apiClient.execute(request);
-
+            log.info(response.getBody());
             if ("200".equals(response.getCode())){
                 log.info(response.getMsg());
             }else {

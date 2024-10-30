@@ -1,7 +1,22 @@
 package com.me.member;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.me.nascent.common.config.NascentConfig;
+import com.me.nascent.modules.grade.entity.GradeMemberInfo;
 import com.me.nascent.modules.member.service.MemberMigrationService;
 import com.me.nascent.modules.member.service.TransMemberService;
+import com.me.nascent.modules.point.entity.PureMemberPoint;
+import com.me.nascent.modules.point.service.PureMemberPointService;
+import com.me.nascent.modules.token.service.TokenService;
+import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
+import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
+import com.nascent.ecrp.opensdk.domain.customer.NickPlatform;
+
+import com.nascent.ecrp.opensdk.request.customer.CustomerInfoQueryRequest;
+import com.nascent.ecrp.opensdk.response.customer.BatchCustomerSaveResponse;
+import com.nascent.ecrp.opensdk.response.customer.CustomerInfoQueryResponse;
+import com.nascent.ecrp.opensdk.response.customer.customerInfoQuery.SystemCustomerInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,77 +38,14 @@ public class MemberTest {
     @Autowired
     private MemberMigrationService memberMigrationService;
 
+    @Autowired
+    private PureMemberPointService pureMemberPointService;
 
+    @Autowired
+    private NascentConfig nascentConfig;
 
-    /*@Test
-    public void transPureMemberByRange() throws Exception {
-
-        String year = "2024";
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Calendar cal = Calendar.getInstance();
-
-        for (int month = 8; month <= 8; month++) {
-            cal.set(Calendar.YEAR, Integer.parseInt(year));
-            cal.set(Calendar.MONTH, month - 1);
-            cal.set(Calendar.DAY_OF_MONTH, 1);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            Date startDate = cal.getTime();
-
-            cal.add(Calendar.MONTH, 1);
-            cal.add(Calendar.DAY_OF_MONTH, -1);
-            cal.set(Calendar.HOUR_OF_DAY, 23);
-            cal.set(Calendar.MINUTE, 59);
-            cal.set(Calendar.SECOND, 59);
-            cal.set(Calendar.MILLISECOND, 999);
-            Date endDate = cal.getTime();
-
-            String startStr = sdf.format(startDate);
-            String endStr = sdf.format(endDate);
-            System.out.println("同步会员数据: " + startStr + " 到 " + endStr);
-            // 在这里调用处理会员数据的方法
-            memberMigrationService.transPureMemberByRange(startDate, endDate);
-        }
-
-    }
-
-    @Test
-    public void transZaMemberByRange() throws Exception {
-        String year = "2024";
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Calendar cal = Calendar.getInstance();
-
-        for (int month = 8; month <= 8; month++) {
-            cal.set(Calendar.YEAR, Integer.parseInt(year));
-            cal.set(Calendar.MONTH, month - 1);
-            cal.set(Calendar.DAY_OF_MONTH, 1);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            Date startDate = cal.getTime();
-
-            cal.add(Calendar.MONTH, 1);
-            cal.add(Calendar.DAY_OF_MONTH, -1);
-            cal.set(Calendar.HOUR_OF_DAY, 23);
-            cal.set(Calendar.MINUTE, 59);
-            cal.set(Calendar.SECOND, 59);
-            cal.set(Calendar.MILLISECOND, 999);
-            Date endDate = cal.getTime();
-
-            String startStr = sdf.format(startDate);
-            String endStr = sdf.format(endDate);
-            System.out.println("同步会员数据: " + startStr + " 到 " + endStr);
-            // 在这里调用处理会员数据的方法
-            memberMigrationService.transZaMemberByRange(startDate, endDate);
-        }
-
-
-    }*/
+    @Autowired
+    private TokenService tokenService;
 
     @Test
     public void transOnlineStoreMemberByRange() throws Exception {
@@ -117,8 +69,8 @@ public class MemberTest {
         100150165L 有赞Za姬芮官方旗舰店
 
         */
-        Long shopId = 100150166L;
-        for (int year = 2023;year<=2024;year++){
+        Long shopId = 100149661L;
+        for (int year = 2023;year<=2023;year++){
             for (int month = 1; month <= 12; month++) {
                 cal.set(Calendar.YEAR, year);
                 cal.set(Calendar.MONTH, month - 1);
@@ -155,7 +107,7 @@ public class MemberTest {
         List<Long> numbers = getOffLineStoreId();
 
         for (Long shopId : numbers){
-            for (int year = 2023;year<=2024;year++){
+            for (int year = 2022;year<=2024;year++){
                 for (int month = 1; month <= 12; month++) {
                     cal.set(Calendar.YEAR, year);
                     cal.set(Calendar.MONTH, month - 1);
@@ -192,8 +144,8 @@ public class MemberTest {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        LocalDate startDate = LocalDate.of(2022, 1, 1);
-        LocalDate endDate = LocalDate.of(2022, 12, 31);
+        LocalDate startDate = LocalDate.of(2024, 1, 1);
+        LocalDate endDate = LocalDate.of(2024, 12, 31);
 
         while (!startDate.isAfter(endDate)) {
             LocalDateTime startDateTime = startDate.atStartOfDay();
@@ -229,6 +181,76 @@ public class MemberTest {
     @Test
     public void putMemberTong() throws Exception {
         memberMigrationService.putMemberTong();
+    }
+
+
+    @Test
+    public void batchQueryMember() throws Exception {
+        /*pcode-206261	泊美积分体系
+          pcode-206256	Za线上积分体系 */
+        String integralAccount = "pcode-206261";
+        QueryWrapper<PureMemberPoint> pureMemberPointQuery = new QueryWrapper<>();
+        pureMemberPointQuery.eq("integralAccount",integralAccount)
+                .eq("platform","111")
+                .eq("isFinsih","0")
+                .eq("nasOuid","1@#S3MPE7dZeT4m7BFj+UW5GmcaPiT07HlmdVOb7j5IyJ+FQvkNODb0/6+d0BeAxV3Gf7Q=");
+        List<PureMemberPoint> pureMemberPoints = pureMemberPointService.list(pureMemberPointQuery);
+
+
+        int batchSize = 1; // 每次处理的数据量
+        int totalSize  = pureMemberPoints.size(); // 总数据量;
+        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+
+        for (int i = 0; i < loopCount; i++) {
+            int start = i * batchSize; // 开始索引
+            int end = Math.min((i + 1) * batchSize, totalSize); // 结束索引，确保不超过总数据量
+            List<PureMemberPoint> batchList = pureMemberPoints.subList(start, end);
+
+            CustomerInfoQueryRequest request = new CustomerInfoQueryRequest();
+            List<NickPlatform> nickList = new ArrayList<>();
+            for (PureMemberPoint pureMemberPoint : batchList){
+                String nasOuid = pureMemberPoint.getNasOuid();
+                Integer platform =  pureMemberPoint.getPlatform();
+
+                NickPlatform nickPlatform = new NickPlatform();
+                nickPlatform.setNasOuid(nasOuid);
+                nickPlatform.setPlatform(platform);
+
+                nickList.add(nickPlatform);
+
+                request.setNickList(nickList);
+                request.setServerUrl(nascentConfig.getServerUrl());
+                request.setAppKey(nascentConfig.getAppKey());
+                request.setAppSecret(nascentConfig.getAppSerect());
+                request.setGroupId(nascentConfig.getGroupID());
+                request.setAccessToken(tokenService.getToken());
+
+
+                ApiClient client = new ApiClientImpl(request);
+
+                CustomerInfoQueryResponse response = client.execute(request);
+
+                log.info(response.getBody());
+
+                List<SystemCustomerInfo> systemCustomerInfos =  response.getResult();
+
+                /*if("200".equals(response.getCode())){
+                    for (SystemCustomerInfo systemCustomerInfo : systemCustomerInfos){
+                        log.info("客户id="+pureMemberPoint.getNasOuid()+",等级名称="+systemCustomerInfo.getGradeName());
+                        UpdateWrapper<PureMemberPoint> pureMemberPointUpdate = new UpdateWrapper<>();
+                        pureMemberPointUpdate.eq("integralAccount",integralAccount)
+                                .eq("platform","703212")
+                                .eq("isFinsih","0")
+                                .eq("nasOuid",nasOuid)
+                                .set("gradeName",systemCustomerInfo.getGradeName());
+
+                        pureMemberPointService.update(pureMemberPointUpdate);
+                    }
+                }else {
+                    log.info(response.getBody());
+                }*/
+            }
+        }
     }
 
 

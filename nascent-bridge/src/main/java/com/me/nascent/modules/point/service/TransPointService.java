@@ -1,6 +1,7 @@
 package com.me.nascent.modules.point.service;
 
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public interface TransPointService {
 
@@ -11,6 +12,8 @@ public interface TransPointService {
     void getZaOfflinePoint(String integralAccount,Long viewId) throws Exception;
 
     void putPureMemberPoint(String integralAccount,String platform) throws Exception;
+
+    void putPureMemberPointByRange(String integralAccount, String platform) throws Exception;
 
     void transMemberPoint(Date start, Date end,String integralAccount) throws Exception;
 

@@ -1,6 +1,7 @@
 package com.me.nascent.modules.reorder.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.me.nascent.common.config.NascentConfig;
@@ -12,6 +13,8 @@ import com.me.nascent.modules.reorder.service.ReFundService;
 import com.me.nascent.modules.reorder.service.TransReOrderService;
 import com.me.nascent.modules.token.entity.Token;
 import com.me.nascent.modules.token.service.TokenService;
+import com.me.nascent.modules.trans.entity.TransBtnRefundFail;
+import com.me.nascent.modules.trans.service.TransBtnRefundFailService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
 import com.nascent.ecrp.opensdk.domain.customer.NickInfo;
@@ -22,6 +25,7 @@ import com.nascent.ecrp.opensdk.request.trade.TradeSynRequest;
 import com.nascent.ecrp.opensdk.response.customer.ActivateCustomerListSyncResponse;
 import com.nascent.ecrp.opensdk.response.refund.RefundInfoSynResponse;
 import com.nascent.ecrp.opensdk.response.refund.ThirdRefundSaveResponse;
+import com.nascent.ecrp.opensdk.response.trade.TradeSaveResponse;
 import com.nascent.ecrp.opensdk.response.trade.TradeSynResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +50,8 @@ public class TransReOrderServiceImpl implements TransReOrderService {
     private ReFundService reFundService;
 
     private ReFundNickInfoService reFundNickInfoService;
+
+    private TransBtnRefundFailService transBtnRefundFailService;
 
     @Override
     public void transReOrder(Long id, Date startDate, Date endDate) throws Exception {
@@ -182,7 +188,7 @@ public class TransReOrderServiceImpl implements TransReOrderService {
                     reFund.setUpdateTime(refundSynInfo.getUpdateTime());
 
                     if(reFundResult != null){
-                        updateReFunds.add(reFund);
+                        //updateReFunds.add(reFund);
                     }else {
                         insertReFunds.add(reFund);
 
@@ -206,9 +212,9 @@ public class TransReOrderServiceImpl implements TransReOrderService {
                     reFundService.saveBatch(insertReFunds);
                 }
 
-                if(updateReFunds.size()>0){
+                /*if(updateReFunds.size()>0){
                     reFundService.saveOrUpdateBatch(updateReFunds);
-                }
+                }*/
 
                 resMap.put("id",id);
                 resMap.put("startDate",startDate);
@@ -218,6 +224,11 @@ public class TransReOrderServiceImpl implements TransReOrderService {
                 resMap.put("startDate",startDate);
                 resMap.put("isNext",false);
             }
+        }else {
+            log.info(response.getBody());
+            resMap.put("id",0L);
+            resMap.put("startDate",startDate);
+            resMap.put("isNext",false);
         }
 
 
@@ -228,7 +239,7 @@ public class TransReOrderServiceImpl implements TransReOrderService {
 
     @Override
     public void putReOrder() throws Exception {
-
+        Map<Long,Long> storeIdMap = storeIdMap();
         ThirdRefundSaveRequest request = new ThirdRefundSaveRequest();
         request.setServerUrl(nascentConfig.getBtnServerUrl());
         request.setAppKey(nascentConfig.getBtnAppKey());
@@ -236,42 +247,190 @@ public class TransReOrderServiceImpl implements TransReOrderService {
         request.setGroupId(nascentConfig.getBtnGroupID());
         request.setAccessToken(tokenService.getBtnToken());
 
+        List<String> list1 = new ArrayList<>();
+        list1.add("100172217");
+        list1.add("100172216");
+
         QueryWrapper<ReFund> reFundQuery = new QueryWrapper<>();
-        reFundQuery.between("applyTime","2013-01-01 00:00:00","2013-12-31 23:59:59");
+        reFundQuery
+                //.between("applyTime","2013-04-01 00:00:00","2013-06-30 23:59:59")
+                //.likeRight("applyTime","2024")
+                //.ne("shopId","100172217").ne("shopId","100172216").ne("shopId","0");
+                .in("shopId",list1);
         List<ReFund> existReFund = reFundService.list(reFundQuery);
 
-        int batchSize = 1; // 每次处理的数据量
-        //int totalSize = existReFund.size(); // 总数据量
-
-        int totalSize = 1;
-
-        int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
-
-        for (int i = 0; i < loopCount; i++) {
-            int start = i * batchSize; // 开始索引
-            int end = Math.min((i + 1) * batchSize, totalSize);
-
-            List<ReFund> batchList = existReFund.subList(start, end);
-            log.info("batchList=" + batchList.toString());
-
-            List<ThirdRefund> refunds = new ArrayList<>();
-
-            for (ReFund reFund : batchList) {
-                ThirdRefund thirdRefund = new ThirdRefund();
-                BeanUtils.copyProperties(reFund, thirdRefund);
-                thirdRefund.setCreated(reFund.getApplyTime());
-                thirdRefund.setRefundWay(reFund.getRefundWap());
-                refunds.add(thirdRefund);
+        HashMap<Long,List<ReFund>> reFundHashMap = new LinkedHashMap<>();
+        for (ReFund reFund : existReFund){
+            Long shopId = reFund.getShopId();
+            if(reFundHashMap.containsKey(shopId)){
+                List<ReFund> reFundList = reFundHashMap.get(shopId);
+                reFundList.add(reFund);
+            }else {
+                List<ReFund> reFundList = new ArrayList<>();
+                reFundList.add(reFund);
+                reFundHashMap.put(shopId,reFundList);
             }
-
-            log.info(refunds.size()+"");
-            request.setRefunds(refunds);
-
-            ApiClient client = new ApiClientImpl(request);
-            ThirdRefundSaveResponse response = client.execute(request);
-            log.info(response.getBody());
         }
 
+        Set<Long> keys = reFundHashMap.keySet();
 
+        for (long key : keys){
+            List<ReFund> list = reFundHashMap.get(key);
+
+            int batchSize = 100; // 每次处理的数据量
+            int totalSize = list.size(); // 总数据量
+            //int totalSize = 1;
+            int loopCount = (int) Math.ceil((double) totalSize / batchSize); // 需要循环的次数
+
+            for (int i = 0 ;i< loopCount;i++){
+                int start = i * batchSize; // 开始索引
+                int end = Math.min((i + 1) * batchSize, totalSize);
+
+                List<ReFund> batchList = list.subList(start, end);
+
+                List<ThirdRefund> refunds = new ArrayList<>();
+
+                for (ReFund reFund : batchList) {
+                    ThirdRefund thirdRefund = new ThirdRefund();
+                    BeanUtils.copyProperties(reFund, thirdRefund);
+                    thirdRefund.setCreated(reFund.getApplyTime());
+                    thirdRefund.setRefundWay(reFund.getRefundWap());
+                    thirdRefund.setItemNum(reFund.getNumber());
+                    thirdRefund.setItemPrice(reFund.getPrice());
+                    if(StrUtil.isNotEmpty(reFund.getReasonStr())){
+                        thirdRefund.setRefundReasonStr(reFund.getReasonStr());
+                    }else {
+                        thirdRefund.setRefundReasonStr("-");
+                    }
+                    thirdRefund.setItemTitle(reFund.getTitle());
+                    refunds.add(thirdRefund);
+                }
+                request.setRefunds(refunds);
+                log.info(refunds.size()+"");
+
+                log.info("悦江shopid="+key);
+                log.info("贝泰妮shopid="+storeIdMap.get(key));
+                request.setShopId(storeIdMap.get(key));
+                request.setIsBackIntegral(false);
+
+                ApiClient client = new ApiClientImpl(request);
+
+                ThirdRefundSaveResponse response = client.execute(request);
+                log.info(response.getBody());
+
+                if(!"200".equals(response.getCode())){
+                    String ids = "";
+                    for (int j = 0 ; j<batchList.size();j++){
+                        ReFund reFund = batchList.get(j);
+                        Long id = reFund.getId();
+
+                        if(j == (batchList.size()-1)){
+                            ids = ids+String.valueOf(id);
+                        }else {
+                            ids = ids+String.valueOf(id)+",";
+                        }
+                    }
+                    TransBtnRefundFail transBtnRefundFail  = new TransBtnRefundFail();
+                    transBtnRefundFail.setIds(ids);
+                    transBtnRefundFail.setMessage(response.getMsg()+","+response.getRequestId());
+
+                    transBtnRefundFailService.save(transBtnRefundFail);
+                }
+            }
+        }
+
+        /*
+
+
+
+
+
+
+        */
+    }
+
+
+    public static Map<Long,Long> storeIdMap(){
+
+        Map<Long, Long> storeIdMap = new HashMap<>();
+
+        // 数据初始化
+        storeIdMap.put(100150234L, 101130609L);
+        storeIdMap.put(100157262L, 101130549L);
+        storeIdMap.put(100150235L, 101130610L);
+        storeIdMap.put(100234651L, 101130540L);
+        storeIdMap.put(100150179L, 101155857L);
+        storeIdMap.put(100186879L, 101130542L);
+        storeIdMap.put(100150210L, 101130589L);
+        storeIdMap.put(100150228L, 101155862L);
+        storeIdMap.put(100150244L, 101155867L);
+        storeIdMap.put(100150229L, 101130605L);
+        storeIdMap.put(100150230L, 101130606L);
+        storeIdMap.put(100150211L, 101130590L);
+        storeIdMap.put(100150233L, 101155863L);
+        storeIdMap.put(100150166L, 101130620L);
+        storeIdMap.put(100156928L, 101092686L);
+        storeIdMap.put(100149662L, 101130619L);
+        storeIdMap.put(100150205L, 101130584L);
+        storeIdMap.put(100150214L, 101130593L);
+        storeIdMap.put(100150199L, 101130578L);
+        storeIdMap.put(100150197L, 101130576L);
+        storeIdMap.put(100150169L, 101130552L);
+        storeIdMap.put(100186877L, 101130547L);
+        storeIdMap.put(100150226L, 101130603L);
+        storeIdMap.put(100150225L, 101155861L);
+        storeIdMap.put(100150212L, 101130591L);
+        storeIdMap.put(100150237L, 101130612L);
+        storeIdMap.put(100150180L, 101130561L);
+        storeIdMap.put(100150219L, 101130598L);
+        storeIdMap.put(100186881L, 101130544L);
+        storeIdMap.put(100150177L, 101130559L);
+        storeIdMap.put(100150221L, 101130599L);
+        storeIdMap.put(100150168L, 101130551L);
+        storeIdMap.put(100150172L, 101130555L);
+        storeIdMap.put(100150175L, 101130557L);
+        storeIdMap.put(100150182L, 101130563L);
+        storeIdMap.put(100150184L, 101130565L);
+        storeIdMap.put(100150183L, 101130564L);
+        storeIdMap.put(100156915L, 101155854L);
+        storeIdMap.put(100150232L, 101130608L);
+        storeIdMap.put(100150173L, 101130556L);
+        storeIdMap.put(100150245L, 101155868L);
+        storeIdMap.put(100150227L, 101130604L);
+        storeIdMap.put(100186878L, 101130548L);
+        storeIdMap.put(100150213L, 101130592L);
+        storeIdMap.put(100149663L, 101130621L);
+        storeIdMap.put(100149661L, 101130618L);
+        storeIdMap.put(100150241L, 101130615L);
+        storeIdMap.put(100150238L, 101130613L);
+        storeIdMap.put(100150243L, 101155866L);
+        storeIdMap.put(100150242L, 101155865L);
+        storeIdMap.put(100150198L, 101130577L);
+        storeIdMap.put(100150239L, 101155864L);
+        storeIdMap.put(100150174L, 101155856L);
+        storeIdMap.put(100150208L, 101130587L);
+        storeIdMap.put(100150209L, 101130588L);
+        storeIdMap.put(100150218L, 101130597L);
+        storeIdMap.put(100150240L, 101130614L);
+        storeIdMap.put(100150178L, 101130560L);
+        storeIdMap.put(100150181L, 101130562L);
+        storeIdMap.put(100150176L, 101130558L);
+        storeIdMap.put(100150171L, 101130554L);
+        storeIdMap.put(100186883L, 101130546L);
+        storeIdMap.put(100150223L, 101130601L);
+        storeIdMap.put(100150167L, 101155855L);
+        storeIdMap.put(100186882L, 101130545L);
+        storeIdMap.put(100150222L, 101130600L);
+        storeIdMap.put(100150236L, 101130611L);
+        storeIdMap.put(100186884L, 101130541L);
+        storeIdMap.put(100150224L, 101130602L);
+        storeIdMap.put(100150553L, 101130550L);
+        storeIdMap.put(100149660L, 101130616L);
+        storeIdMap.put(100150083L, 101092685L);
+        storeIdMap.put(100150165L,101130617L);
+        storeIdMap.put(100150188L,101130568L);
+        storeIdMap.put(100172217L,101242273L);
+        storeIdMap.put(100172216L,101242274L);
+        return storeIdMap;
     }
 }

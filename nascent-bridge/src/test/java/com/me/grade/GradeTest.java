@@ -83,14 +83,14 @@ public class GradeTest {
     public void putShopActiveCustomerGrade() throws Exception {
         List<Long> shopIds = new ArrayList<>();
         //抖店 泊美 平台id 111 改执行sql
-        //shopIds.add(100149663L);
+        shopIds.add(100149663L);
         //有赞 泊美 平台 id 11 100150166
         //shopIds.add(100150166L);
         //会员中心 平台id 19
         //泊美 会员 100156928
         //shopIds.add(100156928L);
         //Za 会员
-        shopIds.add(100150083L);
+        //shopIds.add(100150083L);
         //抖店Za 100149661 平台id 111 改执行sql
         //shopIds.add(100149661L);
         //有赞Za 100150165 平台 id 11

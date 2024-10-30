@@ -2,6 +2,7 @@ package com.me.token;
 
 import cn.hutool.core.util.StrUtil;
 import com.me.nascent.common.config.NascentConfig;
+import com.me.nascent.modules.token.service.TokenService;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
 import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
 import com.nascent.ecrp.opensdk.request.basis.AccessTokenRegisterRequest;
@@ -17,6 +18,9 @@ public class TokenTest {
 
     @Autowired
     private NascentConfig nascentConfig;
+
+    @Autowired
+    private TokenService tokenService;
 
     @Test
     public void getToken(){
@@ -43,6 +47,12 @@ public class TokenTest {
         } catch (Exception e) {
             log.info("查询开放平台获取Token异常！", e);
         }
+    }
+
+    @Test
+    public void getBtnToken() throws Exception {
+        log.info(tokenService.getBtnToken());
+
     }
 
 

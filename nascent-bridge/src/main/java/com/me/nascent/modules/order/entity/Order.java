@@ -84,7 +84,7 @@ public class Order {
     private Integer refundTimes;
 
     @TableField("goodsLibId")
-    private Integer goodsLibId;
+    private Long goodsLibId;
 
     @TableField("warehouseId")
     private Integer warehouseId;

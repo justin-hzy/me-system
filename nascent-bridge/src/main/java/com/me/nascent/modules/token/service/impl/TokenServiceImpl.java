@@ -59,6 +59,7 @@ public class TokenServiceImpl extends ServiceImpl<TokenMapper, Token> implements
 
         ApiClient client = new ApiClientImpl(request);
         AccessTokenRegisterResponse response = client.execute(request);
+        log.info("token="+response.getResult().getAccessToken());
         if (null != response) {
 //            log.info(response.getSuccess()+"");
 //            log.info(response.getResult().getAccessToken());

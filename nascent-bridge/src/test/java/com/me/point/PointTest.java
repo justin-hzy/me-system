@@ -1,6 +1,16 @@
 package com.me.point;
 
+import com.me.nascent.common.config.NascentConfig;
 import com.me.nascent.modules.point.service.TransPointService;
+import com.me.nascent.modules.token.service.TokenService;
+import com.nascent.ecrp.opensdk.core.executeClient.ApiClient;
+import com.nascent.ecrp.opensdk.core.executeClient.ApiClientImpl;
+import com.nascent.ecrp.opensdk.domain.customer.NickPlatform;
+import com.nascent.ecrp.opensdk.request.point.CustomerPointInfoQueryRequest;
+import com.nascent.ecrp.opensdk.request.point.PointInfoGetRequest;
+import com.nascent.ecrp.opensdk.response.customer.MemberQueryResponse;
+import com.nascent.ecrp.opensdk.response.point.CustomerPointInfoQueryResponse;
+import com.nascent.ecrp.opensdk.response.point.PointInfoGetResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +31,12 @@ public class PointTest {
 
     @Autowired
     private TransPointService transPointService;
+
+    @Autowired
+    private NascentConfig nascentConfig;
+
+    @Autowired
+    private TokenService tokenService;
 
     @Test
     public void getPurePoint() throws Exception {
@@ -60,11 +76,10 @@ public class PointTest {
         * 703212 泊美淘宝
         * 703184 Za淘宝
         * */
-        String platform = "703212";
+        String platform = "111";
 
         for (String integralAccount : integralAccounts){
             transPointService.putPureMemberPoint(integralAccount,platform);
-
         }
     }
 
@@ -124,5 +139,29 @@ public class PointTest {
 
         }
     }
+
+    @Test
+    void queryPoint() throws Exception {
+
+        PointInfoGetRequest request = new PointInfoGetRequest();
+
+        //pcode-216174 泊美
+        request.setIntegralAccount("pcode-216174");
+        request.setServerUrl(nascentConfig.getBtnServerUrl());
+        request.setAppKey(nascentConfig.getBtnAppKey());
+        request.setAppSecret(nascentConfig.getBtnAppSerect());
+        request.setGroupId(nascentConfig.getBtnGroupID());
+        request.setAccessToken(tokenService.getBtnToken());
+
+        request.setPlatform(11);
+        request.setNasOuid("RtQmm3U0683299795078488064");
+        request.setShopId(101130619L);
+
+        ApiClient client = new ApiClientImpl(request);
+        PointInfoGetResponse response = client.execute(request);
+        log.info(response.getBody());
+
+    }
+
 
 }

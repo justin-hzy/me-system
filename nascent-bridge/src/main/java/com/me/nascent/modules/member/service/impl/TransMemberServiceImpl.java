@@ -125,10 +125,10 @@ public class TransMemberServiceImpl implements TransMemberService {
         request.setPageSize(200);
         request.setPageNo(pageNo);
         /*泊美官方旗舰店  za姬芮官方旗舰店 */
-        request.setSellerNick("za姬芮官方旗舰店");
+        request.setSellerNick("泊美官方旗舰店");
         request.setPlatform(1);
         /* pcode-206261	泊美积分体系 pcode-206256	Za线上积分体系 pcode-206258 Za姬芮线下积分体系*/
-        request.setIntegralAccount("pcode-206256");
+        request.setIntegralAccount("pcode-206261");
 
         QueryWrapper<Token> tokenQuery = new QueryWrapper<>();
         tokenQuery.eq("name","nascent");
@@ -173,6 +173,7 @@ public class TransMemberServiceImpl implements TransMemberService {
                 respMap.put("isNext",false);
             }
         }else {
+            log.info(response.getBody());
             respMap.put("isNext",true);
             respMap.put("pageNo",pageNo);
         }
@@ -514,9 +515,27 @@ public class TransMemberServiceImpl implements TransMemberService {
                     shopActiveCustomerQuery.eq("id",id);
                     ShopActiveCustomer existObj = shopActiveCustomerService.getOne(shopActiveCustomerQuery);
                     if (existObj != null){
-                        /*UpdateWrapper<ShopActiveCustomer> shopActiveCustomerUpdate = new UpdateWrapper<>();
-                        shopActiveCustomerUpdate.eq("id",id);
-                        shopActiveCustomerService.update(shopActiveCustomer,shopActiveCustomerUpdate);*/
+                        UpdateWrapper<ShopActiveCustomerNick> shopActiveCustomerNickUpdate = new UpdateWrapper<>();
+                        shopActiveCustomerNickUpdate.eq("mainid",id);
+                        shopActiveCustomerNickService.remove(shopActiveCustomerNickUpdate);
+
+                        List<NickPlatform> nickPlatforms = shopActiveCustomerInfo.getNickInfoList();
+
+                        if(CollUtil.isNotEmpty(nickPlatforms)){
+                            List<ShopActiveCustomerNick> shopActiveCustomerNicks = new ArrayList<>();
+                            for (NickPlatform nickPlatform : nickPlatforms){
+
+                                if(shopId.equals(100149661L) && nickPlatform.getPlatform().equals(111)){
+                                    ShopActiveCustomerNick shopActiveCustomerNick = new ShopActiveCustomerNick();
+                                    BeanUtils.copyProperties(nickPlatform,shopActiveCustomerNick);
+                                    shopActiveCustomerNick.setMainId(id);
+                                    shopActiveCustomerNicks.add(shopActiveCustomerNick);
+                                }
+                            }
+
+                            shopActiveCustomerNickService.saveBatch(shopActiveCustomerNicks);
+                        }
+
                     }else {
                         shopActiveCustomerInfos.add(shopActiveCustomer);
 
@@ -525,10 +544,12 @@ public class TransMemberServiceImpl implements TransMemberService {
                         if(CollUtil.isNotEmpty(nickPlatforms)){
                             List<ShopActiveCustomerNick> shopActiveCustomerNicks = new ArrayList<>();
                             for (NickPlatform nickPlatform : nickPlatforms){
-                                ShopActiveCustomerNick shopActiveCustomerNick = new ShopActiveCustomerNick();
-                                BeanUtils.copyProperties(nickPlatform,shopActiveCustomerNick);
-                                shopActiveCustomerNick.setMainId(id);
-                                shopActiveCustomerNicks.add(shopActiveCustomerNick);
+                                if(shopId.equals(100149661L) && "111".equals(nickPlatform.getPlatform())){
+                                    ShopActiveCustomerNick shopActiveCustomerNick = new ShopActiveCustomerNick();
+                                    BeanUtils.copyProperties(nickPlatform,shopActiveCustomerNick);
+                                    shopActiveCustomerNick.setMainId(id);
+                                    shopActiveCustomerNicks.add(shopActiveCustomerNick);
+                                }
                             }
 
                             shopActiveCustomerNickService.saveBatch(shopActiveCustomerNicks);
