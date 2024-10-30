@@ -23,4 +23,9 @@ public class SalInFEntityJson {
 
     private String F_DSG_srcoid1;
 
+    private NumberJson FLot;
+
+    private String FProduceDate;
+
+    private String FExpiryDate;
 }

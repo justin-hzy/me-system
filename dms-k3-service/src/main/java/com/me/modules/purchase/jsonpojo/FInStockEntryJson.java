@@ -36,6 +36,12 @@ public class FInStockEntryJson {
 
     private String FPOORDERNO;
 
+    private NumberJson FLot;
+
+    private String FProduceDate;
+
+    private String FExpiryDate;
+
     //List<FInStockEntryLinkJson> FInStockEntry_Link = new ArrayList<>();
 
     public String getFPOOrderNo() {

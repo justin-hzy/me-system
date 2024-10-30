@@ -18,19 +18,18 @@ public class SaleController {
 
     private TranService tranService;
 
-    @PostMapping("putSale")
-    public String putSale(@RequestBody PutSaleReqDto dto) throws Exception {
+    @PostMapping("putHkSale")
+    public String putHkSale(@RequestBody PutSaleReqDto dto) throws Exception {
 
-
-        //log.info(dto.toString());
-        String resJsonStr = tranService.tranSaleOrder(dto);
-
+        log.info(dto.toString());
+        String resJsonStr = tranService.tranHkSaleOrder(dto);
 
         return resJsonStr;
     }
 
     @PostMapping("putTWSale")
     public String putTWSale(@RequestBody PutSaleReqDto dto) throws Exception {
+        log.info(dto.toString());
         String resJsonStr = tranService.tranTWSaleOrder(dto);
         return resJsonStr;
     }

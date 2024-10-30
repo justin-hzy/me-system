@@ -54,7 +54,7 @@ public class TranServiceImpl implements TranService {
     private DmsK3ErrorLogService errorLogService;
 
     @Override
-    public String tranSaleOrder(PutSaleReqDto dto) throws Exception {
+    public String tranHkSaleOrder(PutSaleReqDto dto) throws Exception {
 
 
         String param = jsonService.getSaveSaleJsons(dto);
@@ -200,7 +200,7 @@ public class TranServiceImpl implements TranService {
     }
 
     @Override
-    public String tranPurchase(PutPurReqDto dto) throws Exception {
+    public String tranHkPurchase(PutPurReqDto dto) throws Exception {
 
         String param = jsonService.getSavePurchaseJsons(dto);
 

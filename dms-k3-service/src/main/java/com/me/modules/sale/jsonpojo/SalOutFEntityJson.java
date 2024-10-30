@@ -19,9 +19,16 @@ public class SalOutFEntityJson {
 
     private String FSoorDerno;
 
-
-
     private String F_DSG_srcoid;
+
+    //批次1
+    private NumberJson FLot;
+
+    //生产日期
+    private String FProduceDate;
+
+    //效期
+    private String FExpiryDate;
 
 
 }

@@ -15,4 +15,10 @@ public class AssyFsubFntityJson {
     private String FCostProportion;
 
     private String FZJWdtID;
+
+    private NumberJson FLot;
+
+    private String FProduceDate;
+
+    private String FExpiryDate;
 }

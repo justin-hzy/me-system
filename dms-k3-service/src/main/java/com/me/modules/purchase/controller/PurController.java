@@ -18,11 +18,11 @@ public class PurController {
 
     private TranService tranService;
 
-    @PostMapping("putPur")
-    public String putPur(@RequestBody PutPurReqDto dto) throws Exception {
+    @PostMapping("putHKPur")
+    public String putHKPur(@RequestBody PutPurReqDto dto) throws Exception {
 
         log.info("dto="+dto.toString());
-        String resJsonStr = tranService.tranPurchase(dto);
+        String resJsonStr = tranService.tranHkPurchase(dto);
         return resJsonStr;
     }
 

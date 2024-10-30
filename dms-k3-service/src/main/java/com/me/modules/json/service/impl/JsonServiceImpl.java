@@ -215,6 +215,12 @@ public class JsonServiceImpl implements JsonService {
 
             salOutFEntityJson.setF_DSG_srcoid(saleFEntity.getFdsgsrcoid());
 
+            //默认批次效期、生产日期、效期
+            NumberJson flotJson = new NumberJson();
+            flotJson.setFNumber("1");
+            salOutFEntityJson.setFLot(flotJson);
+            salOutFEntityJson.setFExpiryDate("1900-01-01");
+            salOutFEntityJson.setFProduceDate("1900-01-01");
 
             FEntity.add(salOutFEntityJson);
         }
@@ -226,7 +232,7 @@ public class JsonServiceImpl implements JsonService {
 
         Gson gson = new Gson();
         String json = gson.toJson(salOutJson);
-        log.info("json=" + json);
+        //log.info("json=" + json);
 
         /*Map<String,String> paramsMap = new HashMap<>();
         //paramsMap.put("id",id);
@@ -364,6 +370,13 @@ public class JsonServiceImpl implements JsonService {
             } else {
                 salInFEntityJson.setF_DSG_srcoid1("");
             }
+
+            //默认批次效期、生产日期、效期
+            NumberJson flotJson = new NumberJson();
+            flotJson.setFNumber("1");
+            salInFEntityJson.setFLot(flotJson);
+            salInFEntityJson.setFExpiryDate("1900-01-01");
+            salInFEntityJson.setFProduceDate("1900-01-01");
 
             FEntity.add(salInFEntityJson);
         }
@@ -539,6 +552,12 @@ public class JsonServiceImpl implements JsonService {
                 fInStockEntryJson.setFENTRYTAXRATE("");
             }
 
+            //默认批次效期、生产日期、效期
+            NumberJson flotJson = new NumberJson();
+            flotJson.setFNumber("1");
+            fInStockEntryJson.setFLot(flotJson);
+            fInStockEntryJson.setFExpiryDate("1900-01-01");
+            fInStockEntryJson.setFProduceDate("1900-01-01");
 
             FInStockEntry.add(fInStockEntryJson);
         }
@@ -635,6 +654,13 @@ public class JsonServiceImpl implements JsonService {
             FPURMRB.setFTAXPRICE(rePurFentity.getFtaxprice());
             FPURMRB.setFnote("");
             FPURMRB.setFENTRYTAXRATE(rePurFentity.getFentrytaxrate());
+
+            //默认批次效期、生产日期、效期
+            NumberJson flotJson = new NumberJson();
+            flotJson.setFNumber("1");
+            FPURMRB.setFLot(flotJson);
+            FPURMRB.setFExpiryDate("1900-01-01");
+            FPURMRB.setFProduceDate("1900-01-01");
 
             FPURMRBENTRY.add(FPURMRB);
         }
@@ -807,6 +833,13 @@ public class JsonServiceImpl implements JsonService {
 
                 assyFsubFntityJson.setFZJWdtID("");
                 assyFsubFntityJson.setFCostProportion("");
+
+                //默认批次效期、生产日期、效期
+                NumberJson flotJson = new NumberJson();
+                flotJson.setFNumber("1");
+                assyFsubFntityJson.setFLot(flotJson);
+                assyFsubFntityJson.setFExpiryDate("1900-01-01");
+                assyFsubFntityJson.setFProduceDate("1900-01-01");
 
 
                 FSubEntity.add(assyFsubFntityJson);

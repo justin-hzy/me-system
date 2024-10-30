@@ -19,4 +19,10 @@ public class FPURMRB {
     private String fnote;
 
     private String FENTRYTAXRATE;
+
+    private NumberJson FLot;
+
+    private String FProduceDate;
+
+    private String FExpiryDate;
 }
