@@ -1,33 +1,229 @@
-[
-  {
-    "id": "61e443bd-aacd-4ad2-9d78-31e40d4164e9",
-    "params": {
-      "submit": true,
-      "detailobjs": {
-        "reftables": [
-          688
-        ],
-        "refobjs": [
-          {
-            "addList": [
-              {
-                "QTY": "3630",
-                "M_PRODUCT_ID__NAME": "9000000000018"
-              }
-            ],
-            "table": 12984
-          }
-        ]
-      },
-      "masterobj": {
-        "DESCRIPTION": "台湾采购申请流程-入库",
-        "BILLDATE": "20240619",
-        "C_OTHER_INOUTTYPE_ID__NAME": "采购入库",
-        "id": "-1",
-        "C_STORE_ID__NAME": "A1",
-        "table": "12983"
-      }
+{
+  "title": "DMSTW07-2024092703",
+  "items": [
+    {
+      "storage_type": "A1",
+      "batch": "4228GA",
+      "expiration_date": "2027-08-14",
+      "sku": "4711401211860",
+      "received_pcs": "1179"
     },
-    "command": "ProcessOrder"
-  }
-]
+    {
+      "storage_type": "A1",
+      "batch": "4246AA",
+      "expiration_date": "2027-09-01",
+      "sku": "4711401211860",
+      "received_pcs": "8383"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4225BA",
+      "expiration_date": "2027-08-11",
+      "sku": "4711401211693",
+      "received_pcs": "1534"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4253BA",
+      "expiration_date": "2027-09-08",
+      "sku": "4711401211693",
+      "received_pcs": "6322"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4221AB",
+      "expiration_date": "2027-08-07",
+      "sku": "4711401211709",
+      "received_pcs": "1498"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4250BA",
+      "expiration_date": "2027-09-05",
+      "sku": "4711401211709",
+      "received_pcs": "6051"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4253BA",
+      "expiration_date": "2027-09-08",
+      "sku": "4711401211730",
+      "received_pcs": "3313"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4226AB",
+      "expiration_date": "2027-08-12",
+      "sku": "4711401211730",
+      "received_pcs": "3039"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4228GA",
+      "expiration_date": "2027-08-14",
+      "sku": "4711401211853",
+      "received_pcs": "1177"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4244AA",
+      "expiration_date": "2027-08-30",
+      "sku": "4711401211853",
+      "received_pcs": "8434"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4253AA",
+      "expiration_date": "2027-09-08",
+      "sku": "4711401211877",
+      "received_pcs": "7385"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4229GA",
+      "expiration_date": "2027-08-15",
+      "sku": "4711401211877",
+      "received_pcs": "1727"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4248AA",
+      "expiration_date": "2027-09-04",
+      "sku": "4711401211822",
+      "received_pcs": "6790"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4257GA",
+      "expiration_date": "2027-09-12",
+      "sku": "4711401211877",
+      "received_pcs": "420"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4257GA",
+      "expiration_date": "2027-09-12",
+      "sku": "4711401211846",
+      "received_pcs": "1700"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4248AA",
+      "expiration_date": "2027-09-04",
+      "sku": "4711401211846",
+      "received_pcs": "6744"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4229GA",
+      "expiration_date": "2027-08-15",
+      "sku": "4711401211846",
+      "received_pcs": "959"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4229GA",
+      "expiration_date": "2027-08-15",
+      "sku": "4711401211822",
+      "received_pcs": "1065"
+    },
+    {
+      "storage_type": "A1",
+      "expiration_date": "2034-07-29",
+      "sku": "4711401211907",
+      "received_pcs": "9978"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4227GA",
+      "expiration_date": "2027-09-13",
+      "sku": "4711401211891",
+      "received_pcs": "1370"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4226AA",
+      "expiration_date": "2027-08-12",
+      "sku": "4711401211730",
+      "received_pcs": "1179"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4251BA",
+      "expiration_date": "2027-09-06",
+      "sku": "4711401211723",
+      "received_pcs": "6460"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4244AA",
+      "expiration_date": "2027-08-30",
+      "sku": "4711401211891",
+      "received_pcs": "8186"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4246AA",
+      "expiration_date": "2027-09-01",
+      "sku": "4711401211839",
+      "received_pcs": "8486"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4251BA",
+      "expiration_date": "2027-09-06",
+      "sku": "4711401211716",
+      "received_pcs": "6073"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4225BA",
+      "expiration_date": "2027-08-11",
+      "sku": "4711401211723",
+      "received_pcs": "1402"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4244AA",
+      "expiration_date": "2027-08-30",
+      "sku": "4711401211884",
+      "received_pcs": "8178"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4222AB",
+      "expiration_date": "2027-08-08",
+      "sku": "4711401211716",
+      "received_pcs": "1296"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4227GA",
+      "expiration_date": "2027-08-13",
+      "sku": "4711401211884",
+      "received_pcs": "1286"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4248AA",
+      "expiration_date": "2027-09-03",
+      "sku": "4711401211822",
+      "received_pcs": "1700"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4248AA",
+      "expiration_date": "2027-09-03",
+      "sku": "4711401211846",
+      "received_pcs": "91"
+    },
+    {
+      "storage_type": "A1",
+      "batch": "4228GA",
+      "expiration_date": "2027-08-14",
+      "sku": "4711401211839",
+      "received_pcs": "1072"
+    }
+  ],
+  "status": "done"
+}

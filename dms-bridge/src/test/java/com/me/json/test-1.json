@@ -1,58 +1,77 @@
 {
   "NeedUpDateFields": [],
   "NeedReturnFields": [],
-  "IsDeleteEntry": "True",
-  "SubSystemId": "",
+  "IsDeleteEntry": "true",
+  "SubSystemId": "0",
   "IsVerifyBaseDataField": "false",
   "IsEntryBatchFill": "true",
   "ValidateFlag": "true",
   "NumberSearch": "true",
   "IsAutoAdjustField": "false",
+  "IsAutoSubmitAndAudit": "true",
   "InterationFlags": "STK_InvCheckDetailMessage",
   "IgnoreInterationFlag": "",
   "IsControlPrecision": "false",
   "ValidateRepeatJson": "false",
-  "IsAutoSubmitAndAudit": "true",
   "Model": {
     "FID": "0",
-    "FBillNo": "HK_DMSTW05-2024062001",
     "FBillTypeID": {
-      "FNumber": "ZJDB01_SYS"
+      "FNumber": "XSCKD01_SYS"
     },
-    "FBizType": "NORMAL",
-    "FTransferDirect": "GENERAL",
-    "FTransferBizType": "InnerOrgTransfer",
-    "FStockOutOrgId": {
+    "FBillNo": "HK_TW13.4746360",
+    "FDate": "",
+    "FStockOrgId": {
       "FNumber": "ZT021"
     },
-    "FDate": "2024-06-27",
-    "FThirdSrcBillNo": "DMSTW05-2024062001",
-    "FBillEntry": [
+    "FSaleOrgId": {
+      "FNumber": "ZT021"
+    },
+    "FOwnerTypeIdHead": "业务组织",
+    "FCUSTOMERID": {
+      "FNumber": "CUST0558"
+    },
+    "F_DSG_Base": {
+      "FNumber": "ZT026"
+    },
+    "F_DSG_FLLX": "留空",
+    "F_DSG_Text1": "",
+    "SubHeadEntity": {
+      "FSettleOrgID": {
+        "FNumber": "ZT021"
+      },
+      "fSettleCurrID": {
+        "FNumber": "PRE005"
+      },
+      "FThirdBillNo": "HK_TW13.4746360"
+    },
+    "FEntity": [
       {
-        "FRowType": "Standard",
+        "FEntryID": "0",
         "FMaterialId": {
-          "FNumber": "4531632408248"
+          "FNumber": "4531632457505"
         },
-        "FQty": "50",
-        "FSrcStockId": {
+        "FEntryTaxRate": "0",
+        "FRealQty": "6",
+        "FStockId": {
           "FNumber": "A1"
         },
-        "FDestStockId": {
-          "FNumber": "S1"
-        }
+        "FTAXPRICE": "105.0000000000",
+        "FSoorDerno": "HK_TW13.4746360",
+        "F_DSG_srcoid": "HK_TW13.4746360"
       },
       {
-        "FRowType": "Standard",
+        "FEntryID": "0",
         "FMaterialId": {
           "FNumber": "4531632457529"
         },
-        "FQty": "150",
-        "FSrcStockId": {
+        "FEntryTaxRate": "0",
+        "FRealQty": "3",
+        "FStockId": {
           "FNumber": "A1"
         },
-        "FDestStockId": {
-          "FNumber": "S1"
-        }
+        "FTAXPRICE": "105.0000000000",
+        "FSoorDerno": "HK_TW13.4746360",
+        "F_DSG_srcoid": "HK_TW13.4746360"
       }
     ]
   }
