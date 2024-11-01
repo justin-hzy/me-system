@@ -26,8 +26,8 @@ public class PurController {
         return resJsonStr;
     }
 
-    @PostMapping("twPutPur")
-    public String twPutPur(@RequestBody PutPurReqDto dto) throws Exception {
+    @PostMapping("putTWPur")
+    public String putTWPur(@RequestBody PutPurReqDto dto) throws Exception {
         log.info("dto="+dto.toString());
         String resJsonStr = tranService.tranTwPurchase(dto);
         return resJsonStr;

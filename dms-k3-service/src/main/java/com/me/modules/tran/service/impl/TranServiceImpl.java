@@ -111,9 +111,10 @@ public class TranServiceImpl implements TranService {
 
         //调用金蝶销售出库保存接口 没有测试环境以下代码暂时注释
         IdentifyInfo iden = new IdentifyInfo();
-        iden.setAppId(k3Config.getAppId());
-        iden.setdCID(k3Config.getDCID());
-        iden.setAppSecret(k3Config.getAppSecret());
+        iden.setAppId(k3Config.getTwAppId());
+        iden.setdCID(k3Config.getTwdCID());
+        iden.setAppSecret(k3Config.getTwAppSecret());
+
         iden.setlCID(k3Config.getLCID());
         iden.setServerUrl(k3Config.getServerUrl());
         iden.setUserName(k3Config.getUserName());
@@ -267,9 +268,10 @@ public class TranServiceImpl implements TranService {
 
         //调用金蝶销售出库保存接口 没有测试环境以下代码暂时注释
         IdentifyInfo iden = new IdentifyInfo();
-        iden.setAppId(k3Config.getAppId());
-        iden.setdCID(k3Config.getDCID());
-        iden.setAppSecret(k3Config.getAppSecret());
+        iden.setAppId(k3Config.getTwAppId());
+        iden.setAppSecret(k3Config.getTwAppSecret());
+        iden.setdCID(k3Config.getTwdCID());
+
         iden.setlCID(k3Config.getLCID());
         iden.setServerUrl(k3Config.getServerUrl());
         iden.setUserName(k3Config.getUserName());

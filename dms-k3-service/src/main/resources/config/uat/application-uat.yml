@@ -85,19 +85,20 @@ fl:
   authorization: Bearer Hw_m_wYL7l8qaVuJNrgUXBYKn55YQO3w5X-Bdi5FKEo
 
 #金蝶 暂时是用生成环境
-K3:
-  appId: 293236_RdbvTyvPyrB8RWxI5/1oRzVuzs0aQOmE
-  dCID: 661f3771555e3a
-  appSecret: be7dfad02c9d4de19585698309315157
-  userName: admin1
+k3:
+  hk:
+    appId: '294117_xY9v08CKyomfSWUo0ZTKzwxHTJwX1soH'
+    dCID: '672146be582422'
+    appSecret: '3bded10db07d49e8be546f1b7d9932f9'
+  tw:
+    appId: '294137_1+eC2xvo4pnW45WH7Z7NVzyE6uQ/4ALu'
+    appSecret: '3191e6db61d84fb59413b456bdbc73e8'
+    dCID: '6721823e582426'
+  userName: 'admin1'
   lCID: 2052
   serverUrl: http://kd.za-cosmetics.com/k3Cloud/
+  produceDate: 2020-01-01
+  expiryDate: 2030-01-01
+  flot: 1
 
-twk3:
-  twAppId: 292841_S6eq6xCI3kH92+yv7e2Myx1Fzi7VRCrG
-  twDCID: 6710da19a7abef
-  twAppSecret: d34572a11101458d85fd0670076f49c9
-  twUserName: admin1
-  lCID: 2052
-  serverUrl: http://kd.za-cosmetics.com/k3Cloud/
 

@@ -52,8 +52,8 @@ public class InventoryController {
     }
 
 
-    @PostMapping("getBatchInventory")
-    public String getBatchInventory(@RequestBody GetBatInventoryReqDto dto) throws Exception {
+    @PostMapping("getTwBatchInventory")
+    public String getTWBatchInventory(@RequestBody GetBatInventoryReqDto dto) throws Exception {
         String resStr = inventoryService.getBatTWInventory(dto.getSkus(),dto.getStockNumber());
         log.info("resStr="+resStr);
         return resStr;

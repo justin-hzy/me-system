@@ -25,8 +25,8 @@ public class PriceController {
 
     private K3Config k3Config;
 
-    @PostMapping("getPrice")
-    public String getPrice(@RequestBody GetPriceReqDto reqDto) throws Exception {
+    @PostMapping("getTWPurPrice")
+    public String getTWPurPrice(@RequestBody GetPriceReqDto reqDto) throws Exception {
 
         K3PriceReqDto dto = new K3PriceReqDto();
         /*String sku1 = "4531632422077-1";
@@ -60,10 +60,11 @@ public class PriceController {
         String json = gson.toJson(dto);
 
         IdentifyInfo iden = new IdentifyInfo();
+        iden.setAppId(k3Config.getTwAppId());
+        iden.setdCID(k3Config.getTwdCID());
+        iden.setAppSecret(k3Config.getTwAppSecret());
+
         iden.setUserName(k3Config.getUserName());
-        iden.setAppId(k3Config.getAppId());
-        iden.setdCID(k3Config.getDCID());
-        iden.setAppSecret(k3Config.getAppSecret());
         iden.setlCID(k3Config.getLCID());
         iden.setServerUrl(k3Config.getServerUrl());
 

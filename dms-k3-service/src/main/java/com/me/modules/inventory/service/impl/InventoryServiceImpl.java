@@ -77,7 +77,11 @@ public class InventoryServiceImpl implements InventoryService {
 
         skus = skus.substring(0,skus.length()-1);
 
-        String FilterString = "FStockOrgId.fnumber in ('ZT026') and FMaterialId.fnumber in("+skus+") and FStockStatusId.fname='可用' and FStockId.fnumber = "+"'"+stockNumber+"'";
+        String FilterString = "FStockOrgId.fnumber in ('ZT026') and FMaterialId.fnumber in("+skus+") and FStockStatusId.fname='可用' " +
+                "and FStockId.fnumber = "+"'"+stockNumber+"'"+"and " +
+                "FLot.fnumber  = '"+k3Config.getFlot()+"' " +
+                "and FProduceDate = '"+k3Config.getFProduceDate()+"' " +
+                "and FExpiryDate = '"+k3Config.getFExpiryDate()+"'";
         dto.setFilterString(FilterString);
 
         Gson gson = new GsonBuilder()
@@ -88,13 +92,14 @@ public class InventoryServiceImpl implements InventoryService {
         log.info("json="+json);
 
         IdentifyInfo iden = new IdentifyInfo();
-        iden.setUserName(k3Config.getUserName());
-        iden.setAppId(k3Config.getAppId());
-        iden.setdCID(k3Config.getDCID());
-        iden.setAppSecret(k3Config.getAppSecret());
+        iden.setAppId(k3Config.getTwAppId());
+        iden.setdCID(k3Config.getTwdCID());
+        iden.setAppSecret(k3Config.getTwAppSecret());
 
+        iden.setUserName(k3Config.getUserName());
         iden.setlCID(k3Config.getLCID());
         iden.setServerUrl(k3Config.getServerUrl());
+
 
         K3CloudApi api = new K3CloudApi(iden);
 

@@ -8,33 +8,43 @@ import org.springframework.context.annotation.Configuration;
 @Data
 public class K3Config {
 
-    @Value("${K3.appId}")
+    @Value("${k3.hk.appId}")
     private String appId;
 
-    @Value("${K3.dCID}")
+    @Value("${k3.hk.dCID}")
     private String dCID;
 
-    @Value("${K3.appSecret}")
+    @Value("${k3.hk.appSecret}")
     private String appSecret;
 
-    @Value("${K3.userName}")
-    private String userName;
-
-    @Value("${K3.lCID}")
-    private Integer lCID;
-
-    @Value("${K3.serverUrl}")
-    private String serverUrl;
-
-    @Value("${twk3.twAppId}")
+    @Value("${k3.tw.appId}")
     private String twAppId;
 
-    @Value("${twk3.twDCID}")
-    private String twDCID;
+    @Value("${k3.tw.dCID}")
+    private String twdCID;
 
-    @Value("${twk3.twAppSecret}")
+    @Value("${k3.tw.appSecret}")
     private String twAppSecret;
 
-    @Value("${twk3.twUserName}")
-    private String twUserName;
+    @Value("${k3.userName}")
+    private String userName;
+
+    @Value("${k3.lCID}")
+    private Integer lCID;
+
+    @Value("${k3.serverUrl}")
+    private String serverUrl;
+
+    @Value("${k3.produceDate}")
+    private String FProduceDate;
+
+    @Value("${k3.expiryDate}")
+    private String FExpiryDate;
+
+    @Value("${k3.flot}")
+    private String flot;
+
+
+
+
 }

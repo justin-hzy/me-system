@@ -2,6 +2,7 @@ package com.me.modules.json.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.google.gson.Gson;
+import com.me.common.config.K3Config;
 import com.me.modules.assembly.dto.PutAssemblyDto;
 import com.me.modules.assembly.jsonpojo.AssyFEntityJson;
 import com.me.modules.assembly.jsonpojo.AssyFsubFntityJson;
@@ -54,7 +55,7 @@ public class JsonServiceImpl implements JsonService {
     private K3RetSaleItemService k3RetSaleItemService;
 
 
-
+    private K3Config k3Config;
 
     @Override
     public String getSaveSaleJsons(PutSaleReqDto dto) {
@@ -217,10 +218,10 @@ public class JsonServiceImpl implements JsonService {
 
             //默认批次效期、生产日期、效期
             NumberJson flotJson = new NumberJson();
-            flotJson.setFNumber("1");
+            flotJson.setFNumber(k3Config.getFlot());
             salOutFEntityJson.setFLot(flotJson);
-            salOutFEntityJson.setFExpiryDate("1900-01-01");
-            salOutFEntityJson.setFProduceDate("1900-01-01");
+            salOutFEntityJson.setFExpiryDate(k3Config.getFExpiryDate());
+            salOutFEntityJson.setFProduceDate(k3Config.getFProduceDate());
 
             FEntity.add(salOutFEntityJson);
         }
@@ -373,10 +374,10 @@ public class JsonServiceImpl implements JsonService {
 
             //默认批次效期、生产日期、效期
             NumberJson flotJson = new NumberJson();
-            flotJson.setFNumber("1");
+            flotJson.setFNumber(k3Config.getFlot());
             salInFEntityJson.setFLot(flotJson);
-            salInFEntityJson.setFExpiryDate("1900-01-01");
-            salInFEntityJson.setFProduceDate("1900-01-01");
+            salInFEntityJson.setFExpiryDate(k3Config.getFExpiryDate());
+            salInFEntityJson.setFProduceDate(k3Config.getFProduceDate());
 
             FEntity.add(salInFEntityJson);
         }
@@ -554,10 +555,10 @@ public class JsonServiceImpl implements JsonService {
 
             //默认批次效期、生产日期、效期
             NumberJson flotJson = new NumberJson();
-            flotJson.setFNumber("1");
+            flotJson.setFNumber(k3Config.getFlot());
             fInStockEntryJson.setFLot(flotJson);
-            fInStockEntryJson.setFExpiryDate("1900-01-01");
-            fInStockEntryJson.setFProduceDate("1900-01-01");
+            fInStockEntryJson.setFExpiryDate(k3Config.getFExpiryDate());
+            fInStockEntryJson.setFProduceDate(k3Config.getFProduceDate());
 
             FInStockEntry.add(fInStockEntryJson);
         }
