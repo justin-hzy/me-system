@@ -84,7 +84,7 @@ public class TranServiceImpl implements TranService {
         String result = gson.toJson(repoRet.getResult());
         if (repoRet.getResult().getResponseStatus().isIsSuccess()) {
             JSONObject resJson = new JSONObject();
-            log.info("同步成功");
+            log.info("香港销售出库单-同步成功");
             log.info("result="+result);
             resJson.put("code",200);
 
@@ -134,7 +134,7 @@ public class TranServiceImpl implements TranService {
         String result = gson.toJson(repoRet.getResult());
         if (repoRet.getResult().getResponseStatus().isIsSuccess()) {
             JSONObject resJson = new JSONObject();
-            log.info("同步成功");
+            log.info("台湾销售出库单-同步成功");
             log.info("result="+result);
             resJson.put("code",200);
 
@@ -289,7 +289,7 @@ public class TranServiceImpl implements TranService {
             System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
             //更新主表状态
             JSONObject resJson = new JSONObject();
-            log.info("同步成功");
+            log.info("台湾采购入库单-同步成功");
             log.info("result="+result);
             resJson.put("code",200);
             return resJson.toJSONString();
