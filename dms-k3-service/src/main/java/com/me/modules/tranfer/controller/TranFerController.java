@@ -15,9 +15,15 @@ public class TranFerController {
 
     private TranService  tranService;
 
-    @PostMapping("putTrf")
-    public String putTrf(@RequestBody PutTrfReqDto dto) throws Exception {
-        String resJsonStr = tranService.tranTrf(dto);
+    @PostMapping("putHkTrf")
+    public String putHkTrfUrl(@RequestBody PutTrfReqDto dto) throws Exception {
+        String resJsonStr = tranService.putHkTrfUrl(dto);
+        return resJsonStr;
+    }
+
+    @PostMapping("putTwTrf")
+    public String putTwTrfUrl(@RequestBody PutTrfReqDto dto) throws Exception {
+        String resJsonStr = tranService.putTwTrfUrl(dto);
         return resJsonStr;
     }
 }

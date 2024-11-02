@@ -22,7 +22,9 @@ public interface TranService {
 
     String tranRetPur(GetPutRePurReqDto dto) throws Exception;
 
-    String tranTrf(PutTrfReqDto dto) throws Exception;
+    String putHkTrfUrl(PutTrfReqDto dto) throws Exception;
+
+    String putTwTrfUrl(PutTrfReqDto dto) throws Exception;
 
     String tranAssembly(PutAssemblyDto dto) throws Exception;
 }

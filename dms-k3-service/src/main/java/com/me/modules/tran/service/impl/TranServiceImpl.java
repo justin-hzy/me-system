@@ -149,7 +149,7 @@ public class TranServiceImpl implements TranService {
             JSONObject resJson = new JSONObject();
             resJson.put("code",500);
             saveErrorLog(repoRet.getResult().getResponseStatus().getErrors(),dto.getFbillno());
-
+            log.info(resJson.toJSONString());
             return resJson.toJSONString();
         }
     }
@@ -363,7 +363,7 @@ public class TranServiceImpl implements TranService {
     }
 
     @Override
-    public String tranTrf(PutTrfReqDto dto) throws Exception {
+    public String putHkTrfUrl(PutTrfReqDto dto) throws Exception {
 
         String param = jsonService.getSaveTrfJson(dto);
 
@@ -416,6 +416,61 @@ public class TranServiceImpl implements TranService {
             return resJson.toJSONString();
         }
 
+    }
+
+    @Override
+    public String putTwTrfUrl(PutTrfReqDto dto) throws Exception {
+        String param = jsonService.getSaveTrfJson(dto);
+
+        //调用金蝶销售出库保存接口 没有测试环境以下代码暂时注释
+        IdentifyInfo iden = new IdentifyInfo();
+        iden.setAppId(k3Config.getTwAppId());
+        iden.setdCID(k3Config.getTwdCID());
+        iden.setAppSecret(k3Config.getTwAppSecret());
+
+        iden.setlCID(k3Config.getLCID());
+        iden.setServerUrl(k3Config.getServerUrl());
+        iden.setUserName(k3Config.getUserName());
+        K3CloudApi client = new K3CloudApi(iden);
+
+        //业务对象标识
+        String formId = "STK_TransferDirect";
+
+        log.info("param="+param);
+        //调用接口
+        String resultJson = client.save(formId,param);
+
+        //用于记录结果
+        Gson gson = new Gson();
+        RepoRet repoRet = gson.fromJson(resultJson, RepoRet.class);
+        String result = gson.toJson(repoRet.getResult());
+
+        log.info("result="+result);
+
+        //用于记录结果
+        if (repoRet.getResult().getResponseStatus().isIsSuccess()) {
+            System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
+            //更新主表状态
+            JSONObject resJson = new JSONObject();
+            log.info("同步成功");
+            log.info("result="+result);
+            resJson.put("code",200);
+            return resJson.toJSONString();
+
+            //更新中间表
+
+        } else {
+            Assert.fail("接口返回结果: " + gson.toJson(repoRet.getResult().getResponseStatus()));
+
+            //更新主表状态
+            JSONObject resJson = new JSONObject();
+            resJson.put("code",500);
+
+            saveErrorLog(repoRet.getResult().getResponseStatus().getErrors(),dto.getFbillNo());
+
+
+            return resJson.toJSONString();
+        }
     }
 
     @Override

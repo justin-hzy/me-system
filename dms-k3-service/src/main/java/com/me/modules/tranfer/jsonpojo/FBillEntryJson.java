@@ -15,4 +15,10 @@ public class FBillEntryJson {
     private NumberJson FSrcStockId;
 
     private NumberJson FDestStockId;
+
+    private NumberJson Flot;
+
+    private String FExpiryDate;
+
+    private String FProduceDate;
 }

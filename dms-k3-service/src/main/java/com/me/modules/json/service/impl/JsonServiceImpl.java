@@ -733,6 +733,12 @@ public class JsonServiceImpl implements JsonService {
             fDestStockIdObj.setFNumber(trfFEntity.getFdeststockid());
             fBillEntryJson.setFDestStockId(fDestStockIdObj);
 
+            NumberJson flotJson = new NumberJson();
+            flotJson.setFNumber(k3Config.getFlot());
+            fBillEntryJson.setFlot(flotJson);
+            fBillEntryJson.setFExpiryDate(k3Config.getFExpiryDate());
+            fBillEntryJson.setFProduceDate(k3Config.getFProduceDate());
+
             fBillEntryJson.setFQty(trfFEntity.getFqty());
 
             fBillEntry.add(fBillEntryJson);
