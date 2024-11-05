@@ -1,4 +1,4 @@
-package com.me.modules.retsale.entity;
+package com.me.modules.resale.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.TableField;
