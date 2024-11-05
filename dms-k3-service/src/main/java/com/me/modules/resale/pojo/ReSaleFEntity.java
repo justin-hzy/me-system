@@ -1,4 +1,4 @@
-package com.me.modules.retsale.pojo;
+package com.me.modules.resale.pojo;
 
 import lombok.Data;
 

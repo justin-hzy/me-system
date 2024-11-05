@@ -1,8 +1,8 @@
-package com.me.modules.retsale.mapper;
+package com.me.modules.resale.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
-import com.me.modules.retsale.entity.K3RetSale;
+import com.me.modules.resale.entity.K3RetSale;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper

@@ -1,10 +1,10 @@
-package com.me.modules.retsale.service.impl;
+package com.me.modules.resale.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 
-import com.me.modules.retsale.entity.K3RetSaleItem;
-import com.me.modules.retsale.mapper.K3RetSaleItemMapper;
-import com.me.modules.retsale.service.K3RetSaleItemService;
+import com.me.modules.resale.entity.K3RetSaleItem;
+import com.me.modules.resale.mapper.K3RetSaleItemMapper;
+import com.me.modules.resale.service.K3RetSaleItemService;
 import org.springframework.stereotype.Service;
 
 @Service

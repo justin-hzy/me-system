@@ -1,4 +1,4 @@
-package com.me.modules.retsale.jsonpojo;
+package com.me.modules.resale.jsonpojo;
 
 
 import com.me.modules.sale.jsonpojo.NumberJson;

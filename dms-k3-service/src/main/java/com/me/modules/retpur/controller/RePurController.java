@@ -18,8 +18,27 @@ public class RePurController {
     @PostMapping("putRePur")
     public String putRePur(@RequestBody GetPutRePurReqDto dto) throws Exception {
 
-        String resJsonStr = tranService.tranRetPur(dto);
+        String resJsonStr = tranService.tranHkRePur(dto);
 
         return resJsonStr;
     }
+
+    @PostMapping("putGyjRePur")
+    public String putGyjRePur(@RequestBody GetPutRePurReqDto dto) throws Exception {
+        String resJsonStr = tranService.tranTwRePur(dto);
+        return resJsonStr;
+    }
+
+    @PostMapping("putGyjTwRePur")
+    public String putGyjTwRePur(@RequestBody GetPutRePurReqDto dto) throws Exception {
+        String resJsonStr = tranService.tranTwRePur(dto);
+        return resJsonStr;
+    }
+
+    @PostMapping("putTwRePur")
+    public String putTwRePur(@RequestBody GetPutRePurReqDto dto) throws Exception {
+        String resJsonStr = tranService.tranTwRePur(dto);
+        return resJsonStr;
+    }
+
 }

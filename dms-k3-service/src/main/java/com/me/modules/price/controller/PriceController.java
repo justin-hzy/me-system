@@ -25,8 +25,8 @@ public class PriceController {
 
     private K3Config k3Config;
 
-    @PostMapping("getTWPurPrice")
-    public String getTWPurPrice(@RequestBody GetPriceReqDto reqDto) throws Exception {
+    @PostMapping("getTwPurPrice")
+    public String getTwPurPrice(@RequestBody GetPriceReqDto reqDto) throws Exception {
 
         K3PriceReqDto dto = new K3PriceReqDto();
         /*String sku1 = "4531632422077-1";

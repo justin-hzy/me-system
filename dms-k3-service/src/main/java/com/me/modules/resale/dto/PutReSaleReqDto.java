@@ -1,7 +1,6 @@
-package com.me.modules.retsale.dto;
+package com.me.modules.resale.dto;
 
-import com.me.modules.retsale.pojo.ReSaleFEntity;
-import com.me.modules.sale.pojo.SaleFEntity;
+import com.me.modules.resale.pojo.ReSaleFEntity;
 import lombok.Data;
 
 import java.util.List;

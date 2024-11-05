@@ -69,4 +69,35 @@ public class LogAspect {
         }
         //打印日志
     }
+
+
+    /**
+     * 切点方法执行后执行此方法
+     *
+     * @param joinPoint joinPoint
+     * @param ret       ret
+     */
+    @AfterReturning(returning = "ret", pointcut = "requestLog()")
+    public void doAfterReturning(JoinPoint joinPoint, Object ret) {
+        //获取方法说明
+        String description = "";
+        ApiOperation annotation = ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(ApiOperation.class);
+        if (Objects.nonNull(annotation)) {
+            description = annotation.value();
+        }
+        //获取请求结果
+        JsonResult<Object> jsonResult = Convert.convert(new TypeReference<JsonResult<Object>>() {
+        }, ret);
+        //打印日志
+        if (Objects.isNull(jsonResult)) {
+            jsonResult = JsonResult.ok();
+        }
+        //获取执行方法名
+        Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
+        String methodName = method.getName();
+        // update by PiaO 20210820 判断是首页图片或者是验证码时 不打印日志
+        if(!(StrUtil.equals(methodName,"showall") ||StrUtil.equals(methodName,"getGraphImg") || StrUtil.equals(methodName,"quartzMonitor"))) {
+            log.info("ENDED->[{}]: ReturnCode[{}] ReturnMsg[{}] Data[{}]", description, jsonResult.getCode(), jsonResult.getMessage(), jsonResult.getData());
+        }
+    }
 }

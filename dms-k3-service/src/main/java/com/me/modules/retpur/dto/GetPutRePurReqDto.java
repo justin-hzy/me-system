@@ -1,7 +1,6 @@
 package com.me.modules.retpur.dto;
 
 import com.me.modules.retpur.pojo.RePurFentity;
-import com.me.modules.retsale.pojo.ReSaleFEntity;
 import lombok.Data;
 
 import java.util.List;
