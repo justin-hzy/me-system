@@ -13,13 +13,18 @@ public interface TranService {
 
     String tranTWSaleOrder(PutSaleReqDto dto) throws Exception;
 
-    String tranSaleReOrder(PutReSaleReqDto dto) throws Exception;
+    String putHkReSaleOrder(PutReSaleReqDto dto) throws Exception;
+
+    String putTwReSaleOrder(PutReSaleReqDto dto) throws Exception;
 
     String tranHkPurchase(PutPurReqDto dto) throws Exception;
 
     String tranTwPurchase(PutPurReqDto dto) throws Exception;
 
-    String tranRetPur(GetPutRePurReqDto dto) throws Exception;
+    String tranHkRePur(GetPutRePurReqDto dto) throws Exception;
+
+    String tranTwRePur(GetPutRePurReqDto dto) throws Exception;
+
 
     String putHkTrfUrl(PutTrfReqDto dto) throws Exception;
 

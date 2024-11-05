@@ -658,10 +658,10 @@ public class JsonServiceImpl implements JsonService {
 
             //默认批次效期、生产日期、效期
             NumberJson flotJson = new NumberJson();
-            flotJson.setFNumber("1");
+            flotJson.setFNumber(k3Config.getFlot());
             FPURMRB.setFLot(flotJson);
-            FPURMRB.setFExpiryDate("1900-01-01");
-            FPURMRB.setFProduceDate("1900-01-01");
+            FPURMRB.setFExpiryDate(k3Config.getFExpiryDate());
+            FPURMRB.setFProduceDate(k3Config.getFProduceDate());
 
             FPURMRBENTRY.add(FPURMRB);
         }

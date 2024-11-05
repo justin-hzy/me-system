@@ -16,8 +16,7 @@ import com.me.modules.log.entity.DmsK3ErrorLog;
 import com.me.modules.log.service.DmsK3ErrorLogService;
 import com.me.modules.purchase.dto.PutPurReqDto;
 import com.me.modules.retpur.dto.GetPutRePurReqDto;
-import com.me.modules.retsale.dto.PutReSaleReqDto;
-import com.me.modules.retsale.service.K3RetSaleService;
+import com.me.modules.resale.dto.PutReSaleReqDto;
 import com.me.modules.sale.dto.PutSaleReqDto;
 import com.me.modules.sale.entity.FlSaleDtlLog;
 import com.me.modules.sale.pojo.SaleFEntity;
@@ -33,8 +32,6 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static org.junit.Assert.fail;
-
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -42,8 +39,6 @@ public class TranServiceImpl implements TranService {
 
 
     private JsonService jsonService;
-
-    private K3RetSaleService k3RetSaleService;
 
     private K3Config k3Config;
 
@@ -156,7 +151,7 @@ public class TranServiceImpl implements TranService {
 
 
     @Override
-    public String tranSaleReOrder(PutReSaleReqDto dto) throws Exception {
+    public String putHkReSaleOrder(PutReSaleReqDto dto) throws Exception {
 
         String param = jsonService.getSaveReSalJsons(dto);
 
@@ -187,7 +182,53 @@ public class TranServiceImpl implements TranService {
             System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
             String result = gson.toJson(repoRet.getResult());
             JSONObject resJson = new JSONObject();
-            log.info("同步成功");
+            log.info(dto.getFbillno()+"--------------"+"香港销售退货单-同步成功");
+            log.info("result="+result);
+            resJson.put("code",200);
+            return resJson.toJSONString();
+        } else {
+            log.info("接口返回结果: " + gson.toJson(repoRet.getResult().getResponseStatus()));
+            JSONObject resJson = new JSONObject();
+            resJson.put("code",500);
+            saveErrorLog(repoRet.getResult().getResponseStatus().getErrors(),dto.getFbillno());
+            return resJson.toJSONString();
+        }
+    }
+
+    @Override
+    public String putTwReSaleOrder(PutReSaleReqDto dto) throws Exception {
+
+        String param = jsonService.getSaveReSalJsons(dto);
+
+        //业务对象标识
+        String formId = "SAL_RETURNSTOCK";
+
+        //调用金蝶销售出库保存接口 没有测试环境以下代码暂时注释
+        //调用金蝶销售出库保存接口 没有测试环境以下代码暂时注释
+        IdentifyInfo iden = new IdentifyInfo();
+        iden.setAppId(k3Config.getTwAppId());
+        iden.setdCID(k3Config.getTwdCID());
+        iden.setAppSecret(k3Config.getTwAppSecret());
+
+        iden.setlCID(k3Config.getLCID());
+        iden.setServerUrl(k3Config.getServerUrl());
+        iden.setUserName(k3Config.getUserName());
+        K3CloudApi client = new K3CloudApi(iden);
+
+        //调用接口
+        String resultJson = client.save(formId,param);
+//
+//            //用于记录结果
+        Gson gson = new Gson();
+
+        //对返回结果进行解析和校验
+
+        RepoRet repoRet = gson.fromJson(resultJson, RepoRet.class);
+        if (repoRet.getResult().getResponseStatus().isIsSuccess()) {
+            System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
+            String result = gson.toJson(repoRet.getResult());
+            JSONObject resJson = new JSONObject();
+            log.info(dto.getFbillno()+"--------------"+"台湾销售退货单-同步成功");
             log.info("result="+result);
             resJson.put("code",200);
             return resJson.toJSONString();
@@ -312,7 +353,7 @@ public class TranServiceImpl implements TranService {
     }
 
     @Override
-    public String tranRetPur(GetPutRePurReqDto dto) throws Exception {
+    public String tranHkRePur(GetPutRePurReqDto dto) throws Exception {
 
         String param = jsonService.getSaveRetPurJsons(dto);
         //业务对象标识
@@ -343,7 +384,7 @@ public class TranServiceImpl implements TranService {
         if (repoRet.getResult().getResponseStatus().isIsSuccess()) {
             System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
             JSONObject resJson = new JSONObject();
-            log.info("同步成功");
+            log.info(dto.getFbillno()+"--------------"+"香港采购退料单-同步成功");
             log.info("repoRet"+repoRet);
             resJson.put("code",200);
             return resJson.toJSONString();
@@ -361,6 +402,58 @@ public class TranServiceImpl implements TranService {
             return resJson.toJSONString();
         }
     }
+
+    @Override
+    public String tranTwRePur(GetPutRePurReqDto dto) throws Exception {
+        String param = jsonService.getSaveRetPurJsons(dto);
+        //业务对象标识
+        String formId = "PUR_MRB";
+
+        //调用金蝶销售出库保存接口 没有测试环境以下代码暂时注释
+        //调用金蝶销售出库保存接口 没有测试环境以下代码暂时注释
+        IdentifyInfo iden = new IdentifyInfo();
+        iden.setAppId(k3Config.getTwAppId());
+        iden.setdCID(k3Config.getTwdCID());
+        iden.setAppSecret(k3Config.getTwAppSecret());
+
+        iden.setlCID(k3Config.getLCID());
+        iden.setServerUrl(k3Config.getServerUrl());
+        iden.setUserName(k3Config.getUserName());
+        K3CloudApi client = new K3CloudApi(iden);
+
+        log.info("param="+param);
+
+        //调用接口
+        String resultJson = client.save(formId,param);
+
+        //用于记录结果
+        Gson gson = new Gson();
+
+        //对返回结果进行解析和校验
+
+        RepoRet repoRet = gson.fromJson(resultJson, RepoRet.class);
+        if (repoRet.getResult().getResponseStatus().isIsSuccess()) {
+            System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
+            JSONObject resJson = new JSONObject();
+            log.info(dto.getFbillno()+"--------------"+"台湾采购退料单-同步成功");
+            log.info("repoRet"+repoRet);
+            resJson.put("code",200);
+            return resJson.toJSONString();
+
+
+
+        } else {
+            Assert.fail("接口返回结果: " + gson.toJson(repoRet.getResult().getResponseStatus()));
+
+            //更新主表状态
+            JSONObject resJson = new JSONObject();
+            resJson.put("code",500);
+
+            saveErrorLog(repoRet.getResult().getResponseStatus().getErrors(),dto.getFbillno());
+            return resJson.toJSONString();
+        }
+    }
+
 
     @Override
     public String putHkTrfUrl(PutTrfReqDto dto) throws Exception {
