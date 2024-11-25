@@ -36,6 +36,8 @@ public class LogAspect {
         //point cut
     }
 
+
+
     /**
      * 切点方法执行前执行此方法
      *
@@ -58,8 +60,8 @@ public class LogAspect {
         }
         String traceid = MDC.get(MDC_TRACE_ID);
         if (StrUtil.isBlank(traceid)) {
-            String traceId = UUID.randomUUID().toString();
-            traceId = traceId.replace("-","");
+            Long currentTime = System.currentTimeMillis();
+            String traceId = String.valueOf(currentTime);
             MDC.put(MDC_TRACE_ID,traceId);
         }
         //获取执行方法名
