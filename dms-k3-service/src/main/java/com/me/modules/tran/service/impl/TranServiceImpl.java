@@ -567,7 +567,7 @@ public class TranServiceImpl implements TranService {
     }
 
     @Override
-    public String tranAssembly(PutAssemblyDto dto) throws Exception {
+    public String tranHkAssembly(PutAssemblyDto dto) throws Exception {
         String param = jsonService.getSaveAssyJson(dto);
 
         //业务对象标识
@@ -577,6 +577,55 @@ public class TranServiceImpl implements TranService {
         iden.setAppId(k3Config.getAppId());
         iden.setdCID(k3Config.getDCID());
         iden.setAppSecret(k3Config.getAppSecret());
+        iden.setlCID(k3Config.getLCID());
+        iden.setServerUrl(k3Config.getServerUrl());
+        iden.setUserName(k3Config.getUserName());
+        K3CloudApi client = new K3CloudApi(iden);
+
+        log.info("param="+param);
+
+        //调用接口
+        String resultJson = client.save(formId,param);
+
+        //用于记录结果
+        Gson gson = new Gson();
+
+        //对返回结果进行解析和校验
+
+        RepoRet repoRet = gson.fromJson(resultJson, RepoRet.class);
+        if (repoRet.getResult().getResponseStatus().isIsSuccess()) {
+            System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
+            JSONObject resJson = new JSONObject();
+            log.info("同步成功");
+            log.info("repoRet"+repoRet);
+            resJson.put("code",200);
+            return resJson.toJSONString();
+
+        } else {
+            Assert.fail("接口返回结果: " + gson.toJson(repoRet.getResult().getResponseStatus()));
+
+            //更新主表状态
+            JSONObject resJson = new JSONObject();
+            resJson.put("code",500);
+
+            saveErrorLog(repoRet.getResult().getResponseStatus().getErrors(),dto.getFillno());
+            return resJson.toJSONString();
+        }
+    }
+
+    @Override
+    public String tranTwAssembly(PutAssemblyDto dto) throws Exception {
+
+        String param = jsonService.getSaveAssyJson(dto);
+
+        //业务对象标识
+        String formId = "STK_AssembledApp";
+
+        IdentifyInfo iden = new IdentifyInfo();
+        iden.setAppId(k3Config.getTwAppId());
+        iden.setdCID(k3Config.getTwdCID());
+        iden.setAppSecret(k3Config.getTwAppSecret());
+
         iden.setlCID(k3Config.getLCID());
         iden.setServerUrl(k3Config.getServerUrl());
         iden.setUserName(k3Config.getUserName());

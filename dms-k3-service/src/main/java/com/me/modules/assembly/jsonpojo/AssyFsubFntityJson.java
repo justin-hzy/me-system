@@ -16,9 +16,9 @@ public class AssyFsubFntityJson {
 
     private String FZJWdtID;
 
-    private NumberJson FLot;
+    private NumberJson FLOTSETY;
 
-    private String FProduceDate;
+    private String FProduceDateSETY;
 
-    private String FExpiryDate;
+    private String FEXPIRYDATESETY;
 }

@@ -22,5 +22,11 @@ public class AssyFEntityJson {
 
     private String FCPWdtID;
 
+    private NumberJson FLot;
+
+    private String FProduceDate;
+
+    private String FExpiryDate;
+
     private List<AssyFsubFntityJson> FSubEntity;
 }

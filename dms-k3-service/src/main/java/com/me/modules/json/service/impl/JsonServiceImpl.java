@@ -817,6 +817,11 @@ public class JsonServiceImpl implements JsonService {
             fEntity.setFSrcBillNo(dto.getFillno());
             fEntity.setFee_ETY("0");
 
+            NumberJson flotJson = new NumberJson();
+            flotJson.setFNumber(k3Config.getFlot());
+            fEntity.setFLot(flotJson);
+            fEntity.setFExpiryDate(k3Config.getFExpiryDate());
+            fEntity.setFProduceDate(k3Config.getFProduceDate());
 
 
             List<AssyFSubEntity> assyFSubEntities  = assyFEntity.getAssyFSubEntities();
@@ -842,11 +847,9 @@ public class JsonServiceImpl implements JsonService {
                 assyFsubFntityJson.setFCostProportion("");
 
                 //默认批次效期、生产日期、效期
-                NumberJson flotJson = new NumberJson();
-                flotJson.setFNumber("1");
-                assyFsubFntityJson.setFLot(flotJson);
-                assyFsubFntityJson.setFExpiryDate("1900-01-01");
-                assyFsubFntityJson.setFProduceDate("1900-01-01");
+                assyFsubFntityJson.setFLOTSETY(flotJson);
+                assyFsubFntityJson.setFEXPIRYDATESETY(k3Config.getFExpiryDate());
+                assyFsubFntityJson.setFProduceDateSETY(k3Config.getFProduceDate());
 
 
                 FSubEntity.add(assyFsubFntityJson);

@@ -15,9 +15,13 @@ public class AssemblyController {
 
     private TranService tranService;
 
-    @PostMapping("putAssembly")
-    public String putAssembly(@RequestBody PutAssemblyDto dto) throws Exception {
+    @PostMapping("putHkAssembly")
+    public String putHkAssembly(@RequestBody PutAssemblyDto dto) throws Exception {
+        return tranService.tranHkAssembly(dto);
+    }
 
-        return tranService.tranAssembly(dto);
+    @PostMapping("putTwAssembly")
+    public String putTwAssembly(@RequestBody PutAssemblyDto dto) throws Exception {
+        return tranService.tranTwAssembly(dto);
     }
 }

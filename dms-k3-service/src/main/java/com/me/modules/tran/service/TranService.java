@@ -30,5 +30,7 @@ public interface TranService {
 
     String putTwTrfUrl(PutTrfReqDto dto) throws Exception;
 
-    String tranAssembly(PutAssemblyDto dto) throws Exception;
+    String tranHkAssembly(PutAssemblyDto dto) throws Exception;
+
+    String tranTwAssembly(PutAssemblyDto dto) throws Exception;
 }
