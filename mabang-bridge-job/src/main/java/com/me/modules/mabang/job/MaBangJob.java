@@ -18,9 +18,9 @@ public class MaBangJob {
     MaBangTransService maBangTransService;
 
 
-    @Scheduled(cron = "0 9/3 * * * *")
+    @Scheduled(cron = "0 0 9-21/3 * * ?")
     void transMaBangOrder(){
-
+        log.info("开始执行马帮销售出库单同步");
         LocalDateTime today = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String todayStr = today.format(formatter);
@@ -46,6 +46,7 @@ public class MaBangJob {
 
     @Scheduled(cron = "0 0 * * * *")
     void transYdayMaBangOrder(){
+        log.info("开始执行n+1马帮销售出库单同步");
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime yesterday = now.minusDays(1);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
