@@ -44,7 +44,7 @@ public class MaBangJob {
         }
     }
 
-    @Scheduled(cron = "0 0 * * ?")
+    @Scheduled(cron = "0 0 * * * *")
     void transYdayMaBangOrder(){
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime yesterday = now.minusDays(1);
