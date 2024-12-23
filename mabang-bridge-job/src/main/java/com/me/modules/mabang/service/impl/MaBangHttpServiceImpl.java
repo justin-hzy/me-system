@@ -59,7 +59,7 @@ public class MaBangHttpServiceImpl implements MaBangHttpService {
         httpPost.setHeader("X-Requested-With", "XMLHttpRequest");
         httpPost.setHeader("Authorization", authorization);
 
-        System.out.println(jsonContent);
+        //System.out.println(jsonContent);
 
         // 封装提交数据
         StringEntity se = new StringEntity(jsonContent, "UTF-8");

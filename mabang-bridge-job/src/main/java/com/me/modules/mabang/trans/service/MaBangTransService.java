@@ -5,7 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 
 public interface MaBangTransService {
 
-    JSONObject transMaBangOrder(String createDateStart,String createDateEnd,String cursor);
+    JSONObject transMaBangOrder(String expressTimeStart,String expressTimeEnd,String cursor);
 
-    JSONObject transMaBangReOrder(String createDateStart,String createDateEnd,String cursor);
+    JSONObject transMaBangRefund(String createDateStart,String createDateEnd,Integer page);
 }

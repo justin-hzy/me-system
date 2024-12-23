@@ -8,7 +8,7 @@ spring:
     name: dmsBridge
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://39.108.125.165:33306/ecology?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
+    url: jdbc:mysql://39.108.136.182:33306/ecology?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
     username: ecology
     password: ecology123
 
@@ -53,6 +53,9 @@ maBang:
   url:
     reqUrl: https://gwapi.mabangerp.com/api/v2
     orderUrl: order-get-order-list-new
+
+dms:
+  orderUrl: http://39.108.136.182:8080/api/cube/restful/interface/saveOrUpdateModeData/ModeDataService_156
 
 bos:
   sipAppKey: nea@burgeon.com.cn

@@ -7,9 +7,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 @SpringBootTest
 @Slf4j
-public class MaBangOrderTest {
+public class MBOrderTest {
 
     @Autowired
     MaBangTransService maBangTransService;
@@ -17,15 +21,22 @@ public class MaBangOrderTest {
     @Test
     void transMaBangOrder(){
 
-        String createDateStart = "2024-10-13 00:00:00";
-        String createDateEnd = "2024-10-13 23:59:59";
+        /*String expressTimeStart = "2024-12-23 00:00:00";
+        String expressTimeEnd = "2024-12-23 23:59:59";*/
+
+        LocalDateTime today = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String todayStr = today.format(formatter);
+
+        String expressTimeStart = todayStr+" 00:00:00";
+        String expressTimeEnd = todayStr+" 23:59:59";
 
         boolean isNext = true;
 
         String cursor = null;
 
         while (isNext){
-            JSONObject returnJSON = maBangTransService.transMaBangOrder(createDateStart,createDateEnd,cursor);
+            JSONObject returnJSON = maBangTransService.transMaBangOrder(expressTimeStart,expressTimeEnd,cursor);
             String hasNext = returnJSON.getString("hasNext");
             if("true".equals(hasNext)){
                 isNext = true;
@@ -34,5 +45,6 @@ public class MaBangOrderTest {
                 isNext = false;
             }
         }
+        //JSONObject returnJSON = maBangTransService.transMaBangOrder(createDateStart,createDateEnd,cursor);
     }
 }

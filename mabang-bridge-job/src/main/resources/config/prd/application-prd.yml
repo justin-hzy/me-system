@@ -50,3 +50,9 @@ mybatis-plus:
 maBang:
   appKey: 201252
   appToken: 87e810a0c6a34bb55c598cef376ffa4a
+  url:
+    reqUrl: https://gwapi.mabangerp.com/api/v2
+    orderUrl: order-get-order-list-new
+
+dms:
+  orderUrl: http://120.77.244.137:8080/api/cube/restful/interface/saveOrUpdateModeData/ModeDataService_156
