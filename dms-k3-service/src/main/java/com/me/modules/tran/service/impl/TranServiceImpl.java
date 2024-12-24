@@ -79,7 +79,7 @@ public class TranServiceImpl implements TranService {
         String result = gson.toJson(repoRet.getResult());
         if (repoRet.getResult().getResponseStatus().isIsSuccess()) {
             JSONObject resJson = new JSONObject();
-            log.info("香港销售出库单-同步成功");
+            log.info(dto.getFbillno()+"--------------香港销售出库单-同步成功");
             log.info("result="+result);
             resJson.put("code",200);
 
@@ -129,7 +129,7 @@ public class TranServiceImpl implements TranService {
         String result = gson.toJson(repoRet.getResult());
         if (repoRet.getResult().getResponseStatus().isIsSuccess()) {
             JSONObject resJson = new JSONObject();
-            log.info("台湾销售出库单-同步成功");
+            log.info(dto.getFbillno()+"--------------台湾销售出库单-同步成功");
             log.info("result="+result);
             resJson.put("code",200);
 
@@ -274,7 +274,7 @@ public class TranServiceImpl implements TranService {
             System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
             //更新主表状态
             JSONObject resJson = new JSONObject();
-            log.info("同步成功");
+            log.info(dto.getFbillno()+"--------------香港采购单-同步成功");
             log.info("result="+result);
             resJson.put("code",200);
             return resJson.toJSONString();
@@ -330,7 +330,7 @@ public class TranServiceImpl implements TranService {
             System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
             //更新主表状态
             JSONObject resJson = new JSONObject();
-            log.info("台湾采购入库单-同步成功");
+            log.info(dto.getFbillno()+"--------------台湾采购入库单-同步成功");
             log.info("result="+result);
             resJson.put("code",200);
             return resJson.toJSONString();
@@ -489,7 +489,7 @@ public class TranServiceImpl implements TranService {
             System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
             //更新主表状态
             JSONObject resJson = new JSONObject();
-            log.info("同步成功");
+            log.info(dto.getFbillNo()+"--------------香港调拨单-同步成功");
             log.info("result="+result);
             resJson.put("code",200);
             return resJson.toJSONString();
@@ -545,7 +545,7 @@ public class TranServiceImpl implements TranService {
             System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
             //更新主表状态
             JSONObject resJson = new JSONObject();
-            log.info("同步成功");
+            log.info(dto.getFbillNo()+"--------------台湾调拨单-同步成功");
             log.info("result="+result);
             resJson.put("code",200);
             return resJson.toJSONString();
@@ -596,7 +596,7 @@ public class TranServiceImpl implements TranService {
         if (repoRet.getResult().getResponseStatus().isIsSuccess()) {
             System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
             JSONObject resJson = new JSONObject();
-            log.info("同步成功");
+            log.info(dto.getFillno()+"--------------香港组装拆卸单单-同步成功");
             log.info("repoRet"+repoRet);
             resJson.put("code",200);
             return resJson.toJSONString();
@@ -645,7 +645,7 @@ public class TranServiceImpl implements TranService {
         if (repoRet.getResult().getResponseStatus().isIsSuccess()) {
             System.out.printf("接口返回结果: %s%n", gson.toJson(repoRet.getResult()));
             JSONObject resJson = new JSONObject();
-            log.info("同步成功");
+            log.info(dto.getFillno()+"--------------台湾组装拆卸单单-同步成功");
             log.info("repoRet"+repoRet);
             resJson.put("code",200);
             return resJson.toJSONString();
