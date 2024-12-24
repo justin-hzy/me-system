@@ -28,6 +28,8 @@ public class MaBangJob {
         String expressTimeStart = todayStr+" 00:00:00";
         String expressTimeEnd = todayStr+" 23:59:59";
 
+        log.info("出库开始时间="+expressTimeStart+",出库结束时间="+expressTimeEnd);
+
         boolean isNext = true;
 
         String cursor = null;
@@ -44,7 +46,7 @@ public class MaBangJob {
         }
     }
 
-    @Scheduled(cron = "0 0 * * * *")
+    @Scheduled(cron = "0 0 0 * * *")
     void transYdayMaBangOrder(){
         log.info("开始执行n+1马帮销售出库单同步");
         LocalDateTime now = LocalDateTime.now();
@@ -54,6 +56,8 @@ public class MaBangJob {
 
         String expressTimeStart = yesterdayStr+" 00:00:00";
         String expressTimeEnd = yesterdayStr+" 23:59:59";
+
+        log.info("出库开始时间="+expressTimeStart+",出库结束时间="+expressTimeEnd);
 
         boolean isNext = true;
 
