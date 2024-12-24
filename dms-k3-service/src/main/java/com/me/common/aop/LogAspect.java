@@ -101,5 +101,7 @@ public class LogAspect {
         if(!(StrUtil.equals(methodName,"showall") ||StrUtil.equals(methodName,"getGraphImg") || StrUtil.equals(methodName,"quartzMonitor"))) {
             log.info("ENDED->[{}]: ReturnCode[{}] ReturnMsg[{}] Data[{}]", description, jsonResult.getCode(), jsonResult.getMessage(), jsonResult.getData());
         }
+
+        MDC.remove(MDC_TRACE_ID);
     }
 }
