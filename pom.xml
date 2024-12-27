@@ -19,6 +19,10 @@
         <module>nascent-bridge</module>
         <module>dms-k3-service</module>
         <module>mabang-bridge-job</module>
+        <module>nascent-data-job</module>
+        <module>dms-flash-service</module>
+        <module>dms-sf-service</module>
+        <module>guandata-service</module>
     </modules>
     <groupId>com.me</groupId>
     <artifactId>me-system</artifactId>
@@ -61,6 +65,7 @@
         <cn.izern.sequence.version>1.0.0</cn.izern.sequence.version>
         <sqlsver.version>7.4.1.jre8</sqlsver.version>
         <easyexcel.verision>2.2.6</easyexcel.verision>
+        <commons-text.version>1.4</commons-text.version>
     </properties>
 
 
@@ -437,7 +442,14 @@
                 <artifactId>easyexcel</artifactId>
                 <version>${easyexcel.verision}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${commons-text.version}</version>
+            </dependency>
         </dependencies>
+
 
     </dependencyManagement>
 
