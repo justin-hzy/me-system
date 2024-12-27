@@ -140,9 +140,11 @@ public class JsonServiceImpl implements JsonService {
         purOrderJson.put("ErpOrder",dto.getErpOrder());
 
 
+
         //默认为 20 退货入库
         //purOrderJson.put("ErpOrderType","20");
         purOrderJson.put("ErpOrderType",dto.getErpOrderType());
+        purOrderJson.put("SfOrderType",dto.getSfOrderType());
         purOrderJson.put("TransferWarehouseCode","");
 
         JSONArray itemsJsonArr = new JSONArray();

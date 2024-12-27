@@ -14,6 +14,8 @@ public class PutRefundPurDto {
 
     private String erpOrderType;
 
+    private String sfOrderType;
+
     private String transferWarehouseCode;
 
     List<RefundGood> goods;
