@@ -51,7 +51,9 @@ mybatis-plus:
 dms:
   ip: http://39.108.136.182:8080/
   url: /api/workflow/paService/submitRequest
-
+  order:
+    refundDtl2: formtable_main_348_dt2
+    saleDt2: formtable_main_347_dt2
 
 
 sf:
