@@ -61,7 +61,7 @@ sf:
   accessCode: 4xw2TnbNMEZ2TIq9OotgmQ==
   checkWord: AXSjzpU1CULRGpTLAIvyztTGij8Ayf6h
   key: 5vuOuhAbcDvLoBOW9LyB3vx6zZgP2KpL
-  url: https://portal-gateway.sit.sf-express.com:55443/scc-portal-api-service/omsPortalService/sendRequest
+  url: https://portal-gateway.sf-express.com/scc-portal-api-service/omsPortalService/sendRequest
   saleOrderServiceCode: SALE_ORDER_SERVICE
   saleOrderDtlServiceCode: SALE_ORDER_OUTBOUND_DETAIL_QUERY_SERVICE
   purOrderServiceCode: PURCHASE_ORDER_SERVICE
