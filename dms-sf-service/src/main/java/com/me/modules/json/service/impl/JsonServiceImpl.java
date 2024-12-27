@@ -68,6 +68,12 @@ public class JsonServiceImpl implements JsonService {
         orderSenderInfoJson.put("SenderName","周宇");*/
         saleOrderJson.put("OrderSenderInfo",orderSenderInfoJson);
 
+        //设置承运商
+        JSONObject OrderCarrierJson = new JSONObject();
+        OrderCarrierJson.put("Carrier","ZT");
+        saleOrderJson.put("OrderCarrier",OrderCarrierJson);
+
+
         JSONArray orderItemsJsonArr = new JSONArray();
 
         List<SaleGood> saleGoods = dto.getSaleGoods();
