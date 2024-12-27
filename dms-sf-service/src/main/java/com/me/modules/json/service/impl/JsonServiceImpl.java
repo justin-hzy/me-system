@@ -74,7 +74,7 @@ public class JsonServiceImpl implements JsonService {
         for (SaleGood good : saleGoods){
             JSONObject orderItemJson = new JSONObject();
 
-            orderItemJson.put("SkuNo","TEST2");
+            orderItemJson.put("SkuNo",good.getSkuNo());
             orderItemJson.put("ItemQuantity",good.getItemQuantity());
             orderItemJson.put("InventoryStatus",good.getInventoryStatus());
             orderItemsJsonArr.add(orderItemJson);
