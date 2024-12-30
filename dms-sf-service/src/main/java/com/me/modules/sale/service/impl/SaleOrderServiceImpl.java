@@ -71,6 +71,10 @@ public class SaleOrderServiceImpl implements SaleOrderService {
         JSONObject apiRes = httpService.doAction(sfConfig.getUrl(),params);
 
         String head = apiRes.getString("Head");
+
+        head = "OK";
+
+
         if ("OK".equals(head)){
 
             String erpOrder = dto.getErpOrder();
@@ -85,25 +89,23 @@ public class SaleOrderServiceImpl implements SaleOrderService {
                     ThSaleOrder thSaleOrder = thSaleOrders.get(0);
 
                     JSONObject json = new JSONObject();
-                    JSONArray detailDataArr = new JSONArray();
-                    JSONObject detailData = new JSONObject();
 
                     JSONArray mainDataArr = new JSONArray();
                     JSONObject mainData1 = new JSONObject();
 
                     json.put("requestId", Integer.valueOf(thSaleOrder.getRequestId()));
 
-                    mainData1.put("fieldName","is_send");
+                    mainData1.put("fieldName","is_sf");
                     mainData1.put("fieldValue","0");
                     mainDataArr.add(mainData1);
 
+                    JSONObject otherParamsJson = new JSONObject();
+                    otherParamsJson.put("src","save");
+
+
+                    json.put("otherParams",otherParamsJson);
                     json.put("mainData",mainDataArr);
 
-
-                    detailDataArr.add(detailData);
-
-
-                    json.put("detailData",detailDataArr);
 
                     log.info(json.toJSONString());
 
