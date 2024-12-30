@@ -92,11 +92,7 @@ public class MaBangTransServiceImpl implements MaBangTransService {
                         dto.setShopId(shopId);
                         dto.setShopName(shopName);
                         dto.setOrderStatus(orderStatus);
-                        dto.setVoucherPriceOrigin(voucherPriceOrigin);
-                        dto.setSubsidyAmountOrigin(subsidyAmountOrigin);
-                        dto.setShippingTotalOrigin(shippingTotalOrigin);
-                        dto.setOtherIncome(otherIncome);
-                        dto.setItemTotalOrigin(itemTotalOrigin);
+
 
                         List<InsertMBOrderDtl> dtl = dto.getInsertMBOrderDtls();
 
@@ -111,6 +107,12 @@ public class MaBangTransServiceImpl implements MaBangTransService {
                             insertMBOrderDtl.setStockSku(stockSku);
                             insertMBOrderDtl.setQuantity(quantity);
                             insertMBOrderDtl.setSellPriceOrigin(sellPriceOrigin);
+
+                            insertMBOrderDtl.setVoucherPriceOrigin(voucherPriceOrigin);
+                            insertMBOrderDtl.setSubsidyAmountOrigin(subsidyAmountOrigin);
+                            insertMBOrderDtl.setShippingTotalOrigin(shippingTotalOrigin);
+                            insertMBOrderDtl.setOtherIncome(otherIncome);
+                            insertMBOrderDtl.setItemTotalOrigin(itemTotalOrigin);
 
                             dtl.add(insertMBOrderDtl);
                         }

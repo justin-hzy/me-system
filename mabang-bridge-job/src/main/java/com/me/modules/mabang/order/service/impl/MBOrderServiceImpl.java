@@ -110,6 +110,13 @@ public class MBOrderServiceImpl extends ServiceImpl<MBOrderMapper, MBOrder> impl
             dataJson.put("quantity",dtl.getQuantity());
             dataJson.put("sell_price_origin",dtl.getSellPriceOrigin());
 
+            dataJson.put("voucher_price_origin",dtl.getVoucherPriceOrigin());
+            dataJson.put("subsidy_amount_origin",dtl.getSubsidyAmountOrigin());
+            dataJson.put("shipping_total_origin",dtl.getShippingTotalOrigin());
+            dataJson.put("other_income",dtl.getOtherIncome());
+            dataJson.put("item_total_origin",dtl.getItemTotalOrigin());
+
+
 
             JSONObject detailJson = new JSONObject();
 
