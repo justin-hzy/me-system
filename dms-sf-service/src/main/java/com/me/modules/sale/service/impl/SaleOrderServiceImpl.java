@@ -182,6 +182,8 @@ public class SaleOrderServiceImpl implements SaleOrderService {
                         log.info("订单回传异常，数据进入中间表,requestId="+ thSaleOrder.getRequestId()+",提交失败");
                     }
                 }
+            }else {
+                log.info(thSaleOrder.getErpOrder()+"----------"+"暂未出库");
             }
         }
         return null;
