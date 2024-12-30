@@ -3,6 +3,7 @@ package com.me.modules.sale.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.me.common.config.DmsConfig;
 import com.me.common.config.SfConfig;
 import com.me.common.core.JsonResult;
@@ -12,6 +13,7 @@ import com.me.modules.json.service.JsonService;
 import com.me.modules.sale.dto.PutSaleOrderDto;
 import com.me.modules.sale.entity.ThSaleOrder;
 import com.me.modules.sale.service.SaleOrderService;
+import com.me.modules.sale.service.ThSaleOrderService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.StringEscapeUtils;
@@ -42,6 +44,8 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 
     private DmsConfig dmsConfig;
 
+    private ThSaleOrderService thSaleOrderService;
+
     @Override
     public JsonResult putSaleOrder(PutSaleOrderDto dto) throws IOException {
         JSONObject saleOrderJson = jsonService.createSaleOrderJson(dto);
@@ -66,6 +70,47 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 
         JSONObject apiRes = httpService.doAction(sfConfig.getUrl(),params);
 
+        String head = apiRes.getString("Head");
+        if ("OK".equals(head)){
+
+            String erpOrder = dto.getErpOrder();
+            QueryWrapper<ThSaleOrder> saleOrderQuery = new QueryWrapper<>();
+            saleOrderQuery.eq("erp_order",erpOrder);
+            saleOrderQuery.eq("is_sf","1");
+
+            List<ThSaleOrder> thSaleOrders = thSaleOrderService.list(saleOrderQuery);
+
+            if(CollUtil.isNotEmpty(thSaleOrders)){
+                if(thSaleOrders.size() == 1){
+                    ThSaleOrder thSaleOrder = thSaleOrders.get(0);
+
+                    JSONObject json = new JSONObject();
+                    JSONArray detailDataArr = new JSONArray();
+                    JSONObject detailData = new JSONObject();
+
+                    JSONArray mainDataArr = new JSONArray();
+                    JSONObject mainData1 = new JSONObject();
+
+                    json.put("requestId", Integer.valueOf(thSaleOrder.getRequestId()));
+
+                    mainData1.put("fieldName","is_send");
+                    mainData1.put("fieldValue","0");
+                    mainDataArr.add(mainData1);
+
+                    json.put("mainData",mainDataArr);
+
+
+                    detailDataArr.add(detailData);
+
+
+                    json.put("detailData",detailDataArr);
+                }else {
+                    log.info(erpOrder+"---------"+"涉及多条流程，无法更新is_sf字段");
+                }
+            }else {
+                log.info(erpOrder+"---------"+"查询为空,无法更新is_sf字段");
+            }
+        }
         return null;
     }
 
