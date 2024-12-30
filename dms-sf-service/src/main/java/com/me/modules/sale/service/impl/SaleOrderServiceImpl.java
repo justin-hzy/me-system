@@ -104,6 +104,17 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 
 
                     json.put("detailData",detailDataArr);
+
+                    log.info(json.toJSONString());
+
+                    try{
+                        DmsUtil.testRegist(dmsConfig.getIp());
+                        DmsUtil.testGetoken(dmsConfig.getIp());
+                        DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),json.toJSONString());
+                    }catch (Exception e){
+                        log.info("订单回传异常，数据进入中间表,requestId="+ thSaleOrder.getRequestId()+",提交失败");
+                    }
+
                 }else {
                     log.info(erpOrder+"---------"+"涉及多条流程，无法更新is_sf字段");
                 }
