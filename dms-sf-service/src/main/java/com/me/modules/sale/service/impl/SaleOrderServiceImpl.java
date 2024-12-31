@@ -72,9 +72,6 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 
         String head = apiRes.getString("Head");
 
-        head = "OK";
-
-
         if ("OK".equals(head)){
 
             String erpOrder = dto.getErpOrder();
