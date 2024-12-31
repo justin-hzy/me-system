@@ -1,0 +1,16 @@
+package com.me.modules.sale.in.pojo;
+
+import lombok.Data;
+
+@Data
+public class InGood {
+
+    private String i;
+
+    private String barCode;
+
+    private String num;
+
+    private String price;
+
+}

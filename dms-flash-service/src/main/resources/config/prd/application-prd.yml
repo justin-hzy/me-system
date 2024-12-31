@@ -1,0 +1,71 @@
+server:
+  port: 9090
+  servlet:
+    context-path: /dmsFlashService
+
+spring:
+  application:
+    name: dmsFlashService
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://39.108.125.165:33306/ecology?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
+    username: ecology
+    password: ecology123
+
+# ====================Log4j2=========================
+logging:
+  config: classpath:log4j2-prd.xml
+  level:
+    #打印sql时改为debug
+    druid.sql: info
+    de.codecentric: error
+    com.alibaba.excel.analysis.v03.handlers.FormulaRecordHandler: error
+log4j2:
+  threadContextMap: com.alibaba.ttl.log4j2.TtlThreadContextMap
+
+# ====================MybatisPlus====================
+mybatis-plus:
+  mapper-locations: classpath*:/mapping/modules/**/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.me.modules.*.entity,com.me.sys.*.entity
+  global-config:
+    db-config:
+      #主键类型  0:"数据库ID自增", 1:"用户输入ID",2:"全局唯一ID (数字类型唯一ID)", 3:"全局唯一ID UUID";
+      id-type: none
+      #逻辑删除配置
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+    banner: false
+  configuration:
+    call-setters-on-nulls: true
+    #配置返回数据库(column下划线命名&&返回java实体是驼峰命名)，自动匹配无需as（没开启这个，SQL需要写as： select user_id as userId）
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    #配置JdbcTypeForNull, oracle数据库必须配置
+    jdbc-type-for-null: 'null'
+    #需要测试SQL时再打开
+    log-impl: org.apache.ibatis.logging.log4j2.Log4j2Impl
+
+
+# ====================dms=========================
+dms:
+  ip: http://120.77.244.137:8080/
+  url: /api/workflow/paService/submitRequest
+
+
+
+flash:
+  merchantId: C2405011
+  key: 2464bb12440d0eb67a6a8a6375e0efdee7c42515c7dccbd9286ae9737206009c
+  putOutOrderUrl: https://open.flashfulfillment.vn/open/returnWarehouseAdd
+  outOrderDetailUrl: https://open.flashfulfillment.vn/return_warehouse/outBoundOrderDetail
+  inOrderDetailUrl: https://open.flashfulfillment.vn/Inbound/getInBoundDetail
+  putInOrderUrl: https://open.flashfulfillment.vn/arrival_notice/create
+  putRefundUrl: https://open.flashfulfillment.vn/rollback_order/add
+
+
+
+
+
+
+
