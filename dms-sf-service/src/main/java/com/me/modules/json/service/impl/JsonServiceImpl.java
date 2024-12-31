@@ -28,7 +28,7 @@ public class JsonServiceImpl implements JsonService {
     @Override
     public JSONObject createSaleOrderJson(PutSaleOrderDto dto) {
         JSONObject paramJson = new JSONObject();
-        paramJson.put("CompanyCode",sfConfig.getCompanyCode());
+        paramJson.put("CompanyCode",dto.getCompanyCode());
         paramJson.put("AccessCode",sfConfig.getAccessCode());
         paramJson.put("Checkword",sfConfig.getCheckWord());
         paramJson.put("ServiceCode",sfConfig.getSaleOrderServiceCode());

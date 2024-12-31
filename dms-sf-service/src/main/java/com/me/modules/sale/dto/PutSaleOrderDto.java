@@ -8,6 +8,8 @@ import java.util.List;
 @Data
 public class PutSaleOrderDto {
 
+    private String companyCode;
+
     private String sfOrderType;
 
     private String erpOrder;
