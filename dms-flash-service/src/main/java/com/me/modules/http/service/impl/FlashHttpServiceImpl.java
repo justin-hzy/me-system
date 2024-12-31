@@ -3,8 +3,11 @@ package com.me.modules.http.service.impl;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.me.common.config.FlashConfig;
+import com.me.modules.http.entity.FlashRespCode;
 import com.me.modules.http.service.FlashHttpService;
+import com.me.modules.http.service.FlashRespCodeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -27,6 +30,8 @@ import java.util.*;
 public class FlashHttpServiceImpl implements FlashHttpService {
 
     private FlashConfig flashConfig;
+
+    private FlashRespCodeService flashRespCodeService;
 
     private static final String SHA256_ALGORITHM_NAME = "SHA-256";
     private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
@@ -97,9 +102,16 @@ public class FlashHttpServiceImpl implements FlashHttpService {
         if (response != null && response.getEntity() != null) {
             //返回信息
             String resulString = EntityUtils.toString(response.getEntity());
-            log.info("获取接口数据成功，接口返回体：" + resulString);
+
             //处理返回信息
             apiRes = JSON.parseObject(resulString);
+
+            String code = apiRes.getString("code");
+
+            QueryWrapper<FlashRespCode> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("code",code);
+            FlashRespCode flashRespCode = flashRespCodeService.getOne(queryWrapper);
+            log.info("获取接口数据成功，接口返回体：" + "code:"+code+",msg:"+flashRespCode.getMeaning());
         }else{
             apiRes.put("result","false");
             apiRes.put("message","接口错误返回错误！");
