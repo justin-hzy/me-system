@@ -51,7 +51,9 @@ mybatis-plus:
 dms:
   ip: http://120.77.244.137:8080/
   url: /api/workflow/paService/submitRequest
-
+  order:
+    outOrderDtl2: formtable_main_351_dt2
+    inOrderDtl2: formtable_main_352_dt2
 
 
 flash:
