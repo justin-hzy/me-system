@@ -7,7 +7,7 @@ import lombok.Data;
 * flash 出库单
 * */
 @Data
-@TableName("formtable_main_345")
+@TableName("formtable_main_351")
 public class FlashOutOrder {
 
     @TableField("order_sn")
