@@ -39,4 +39,7 @@ public class SfConfig {
 
     @Value("${sf.cancelSaleOrderServiceCode}")
     private String cancelSaleOrderServiceCode;
+
+    @Value("${sf.cancelPurOrderServiceCode}")
+    private String cancelPurOrderServiceCode;
 }

@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.me.common.config.SfConfig;
 import com.me.modules.json.service.JsonService;
+import com.me.modules.pur.dto.PurCancelDto;
 import com.me.modules.pur.dto.PutRefundPurDto;
 import com.me.modules.pur.pojo.RefundGood;
 import com.me.modules.refund.entity.ThRefund;
@@ -220,6 +221,26 @@ public class JsonServiceImpl implements JsonService {
         saleOrderArr.add(orderJson);
 
         paramJson.put("SaleOrders",saleOrderArr);
+
+        return paramJson;
+    }
+
+    @Override
+    public JSONObject createPurCancel(PurCancelDto dto) {
+
+        JSONObject paramJson = new JSONObject();
+        paramJson.put("CompanyCode",sfConfig.getCompanyCode());
+        paramJson.put("AccessCode",sfConfig.getAccessCode());
+        paramJson.put("Checkword",sfConfig.getCheckWord());
+        paramJson.put("ServiceCode",sfConfig.getCancelPurOrderServiceCode());
+
+        JSONObject orderJson = new JSONObject();
+        orderJson.put("ErpOrder",dto.getErpOrder());
+
+        JSONArray purOrderArr = new JSONArray();
+        purOrderArr.add(orderJson);
+
+        paramJson.put("PurchaseOrders",purOrderArr);
 
         return paramJson;
     }

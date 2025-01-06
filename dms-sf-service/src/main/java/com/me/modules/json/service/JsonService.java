@@ -1,6 +1,7 @@
 package com.me.modules.json.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.me.modules.pur.dto.PurCancelDto;
 import com.me.modules.pur.dto.PutRefundPurDto;
 import com.me.modules.refund.entity.ThRefund;
 import com.me.modules.sale.dto.PutSaleOrderDto;
@@ -18,4 +19,6 @@ public interface JsonService {
     JSONObject createPurOrderDtlJson(ThRefund thRefund);
 
     JSONObject createSaleCancel(SaleCancelDto dto);
+
+    JSONObject createPurCancel(PurCancelDto dto);
 }

@@ -1,6 +1,7 @@
 package com.me.modules.pur.service;
 
 import com.me.common.core.JsonResult;
+import com.me.modules.pur.dto.PurCancelDto;
 import com.me.modules.pur.dto.PutRefundPurDto;
 import com.me.modules.refund.entity.ThRefund;
 
@@ -11,4 +12,6 @@ public interface PurOrderService {
     void putPurOrder(PutRefundPurDto dto) throws IOException;
 
     JsonResult transPurOrderDtl(ThRefund thRefund) throws IOException;
+
+    JsonResult purCancel(PurCancelDto dto) throws IOException;
 }
