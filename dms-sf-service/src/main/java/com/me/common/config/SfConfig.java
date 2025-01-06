@@ -36,4 +36,7 @@ public class SfConfig {
 
     @Value("${sf.purOrderDtlServiceCode}")
     private String purOrderDtlServiceCode;
+
+    @Value("${sf.cancelSaleOrderServiceCode}")
+    private String cancelSaleOrderServiceCode;
 }

@@ -23,7 +23,7 @@ public class SaleOrderJob {
 
     private ThSaleOrderService thSaleOrderService;
 
-    @Scheduled(cron = "0 0 9-21/1 * * ?")
+    //@Scheduled(cron = "0 0 9-21/1 * * ?")
     void querySaleOrderDtl() throws IOException {
 
         log.info("执行销售订单已出库明细查询定时任务");

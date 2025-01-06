@@ -11,6 +11,7 @@ import com.me.common.utils.DmsUtil;
 import com.me.modules.http.service.SlHttpService;
 import com.me.modules.json.service.JsonService;
 import com.me.modules.sale.dto.PutSaleOrderDto;
+import com.me.modules.sale.dto.SaleCancelDto;
 import com.me.modules.sale.entity.ThSaleOrder;
 import com.me.modules.sale.service.SaleOrderService;
 import com.me.modules.sale.service.ThSaleOrderService;
@@ -241,6 +242,34 @@ public class SaleOrderServiceImpl implements SaleOrderService {
                 log.info(thSaleOrder.getErpOrder()+"----------"+"暂未出库");
             }
         }
+        return null;
+    }
+
+    @Override
+    public JsonResult saleCancel(SaleCancelDto dto) throws IOException {
+        JSONObject saleCancelJson = jsonService.createSaleCancel(dto);
+        String unescapedJson = StringEscapeUtils.unescapeJson(saleCancelJson.toJSONString());
+
+        log.info("logistics_interface="+unescapedJson);
+
+        String str = unescapedJson+sfConfig.getKey();
+
+        log.info("str="+str);
+
+        String md5EncryptedString = md5Encryption(str);
+
+        String base64SignedString = base64Signature(md5EncryptedString);
+
+        log.info("data_digest="+base64SignedString);
+
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("logistics_interface", unescapedJson));
+        params.add(new BasicNameValuePair("data_digest", base64SignedString));
+
+        JSONObject apiRes = httpService.doAction(sfConfig.getUrl(),params);
+
+        String head = apiRes.getString("Head");
+
         return null;
     }
 }

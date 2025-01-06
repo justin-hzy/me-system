@@ -9,6 +9,7 @@ import com.me.modules.pur.dto.PutRefundPurDto;
 import com.me.modules.pur.pojo.RefundGood;
 import com.me.modules.refund.entity.ThRefund;
 import com.me.modules.sale.dto.PutSaleOrderDto;
+import com.me.modules.sale.dto.SaleCancelDto;
 import com.me.modules.sale.entity.ThSaleOrder;
 import com.me.modules.sale.pojo.SaleGood;
 import lombok.AllArgsConstructor;
@@ -52,6 +53,7 @@ public class JsonServiceImpl implements JsonService {
         orderReceiverInfoJson.put("ReceiverCompany",dto.getReceiverCompany());
         orderReceiverInfoJson.put("ReceiverName",dto.getReceiverName());
         orderReceiverInfoJson.put("ReceiverMobile",dto.getReceiverMobile());
+        orderReceiverInfoJson.put("ReceiverPhone",dto.getReceiverMobile());
         orderReceiverInfoJson.put("ReceiverCountry",dto.getReceiverCountry());
         orderReceiverInfoJson.put("ReceiverAddress",dto.getReceiverAddress());
         /*orderReceiverInfoJson.put("ReceiverCompany","顺丰");
@@ -199,6 +201,25 @@ public class JsonServiceImpl implements JsonService {
         }
 
         paramJson.put("PurchaseOrders",purOrderJsonArr);
+
+        return paramJson;
+    }
+
+    @Override
+    public JSONObject createSaleCancel(SaleCancelDto dto) {
+        JSONObject paramJson = new JSONObject();
+        paramJson.put("CompanyCode",sfConfig.getCompanyCode());
+        paramJson.put("AccessCode",sfConfig.getAccessCode());
+        paramJson.put("Checkword",sfConfig.getCheckWord());
+        paramJson.put("ServiceCode",sfConfig.getCancelSaleOrderServiceCode());
+
+        JSONObject orderJson = new JSONObject();
+        orderJson.put("ErpOrder",dto.getErpOrder());
+
+        JSONArray saleOrderArr = new JSONArray();
+        saleOrderArr.add(orderJson);
+
+        paramJson.put("SaleOrders",saleOrderArr);
 
         return paramJson;
     }

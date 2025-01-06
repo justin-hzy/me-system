@@ -66,6 +66,7 @@ sf:
   saleOrderDtlServiceCode: SALE_ORDER_OUTBOUND_DETAIL_QUERY_SERVICE
   purOrderServiceCode: PURCHASE_ORDER_SERVICE
   purOrderDtlServiceCode: PURCHASE_ORDER_INBOUND_QUERY_SERVICE
+  cancelSaleOrderServiceCode: CANCEL_SALE_ORDER_SERVICE
 
 
 
