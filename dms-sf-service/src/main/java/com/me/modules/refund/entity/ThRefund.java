@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("formtable_main_352")
+@TableName("formtable_main_348")
 public class ThRefund {
 
     @TableField("erp_order")
