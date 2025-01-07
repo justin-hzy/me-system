@@ -3,6 +3,7 @@ package com.me.modules.pur.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.me.common.config.DmsConfig;
 import com.me.common.config.SfConfig;
 import com.me.common.core.JsonResult;
@@ -13,6 +14,8 @@ import com.me.modules.pur.dto.PurCancelDto;
 import com.me.modules.pur.dto.PutRefundPurDto;
 import com.me.modules.pur.service.PurOrderService;
 import com.me.modules.refund.entity.ThRefund;
+import com.me.modules.refund.service.ThRefundService;
+import com.me.modules.sale.entity.ThSaleOrder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.StringEscapeUtils;
@@ -42,6 +45,8 @@ public class PurOrderServiceImpl implements PurOrderService {
 
     private DmsConfig dmsConfig;
 
+    private ThRefundService thRefundService;
+
 
 
     @Override
@@ -68,6 +73,56 @@ public class PurOrderServiceImpl implements PurOrderService {
 
         JSONObject apiRes = httpService.doAction(sfConfig.getUrl(),params);
 
+        String head = apiRes.getString("Head");
+
+        if ("OK".equals(head)){
+            String erpOrder = dto.getErpOrder();
+            QueryWrapper<ThRefund> refundQuery = new QueryWrapper<>();
+            refundQuery.eq("erp_order",erpOrder);
+            refundQuery.eq("is_sf","1");
+
+            List<ThRefund> thRefunds = thRefundService.list(refundQuery);
+
+            if(CollUtil.isNotEmpty(thRefunds)){
+                if(thRefunds.size() == 1){
+                    ThRefund thRefund = thRefunds.get(0);
+
+                    JSONObject json = new JSONObject();
+
+                    JSONArray mainDataArr = new JSONArray();
+                    JSONObject mainData1 = new JSONObject();
+
+                    json.put("requestId", Integer.valueOf(thRefund.getRequestId()));
+
+
+                    mainData1.put("fieldName","is_sf");
+                    mainData1.put("fieldValue","0");
+                    mainDataArr.add(mainData1);
+
+                    JSONObject otherParamsJson = new JSONObject();
+                    otherParamsJson.put("src","save");
+
+
+                    json.put("otherParams",otherParamsJson);
+                    json.put("mainData",mainDataArr);
+
+
+                    log.info(json.toJSONString());
+
+                    try{
+                        DmsUtil.testRegist(dmsConfig.getIp());
+                        DmsUtil.testGetoken(dmsConfig.getIp());
+                        DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),json.toJSONString());
+                    }catch (Exception e){
+                        log.info("退单更新异常，数据进入中间表,requestId="+ thRefund.getRequestId()+",提交失败");
+                    }
+                }else {
+                    log.info(erpOrder+"---------"+"涉及多条流程，无法更新is_sf字段");
+                }
+            }else {
+                log.info(erpOrder+"---------"+"查询为空,无法更新is_sf字段");
+            }
+        }
     }
 
     @Override

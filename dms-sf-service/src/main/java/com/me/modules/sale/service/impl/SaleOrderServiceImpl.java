@@ -112,7 +112,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
                         DmsUtil.testGetoken(dmsConfig.getIp());
                         DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),json.toJSONString());
                     }catch (Exception e){
-                        log.info("订单回传异常，数据进入中间表,requestId="+ thSaleOrder.getRequestId()+",提交失败");
+                        log.info("订单更新异常，数据进入中间表,requestId="+ thSaleOrder.getRequestId()+",提交失败");
                     }
 
                 }else {
