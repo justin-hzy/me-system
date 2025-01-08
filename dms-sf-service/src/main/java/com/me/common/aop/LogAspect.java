@@ -1,6 +1,7 @@
 package com.me.common.aop;
 
 import cn.hutool.core.convert.Convert;
+import cn.hutool.core.exceptions.ExceptionUtil;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.IdUtil;
@@ -10,16 +11,14 @@ import com.me.common.core.JsonResult;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
-import org.aspectj.lang.annotation.Pointcut;
+import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 import java.util.Objects;
+import java.util.UUID;
 
 @Slf4j
 @Aspect
@@ -71,6 +70,7 @@ public class LogAspect {
             log.info("START->[{}]: Class[{}] Method[{}] Params[{}]", description, className, methodName, JSONUtil.toJsonStr(argValues));
         }
         //打印日志
+        MDC.clear();
     }
 
 
