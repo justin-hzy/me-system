@@ -21,16 +21,16 @@ public class PurOrderController {
     private PurOrderService purOrderService;
 
     @PostMapping("/refund/putRefundPur")
-    private JsonResult putRefundPur(@RequestBody PutRefundPurDto dto) throws IOException {
+    public JsonResult putRefundPur(@RequestBody PutRefundPurDto dto) throws IOException {
 
-            purOrderService.putPurOrder(dto);
+        JsonResult respResult = purOrderService.putPurOrder(dto);
 
-        return JsonResult.ok();
+        return respResult;
     }
 
 
     @PostMapping("/pur/cancel")
-    private JsonResult purCancel(@RequestBody PurCancelDto dto) throws IOException {
+    public JsonResult purCancel(@RequestBody PurCancelDto dto) throws IOException {
         JsonResult respResult = purOrderService.purCancel(dto);
         return respResult;
     }

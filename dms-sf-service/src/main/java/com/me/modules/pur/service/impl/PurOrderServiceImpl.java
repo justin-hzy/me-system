@@ -50,7 +50,7 @@ public class PurOrderServiceImpl implements PurOrderService {
 
 
     @Override
-    public void putPurOrder(PutRefundPurDto dto) throws IOException {
+    public JsonResult putPurOrder(PutRefundPurDto dto) throws IOException {
         JSONObject saleOrderJson = jsonService.createPurOrderJson(dto);
 
         String unescapedJson = StringEscapeUtils.unescapeJson(saleOrderJson.toJSONString());
@@ -72,56 +72,27 @@ public class PurOrderServiceImpl implements PurOrderService {
         params.add(new BasicNameValuePair("data_digest", base64SignedString));
 
         JSONObject apiRes = httpService.doAction(sfConfig.getUrl(),params);
-
         String head = apiRes.getString("Head");
+        JSONObject resultJson = new JSONObject();
+        String note = "";
 
         if ("OK".equals(head)){
-            String erpOrder = dto.getErpOrder();
-            QueryWrapper<ThRefund> refundQuery = new QueryWrapper<>();
-            refundQuery.eq("erp_order",erpOrder);
-            refundQuery.eq("is_sf","1");
-
-            List<ThRefund> thRefunds = thRefundService.list(refundQuery);
-
-            if(CollUtil.isNotEmpty(thRefunds)){
-                if(thRefunds.size() == 1){
-                    ThRefund thRefund = thRefunds.get(0);
-
-                    JSONObject json = new JSONObject();
-
-                    JSONArray mainDataArr = new JSONArray();
-                    JSONObject mainData1 = new JSONObject();
-
-                    json.put("requestId", Integer.valueOf(thRefund.getRequestId()));
-
-
-                    mainData1.put("fieldName","is_sf");
-                    mainData1.put("fieldValue","0");
-                    mainDataArr.add(mainData1);
-
-                    JSONObject otherParamsJson = new JSONObject();
-                    otherParamsJson.put("src","save");
-
-
-                    json.put("otherParams",otherParamsJson);
-                    json.put("mainData",mainDataArr);
-
-
-                    log.info(json.toJSONString());
-
-                    try{
-                        DmsUtil.testRegist(dmsConfig.getIp());
-                        DmsUtil.testGetoken(dmsConfig.getIp());
-                        DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),json.toJSONString());
-                    }catch (Exception e){
-                        log.info("退单更新异常，数据进入中间表,requestId="+ thRefund.getRequestId()+",提交失败");
-                    }
-                }else {
-                    log.info(erpOrder+"---------"+"涉及多条流程，无法更新is_sf字段");
-                }
+            note = "同步成功";
+            resultJson.put("isSf",1);
+            resultJson.put("note",note);
+            return JsonResult.ok("200",note,resultJson);
+        }else {
+            JSONArray jsonArray = apiRes.getJSONArray("PurchaseOrders");
+            if(jsonArray.size()==1){
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                note = jsonObject.getString("Note");
             }else {
-                log.info(erpOrder+"---------"+"查询为空,无法更新is_sf字段");
+                note = "顺丰返回数据异常，返回数组元素个数大于dms订单数，无法记录失败原因";
             }
+            log.info("请求失败,原因:"+note);
+            resultJson.put("isSf",2);
+            resultJson.put("note",note);
+            return JsonResult.ok("202",note,resultJson);
         }
     }
 

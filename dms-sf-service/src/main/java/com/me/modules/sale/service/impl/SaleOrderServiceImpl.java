@@ -49,6 +49,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 
     @Override
     public JsonResult putSaleOrder(PutSaleOrderDto dto) throws IOException {
+
         JSONObject saleOrderJson = jsonService.createSaleOrderJson(dto);
 
         String unescapedJson = StringEscapeUtils.unescapeJson(saleOrderJson.toJSONString());
@@ -68,61 +69,29 @@ public class SaleOrderServiceImpl implements SaleOrderService {
         List<NameValuePair> params = new ArrayList<>();
         params.add(new BasicNameValuePair("logistics_interface", unescapedJson));
         params.add(new BasicNameValuePair("data_digest", base64SignedString));
-
         JSONObject apiRes = httpService.doAction(sfConfig.getUrl(),params);
-
         String head = apiRes.getString("Head");
+        JSONObject resultJson = new JSONObject();
+        String note = "";
 
         if ("OK".equals(head)){
-
-            String erpOrder = dto.getErpOrder();
-            QueryWrapper<ThSaleOrder> saleOrderQuery = new QueryWrapper<>();
-            saleOrderQuery.eq("erp_order",erpOrder);
-            saleOrderQuery.eq("is_sf","1");
-
-            List<ThSaleOrder> thSaleOrders = thSaleOrderService.list(saleOrderQuery);
-
-            if(CollUtil.isNotEmpty(thSaleOrders)){
-                if(thSaleOrders.size() == 1){
-                    ThSaleOrder thSaleOrder = thSaleOrders.get(0);
-
-                    JSONObject json = new JSONObject();
-
-                    JSONArray mainDataArr = new JSONArray();
-                    JSONObject mainData1 = new JSONObject();
-
-                    json.put("requestId", Integer.valueOf(thSaleOrder.getRequestId()));
-
-                    mainData1.put("fieldName","is_sf");
-                    mainData1.put("fieldValue","0");
-                    mainDataArr.add(mainData1);
-
-                    JSONObject otherParamsJson = new JSONObject();
-                    otherParamsJson.put("src","save");
-
-
-                    json.put("otherParams",otherParamsJson);
-                    json.put("mainData",mainDataArr);
-
-
-                    log.info(json.toJSONString());
-
-                    try{
-                        DmsUtil.testRegist(dmsConfig.getIp());
-                        DmsUtil.testGetoken(dmsConfig.getIp());
-                        DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),json.toJSONString());
-                    }catch (Exception e){
-                        log.info("订单更新异常，数据进入中间表,requestId="+ thSaleOrder.getRequestId()+",提交失败");
-                    }
-
-                }else {
-                    log.info(erpOrder+"---------"+"涉及多条流程，无法更新is_sf字段");
-                }
+            note = "同步成功";
+            resultJson.put("isSf",1);
+            resultJson.put("note",note);
+            return JsonResult.ok("200",note,resultJson);
+        }else {
+            JSONArray jsonArray = apiRes.getJSONArray("SaleOrders");
+            if(jsonArray.size()==1){
+                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                note = jsonObject.getString("Note");
             }else {
-                log.info(erpOrder+"---------"+"查询为空,无法更新is_sf字段");
+                note = "顺丰返回数据异常，返回数组元素个数大于dms订单数，无法记录失败原因";
             }
+            log.info("请求失败,原因:"+note);
+            resultJson.put("isSf",2);
+            resultJson.put("note",note);
+            return JsonResult.ok("202",note,resultJson);
         }
-        return null;
     }
 
     @Override

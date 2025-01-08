@@ -20,13 +20,13 @@ public class SaleOrderController {
     private SaleOrderService service;
 
     @PostMapping("/sale/putSaleOrder")
-    private JsonResult putSaleOrder(@RequestBody PutSaleOrderDto dto) throws IOException {
+    public JsonResult putSaleOrder(@RequestBody PutSaleOrderDto dto) throws IOException {
         JsonResult respResult = service.putSaleOrder(dto);
         return respResult;
     }
 
     @PostMapping("/sale/cancel")
-    private JsonResult saleCancel(@RequestBody SaleCancelDto dto) throws IOException {
+    public JsonResult saleCancel(@RequestBody SaleCancelDto dto) throws IOException {
         JsonResult respResult =  service.saleCancel(dto);
         return respResult;
     }

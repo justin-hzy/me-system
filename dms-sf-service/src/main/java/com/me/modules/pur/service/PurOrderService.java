@@ -9,7 +9,7 @@ import java.io.IOException;
 
 public interface PurOrderService {
 
-    void putPurOrder(PutRefundPurDto dto) throws IOException;
+    JsonResult putPurOrder(PutRefundPurDto dto) throws IOException;
 
     JsonResult transPurOrderDtl(ThRefund thRefund) throws IOException;
 
