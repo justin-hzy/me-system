@@ -42,7 +42,7 @@ public class SlHttpServiceImpl implements SlHttpService {
             String resulString = EntityUtils.toString(response.getEntity());
             log.info("获取接口数据成功，接口返回体：" + resulString);
             //处理返回信息
-            apiRes = JSON.parseObject(resulString);
+            apiRes = JSONObject.parseObject(resulString);
         }else{
             apiRes.put("result","false");
             apiRes.put("message","接口错误返回错误！");
