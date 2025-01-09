@@ -154,7 +154,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 
                         JSONObject workflowRequestTableFields1 = new JSONObject();
 
-                        workflowRequestTableFields1.put("fieldName","po");
+                        workflowRequestTableFields1.put("fieldName","erp_order");
                         workflowRequestTableFields1.put("fieldValue",erpOrder);
 
                         JSONObject workflowRequestTableFields2 = new JSONObject();
