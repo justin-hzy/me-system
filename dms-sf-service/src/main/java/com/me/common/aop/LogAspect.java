@@ -69,8 +69,6 @@ public class LogAspect {
         if(!StrUtil.equals(methodName,"quartzMonitor")) {
             log.info("START->[{}]: Class[{}] Method[{}] Params[{}]", description, className, methodName, JSONUtil.toJsonStr(argValues));
         }
-        //打印日志
-        MDC.clear();
     }
 
 
@@ -102,5 +100,6 @@ public class LogAspect {
         if(!(StrUtil.equals(methodName,"showall") ||StrUtil.equals(methodName,"getGraphImg") || StrUtil.equals(methodName,"quartzMonitor"))) {
             log.info("ENDED->[{}]: ReturnCode[{}] ReturnMsg[{}] Data[{}]", description, jsonResult.getCode(), jsonResult.getMessage(), jsonResult.getData());
         }
+        MDC.remove(MDC_TRACE_ID);
     }
 }
