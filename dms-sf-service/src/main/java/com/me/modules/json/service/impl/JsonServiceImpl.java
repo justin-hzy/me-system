@@ -30,10 +30,17 @@ public class JsonServiceImpl implements JsonService {
     @Override
     public JSONObject createSaleOrderJson(PutSaleOrderDto dto) {
         JSONObject paramJson = new JSONObject();
-        paramJson.put("CompanyCode",dto.getCompanyCode());
-        paramJson.put("AccessCode",sfConfig.getAccessCode());
-        paramJson.put("Checkword",sfConfig.getCheckWord());
+        String companyCode = dto.getCompanyCode();
+        paramJson.put("CompanyCode",companyCode);
+        if("ME-TH01".equals(companyCode)){
+            paramJson.put("AccessCode",sfConfig.getAccessCode1());
+            paramJson.put("Checkword",sfConfig.getCheckWord1());
+        }else if ("ME-TH02".equals(companyCode)){
+            paramJson.put("AccessCode",sfConfig.getAccessCode2());
+            paramJson.put("Checkword",sfConfig.getCheckWord2());
+        }
         paramJson.put("ServiceCode",sfConfig.getSaleOrderServiceCode());
+
 
         JSONArray saleOrdersJsonArr = new JSONArray();
 
@@ -105,9 +112,15 @@ public class JsonServiceImpl implements JsonService {
     @Override
     public JSONObject createSaleOrderDtlJson(ThSaleOrder thSaleOrder) {
         JSONObject paramJson = new JSONObject();
-        paramJson.put("CompanyCode",sfConfig.getCompanyCode());
-        paramJson.put("AccessCode",sfConfig.getAccessCode());
-        paramJson.put("Checkword",sfConfig.getCheckWord());
+        String companyCode = thSaleOrder.getCompanyCode();
+        paramJson.put("CompanyCode",companyCode);
+        if("ME-TH01".equals(companyCode)){
+            paramJson.put("AccessCode",sfConfig.getAccessCode1());
+            paramJson.put("Checkword",sfConfig.getCheckWord1());
+        }else if ("ME-TH02".equals(companyCode)){
+            paramJson.put("AccessCode",sfConfig.getAccessCode2());
+            paramJson.put("Checkword",sfConfig.getCheckWord2());
+        }
         paramJson.put("ServiceCode",sfConfig.getSaleOrderDtlServiceCode());
 
 
@@ -134,9 +147,15 @@ public class JsonServiceImpl implements JsonService {
     @Override
     public JSONObject createPurOrderJson(PutRefundPurDto dto) {
         JSONObject paramJson = new JSONObject();
-        paramJson.put("CompanyCode",sfConfig.getCompanyCode());
-        paramJson.put("AccessCode",sfConfig.getAccessCode());
-        paramJson.put("Checkword",sfConfig.getCheckWord());
+        String companyCode = dto.getCompanyCode();
+        paramJson.put("CompanyCode",companyCode);
+        if("ME-TH01".equals(companyCode)){
+            paramJson.put("AccessCode",sfConfig.getAccessCode1());
+            paramJson.put("Checkword",sfConfig.getCheckWord1());
+        }else if ("ME-TH02".equals(companyCode)){
+            paramJson.put("AccessCode",sfConfig.getAccessCode2());
+            paramJson.put("Checkword",sfConfig.getCheckWord2());
+        }
         paramJson.put("ServiceCode",sfConfig.getPurOrderServiceCode());
 
         JSONArray purOrdersJsonArr = new JSONArray();
@@ -183,9 +202,15 @@ public class JsonServiceImpl implements JsonService {
     @Override
     public JSONObject createPurOrderDtlJson(ThRefund thRefund) {
         JSONObject paramJson = new JSONObject();
-        paramJson.put("CompanyCode",sfConfig.getCompanyCode());
-        paramJson.put("AccessCode",sfConfig.getAccessCode());
-        paramJson.put("Checkword",sfConfig.getCheckWord());
+        String companyCode = thRefund.getCompanyCode();
+        paramJson.put("CompanyCode",companyCode);
+        if("ME-TH01".equals(companyCode)){
+            paramJson.put("AccessCode",sfConfig.getAccessCode1());
+            paramJson.put("Checkword",sfConfig.getCheckWord1());
+        }else if ("ME-TH02".equals(companyCode)){
+            paramJson.put("AccessCode",sfConfig.getAccessCode2());
+            paramJson.put("Checkword",sfConfig.getCheckWord2());
+        }
         paramJson.put("ServiceCode",sfConfig.getPurOrderDtlServiceCode());
 
 
@@ -209,9 +234,15 @@ public class JsonServiceImpl implements JsonService {
     @Override
     public JSONObject createSaleCancel(SaleCancelDto dto) {
         JSONObject paramJson = new JSONObject();
-        paramJson.put("CompanyCode",sfConfig.getCompanyCode());
-        paramJson.put("AccessCode",sfConfig.getAccessCode());
-        paramJson.put("Checkword",sfConfig.getCheckWord());
+        String companyCode = dto.getCompanyCode();
+        paramJson.put("CompanyCode",companyCode);
+        if("ME-TH01".equals(companyCode)){
+            paramJson.put("AccessCode",sfConfig.getAccessCode1());
+            paramJson.put("Checkword",sfConfig.getCheckWord1());
+        }else if ("ME-TH02".equals(companyCode)){
+            paramJson.put("AccessCode",sfConfig.getAccessCode2());
+            paramJson.put("Checkword",sfConfig.getCheckWord2());
+        }
         paramJson.put("ServiceCode",sfConfig.getCancelSaleOrderServiceCode());
 
         JSONObject orderJson = new JSONObject();
@@ -229,9 +260,15 @@ public class JsonServiceImpl implements JsonService {
     public JSONObject createPurCancel(PurCancelDto dto) {
 
         JSONObject paramJson = new JSONObject();
-        paramJson.put("CompanyCode",sfConfig.getCompanyCode());
-        paramJson.put("AccessCode",sfConfig.getAccessCode());
-        paramJson.put("Checkword",sfConfig.getCheckWord());
+        String companyCode = dto.getCompanyCode();
+        paramJson.put("CompanyCode",companyCode);
+        if("ME-TH01".equals(companyCode)){
+            paramJson.put("AccessCode",sfConfig.getAccessCode1());
+            paramJson.put("Checkword",sfConfig.getCheckWord1());
+        }else if ("ME-TH02".equals(companyCode)){
+            paramJson.put("AccessCode",sfConfig.getAccessCode2());
+            paramJson.put("Checkword",sfConfig.getCheckWord2());
+        }
         paramJson.put("ServiceCode",sfConfig.getCancelPurOrderServiceCode());
 
         JSONObject orderJson = new JSONObject();

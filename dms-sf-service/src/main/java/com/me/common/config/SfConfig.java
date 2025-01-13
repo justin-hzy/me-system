@@ -9,20 +9,26 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SfConfig {
 
-    @Value("${sf.companyCode}")
-    private String companyCode;
+    @Value("${sf.th01.accessCode1}")
+    private String accessCode1;
 
-    @Value("${sf.accessCode}")
-    private String accessCode;
+    @Value("${sf.th01.checkWord1}")
+    private String checkWord1;
 
-    @Value("${sf.checkWord}")
-    private String checkWord;
+    @Value("${sf.th01.key1}")
+    private String key1;
+
+    @Value("${sf.th02.accessCode2}")
+    private String accessCode2;
+
+    @Value("${sf.th02.checkWord2}")
+    private String checkWord2;
+
+    @Value("${sf.th02.key2}")
+    private String key2;
 
     @Value("${sf.url}")
     private String url;
-
-    @Value("${sf.key}")
-    private String key;
 
     @Value("${sf.saleOrderServiceCode}")
     private String SaleOrderServiceCode;

@@ -57,11 +57,15 @@ dms:
 
 
 sf:
-  companyCode: ME-TH01
-  accessCode: 4xw2TnbNMEZ2TIq9OotgmQ==
-  checkWord: ZlTvaLuvfQEWC8lWtplEQ4DZdwzw54Ey
-  key: JA8RVvoMe8fcH9jJSeLJzr2o7kx2WoYg
-  url: https://portal-gateway.sit.sf-express.com:55443/scc-portal-api-service/omsPortalService/sendRequest
+  th01:
+    accessCode1: 4xw2TnbNMEZ2TIq9OotgmQ==
+    checkWord1: AXSjzpU1CULRGpTLAIvyztTGij8Ayf6h
+    key1: 5vuOuhAbcDvLoBOW9LyB3vx6zZgP2KpL
+  th02:
+    accessCode2: QHk5LIrhU3WLR0/8rFS0rA==
+    checkWord2: 9JVX5hnCjk9fzOj2yfyLp19aDbE3ZZAl
+    key2: xKWPqWj85e1MHoGgtlMnQX1EriZkruck
+  url: https://portal-gateway.sf-express.com/scc-portal-api-service/omsPortalService/sendRequest
   saleOrderServiceCode: SALE_ORDER_SERVICE
   saleOrderDtlServiceCode: SALE_ORDER_OUTBOUND_DETAIL_QUERY_SERVICE
   purOrderServiceCode: PURCHASE_ORDER_SERVICE

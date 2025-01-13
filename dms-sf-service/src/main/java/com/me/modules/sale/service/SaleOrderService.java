@@ -13,5 +13,7 @@ public interface SaleOrderService {
 
     JsonResult transSaleOrderDtl(ThSaleOrder thSaleOrder) throws IOException;
 
+    JsonResult transSaleOrderDtl(ThSaleOrder thSaleOrder,String delTableName) throws IOException;
+
     JsonResult saleCancel(SaleCancelDto dto) throws IOException;
 }

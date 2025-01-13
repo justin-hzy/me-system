@@ -18,6 +18,8 @@ public class PutRefundPurDto {
 
     private String transferWarehouseCode;
 
+    private String companyCode;
+
     List<RefundGood> goods;
 
 }

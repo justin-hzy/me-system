@@ -14,6 +14,9 @@ public class ThRefund {
     @TableField("requestid")
     private String requestId;
 
+    @TableField("company_code")
+    private String companyCode;
+
     @TableField("is_receive")
     private String isReceive;
 }

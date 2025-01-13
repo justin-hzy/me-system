@@ -8,4 +8,6 @@ public class PurCancelDto {
 
     private String erpOrder;
 
+    private String companyCode;
+
 }

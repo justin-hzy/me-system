@@ -6,4 +6,6 @@ import lombok.Data;
 public class SaleCancelDto {
 
     private String erpOrder;
+
+    private String companyCode;
 }

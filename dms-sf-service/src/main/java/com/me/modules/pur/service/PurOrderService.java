@@ -14,4 +14,6 @@ public interface PurOrderService {
     JsonResult transPurOrderDtl(ThRefund thRefund) throws IOException;
 
     JsonResult purCancel(PurCancelDto dto) throws IOException;
+
+    JsonResult transPurOrderDtl(ThRefund thRefund,String dtlTableName) throws IOException;
 }

@@ -1,12 +1,12 @@
-package com.me.modules.sale.entity;
+package com.me.modules.trf.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("formtable_main_347")
-public class ThSaleOrder {
+@TableName("formtable_main_356")
+public class ThTrfOrder {
 
     @TableField("erp_order")
     private String erpOrder;
@@ -17,6 +17,12 @@ public class ThSaleOrder {
     @TableField("is_send")
     private String isSend;
 
-    @TableField("company_code")
-    private String companyCode;
+    @TableField("is_receive")
+    private String isReceive;
+
+    @TableField("out_company_code")
+    private String outCompanyCode;
+
+    @TableField("in_company_code")
+    private String inCompanyCode;
 }
