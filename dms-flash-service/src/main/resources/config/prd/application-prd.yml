@@ -57,8 +57,12 @@ dms:
 
 
 flash:
-  merchantId: C2405011
-  key: 2464bb12440d0eb67a6a8a6375e0efdee7c42515c7dccbd9286ae9737206009c
+  me01:
+    merchantId: C2405011
+    key: 2464bb12440d0eb67a6a8a6375e0efdee7c42515c7dccbd9286ae9737206009c
+  me02:
+    merchantId: C2406013
+    key: 0b1449d71fe6a8fc03681ce6bf08bb6e082fdcd68f5acef8e899da915ba9ee73
   putOutOrderUrl: https://open.flashfulfillment.vn/open/returnWarehouseAdd
   outOrderDetailUrl: https://open.flashfulfillment.vn/return_warehouse/outBoundOrderDetail
   inOrderDetailUrl: https://open.flashfulfillment.vn/Inbound/getInBoundDetail

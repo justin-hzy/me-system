@@ -38,7 +38,7 @@ public class FlashHttpServiceImpl implements FlashHttpService {
 
     public Map<String,String> createCommonParam(){
         Map<String,String> commonParam = new HashMap<>();
-        commonParam.put("mchId",flashConfig.getMerchantId());
+        commonParam.put("mchId",flashConfig.getMerchantId1());
 //        String nonceStr = UUID.randomUUID().toString().replace("-","");
 
         Long currentTime = System.currentTimeMillis();

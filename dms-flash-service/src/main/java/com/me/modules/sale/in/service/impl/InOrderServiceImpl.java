@@ -33,7 +33,7 @@ public class InOrderServiceImpl implements InOrderService {
         JSONObject putInOrderJson = jsonService.createPutInOrderJson(dto);
         log.info(putInOrderJson.toJSONString());
 
-        String key = flashConfig.getKey();
+        String key = flashConfig.getKey1();
 
         String sign = flashHttpService.generateSign(commonParam,key,putInOrderJson.toJSONString());
         log.info(sign);

@@ -8,11 +8,18 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class FlashConfig {
 
-    @Value("${flash.merchantId}")
-    private String merchantId;
+    @Value("${flash.me01.merchantId}")
+    private String merchantId1;
 
-    @Value("${flash.key}")
-    private String key;
+    @Value("${flash.me01.key}")
+    private String key1;
+
+    @Value("${flash.me02.merchantId}")
+    private String merchantId2;
+
+    @Value("${flash.me02.key}")
+    private String key2;
+
 
     @Value("${flash.putOutOrderUrl}")
     private String putOutOrderUrl;

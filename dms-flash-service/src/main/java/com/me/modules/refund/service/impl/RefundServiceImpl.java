@@ -34,7 +34,7 @@ public class RefundServiceImpl implements RefundService {
         JSONObject putRefundJson = jsonService.createPutRefundJson(dto);
         log.info(putRefundJson.toJSONString());
 
-        String key = flashConfig.getKey();
+        String key = flashConfig.getKey1();
 
         String sign = flashHttpService.generateSign(commonParam,key,putRefundJson.toJSONString());
         log.info(sign);

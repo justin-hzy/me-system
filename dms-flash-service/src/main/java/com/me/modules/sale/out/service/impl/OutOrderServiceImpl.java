@@ -34,7 +34,7 @@ public class OutOrderServiceImpl implements OutOrderService {
         JSONObject putOutOrderJson = jsonService.createPutOutOrderJson(dto);
         log.info(putOutOrderJson.toJSONString());
 
-        String key = flashConfig.getKey();
+        String key = flashConfig.getKey1();
 
         String sign = flashHttpService.generateSign(commonParam,key,putOutOrderJson.toJSONString());
         log.info(sign);

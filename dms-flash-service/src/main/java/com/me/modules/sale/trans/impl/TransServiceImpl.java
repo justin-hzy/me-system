@@ -40,7 +40,7 @@ public class TransServiceImpl implements TransService {
 
         Map<String,String> commonParam = flashHttpService.createCommonParam();
 
-        String key = flashConfig.getKey();
+        String key = flashConfig.getKey1();
 
         String sign = flashHttpService.generateSign(commonParam,key,param.toJSONString());
 
@@ -145,7 +145,7 @@ public class TransServiceImpl implements TransService {
         String orderSn = flashInOrder.getOrderSn();
         JSONObject param = jsonService.createTransInOrderDtlJson(flashInOrder);
         Map<String,String> commonParam = flashHttpService.createCommonParam();
-        String key = flashConfig.getKey();
+        String key = flashConfig.getKey1();
 
         String sign = flashHttpService.generateSign(commonParam,key,param.toJSONString());
 
