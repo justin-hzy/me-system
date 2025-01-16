@@ -16,4 +16,7 @@ public class FlashInOrder {
 
     @TableField("is_receive")
     private String isReceive;
+
+    @TableField("store_code")
+    private String storeCode;
 }

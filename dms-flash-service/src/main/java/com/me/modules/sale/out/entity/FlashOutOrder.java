@@ -18,4 +18,7 @@ public class FlashOutOrder {
 
     @TableField("is_send")
     private String isSend;
+
+    @TableField("store_code")
+    private String storeCode;
 }

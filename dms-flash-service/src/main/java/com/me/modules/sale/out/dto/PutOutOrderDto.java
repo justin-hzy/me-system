@@ -44,5 +44,7 @@ public class PutOutOrderDto {
 
     private String orderSn;
 
+    private String storeCode;
+
     private List<OutGood> goods;
 }

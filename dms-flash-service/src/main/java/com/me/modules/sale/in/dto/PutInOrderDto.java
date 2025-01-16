@@ -6,9 +6,11 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class    PutInOrderDto {
+public class PutInOrderDto {
 
     private String warehouseId;
+
+    private String storeCode;
 
     private String type;
 

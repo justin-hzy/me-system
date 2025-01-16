@@ -28,13 +28,19 @@ public class RefundServiceImpl implements RefundService {
 
     @Override
     public JsonResult putFlashRefund(PutRefundDto dto) throws IOException {
-        Map<String,String> commonParam = flashHttpService.createCommonParam();
+        String storeCode = dto.getStoreCode();
+        Map<String,String> commonParam = flashHttpService.createCommonParam(storeCode);
         log.info("commonParam="+commonParam.toString());
 
         JSONObject putRefundJson = jsonService.createPutRefundJson(dto);
         log.info(putRefundJson.toJSONString());
 
-        String key = flashConfig.getKey1();
+        String key = "";
+        if("ME01".equals(storeCode)){
+            key = flashConfig.getKey1();
+        }else if ("ME02".equals(storeCode)){
+            key = flashConfig.getKey2();
+        }
 
         String sign = flashHttpService.generateSign(commonParam,key,putRefundJson.toJSONString());
         log.info(sign);

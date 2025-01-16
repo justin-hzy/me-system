@@ -1,5 +1,6 @@
 package com.me.modules.sale.out.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.me.common.core.JsonResult;
 import com.me.modules.sale.out.dto.PutOutOrderDto;
 import com.me.modules.sale.out.service.OutOrderService;
@@ -20,9 +21,9 @@ public class FlashOrderController {
 
     @PostMapping("/order/putFlashOutOrder")
     public JsonResult putFlashOrder(@RequestBody PutOutOrderDto dto) throws IOException {
-        JsonResult respJsonResult = outOrderService.putFlashOutOrder(dto);
+        JSONObject respJsonResult = outOrderService.putFlashOutOrder(dto);
 
-        return respJsonResult;
+        return JsonResult.ok(respJsonResult);
     }
 
 }

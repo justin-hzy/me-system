@@ -26,15 +26,24 @@ public class OutOrderServiceImpl implements OutOrderService {
     private JsonService jsonService;
 
     @Override
-    public JsonResult putFlashOutOrder(PutOutOrderDto dto) throws IOException {
+    public JSONObject putFlashOutOrder(PutOutOrderDto dto) throws IOException {
 
-        Map<String,String> commonParam = flashHttpService.createCommonParam();
+        String storeCode = dto.getStoreCode();
+
+        Map<String,String> commonParam = flashHttpService.createCommonParam(storeCode);
         log.info("commonParam="+commonParam.toString());
 
         JSONObject putOutOrderJson = jsonService.createPutOutOrderJson(dto);
         log.info(putOutOrderJson.toJSONString());
 
-        String key = flashConfig.getKey1();
+        String key = "";
+        if("ME01".equals(storeCode)){
+            key = flashConfig.getKey1();
+        }else if ("ME02".equals(storeCode)){
+            key = flashConfig.getKey2();
+        }
+
+
 
         String sign = flashHttpService.generateSign(commonParam,key,putOutOrderJson.toJSONString());
         log.info(sign);
@@ -42,8 +51,8 @@ public class OutOrderServiceImpl implements OutOrderService {
         String url = flashHttpService.joinUrl(commonParam,sign,flashConfig.getPutOutOrderUrl());
         log.info(url);
 
-        flashHttpService.doAction(url,putOutOrderJson);
+        JSONObject respJson  = flashHttpService.doAction(url,putOutOrderJson);
 
-        return JsonResult.ok();
+        return respJson;
     }
 }

@@ -27,13 +27,19 @@ public class InOrderServiceImpl implements InOrderService {
 
     @Override
     public JsonResult putFlashInOrder(PutInOrderDto dto) throws IOException {
-        Map<String,String> commonParam = flashHttpService.createCommonParam();
+        String storeCode = dto.getStoreCode();
+        Map<String,String> commonParam = flashHttpService.createCommonParam(storeCode);
         log.info("commonParam="+commonParam.toString());
 
         JSONObject putInOrderJson = jsonService.createPutInOrderJson(dto);
         log.info(putInOrderJson.toJSONString());
 
-        String key = flashConfig.getKey1();
+        String key = "";
+        if("ME01".equals(storeCode)){
+            key = flashConfig.getKey1();
+        }else if ("ME02".equals(storeCode)){
+            key = flashConfig.getKey2();
+        }
 
         String sign = flashHttpService.generateSign(commonParam,key,putInOrderJson.toJSONString());
         log.info(sign);

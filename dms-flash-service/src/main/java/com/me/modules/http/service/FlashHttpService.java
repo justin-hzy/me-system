@@ -7,7 +7,7 @@ import java.util.Map;
 
 public interface FlashHttpService {
 
-    Map<String,String> createCommonParam();
+    Map<String,String> createCommonParam(String storeCode);
 
     String generateSign(Map<String, String> paramMap, String secretKey,String jsonBody);
 

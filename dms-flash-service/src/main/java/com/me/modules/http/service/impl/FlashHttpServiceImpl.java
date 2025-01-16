@@ -36,9 +36,16 @@ public class FlashHttpServiceImpl implements FlashHttpService {
     private static final String SHA256_ALGORITHM_NAME = "SHA-256";
     private static final char[] HEX_CHARS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
-    public Map<String,String> createCommonParam(){
+    public Map<String,String> createCommonParam(String storeCode){
         Map<String,String> commonParam = new HashMap<>();
-        commonParam.put("mchId",flashConfig.getMerchantId1());
+
+        if("ME01".equals(storeCode)){
+            commonParam.put("mchId",flashConfig.getMerchantId1());
+        }else if ("ME02".equals(storeCode)){
+            commonParam.put("mchId",flashConfig.getMerchantId2());
+        }
+
+
 //        String nonceStr = UUID.randomUUID().toString().replace("-","");
 
         Long currentTime = System.currentTimeMillis();
@@ -108,18 +115,20 @@ public class FlashHttpServiceImpl implements FlashHttpService {
 
             String code = apiRes.getString("code");
 
-            QueryWrapper<FlashRespCode> queryWrapper = new QueryWrapper<>();
-            queryWrapper.eq("code",code);
-            FlashRespCode flashRespCode = flashRespCodeService.getOne(queryWrapper);
-            log.info("获取接口数据成功，接口返回体：" + "code:"+code+",msg:"+flashRespCode.getMeaning());
+            log.info(resulString);
+
+            if("1".equals(code)){
+                apiRes.put("message","同步成功");
+                log.info("获取接口数据成功");
+            }else {
+                apiRes.put("message",apiRes.getString("msg"));
+                log.info("获取接口数据失败");
+            }
         }else{
             apiRes.put("result","false");
             apiRes.put("message","接口错误返回错误！");
             log.info("获取接口数据失败，接口返回体为空！");
         }
-
-
-
         return apiRes;
     }
 

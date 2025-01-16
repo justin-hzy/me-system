@@ -58,5 +58,7 @@ public class PutRefundDto {
 
     private String ignorePrice;
 
+    private String storeCode;
+
     private List<RefundGood> goods;
 }

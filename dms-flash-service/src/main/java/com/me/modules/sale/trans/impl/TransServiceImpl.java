@@ -38,9 +38,16 @@ public class TransServiceImpl implements TransService {
         String orderSn = flashOutOrder.getOrderSn();
         JSONObject param = jsonService.createTransOutOrderDtlJson(orderSn);
 
-        Map<String,String> commonParam = flashHttpService.createCommonParam();
+        String storeCode = flashOutOrder.getStoreCode();
 
-        String key = flashConfig.getKey1();
+        Map<String,String> commonParam = flashHttpService.createCommonParam(storeCode);
+
+        String key = "";
+        if("ME01".equals(storeCode)){
+            key = flashConfig.getKey1();
+        }else if ("ME02".equals(storeCode)){
+            key = flashConfig.getKey2();
+        }
 
         String sign = flashHttpService.generateSign(commonParam,key,param.toJSONString());
 
@@ -144,8 +151,16 @@ public class TransServiceImpl implements TransService {
     public void transInOrderList(FlashInOrder flashInOrder) throws IOException {
         String orderSn = flashInOrder.getOrderSn();
         JSONObject param = jsonService.createTransInOrderDtlJson(flashInOrder);
-        Map<String,String> commonParam = flashHttpService.createCommonParam();
-        String key = flashConfig.getKey1();
+
+        String storeCode = flashInOrder.getStoreCode();
+
+        Map<String,String> commonParam = flashHttpService.createCommonParam(storeCode);
+        String key = "";
+        if("ME01".equals(storeCode)){
+            key = flashConfig.getKey1();
+        }else if ("ME02".equals(storeCode)){
+            key = flashConfig.getKey2();
+        }
 
         String sign = flashHttpService.generateSign(commonParam,key,param.toJSONString());
 
