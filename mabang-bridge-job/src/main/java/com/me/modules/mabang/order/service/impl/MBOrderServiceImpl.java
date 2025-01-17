@@ -83,6 +83,7 @@ public class MBOrderServiceImpl extends ServiceImpl<MBOrderMapper, MBOrder> impl
         mainTable.put("shipping_total_origin",dto.getShippingTotalOrigin());
         mainTable.put("other_income",dto.getOtherIncome());
         mainTable.put("item_total_origin",dto.getItemTotalOrigin());
+        mainTable.put("is_flow",1);
         String currencyId = dto.getCurrencyId();
         if ("VND".equals(currencyId)){
             currencyId = "PRE009";
