@@ -20,6 +20,11 @@ public class FlashConfig {
     @Value("${flash.me02.key}")
     private String key2;
 
+    @Value("${flash.yjdr.merchantId}")
+    private String merchantId3;
+
+    @Value("${flash.yjdr.key}")
+    private String key3;
 
     @Value("${flash.putOutOrderUrl}")
     private String putOutOrderUrl;

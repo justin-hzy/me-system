@@ -39,6 +39,8 @@ public class InOrderServiceImpl implements InOrderService {
             key = flashConfig.getKey1();
         }else if ("ME02".equals(storeCode)){
             key = flashConfig.getKey2();
+        }else if("YJDR".equals(storeCode)){
+            key = flashConfig.getKey3();
         }
 
         String sign = flashHttpService.generateSign(commonParam,key,putInOrderJson.toJSONString());

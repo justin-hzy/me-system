@@ -43,6 +43,8 @@ public class FlashHttpServiceImpl implements FlashHttpService {
             commonParam.put("mchId",flashConfig.getMerchantId1());
         }else if ("ME02".equals(storeCode)){
             commonParam.put("mchId",flashConfig.getMerchantId2());
+        }else if ("YJDR".equals(storeCode)){
+            commonParam.put("mchId",flashConfig.getMerchantId3());
         }
 
 

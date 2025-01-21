@@ -63,6 +63,9 @@ flash:
   me02:
     merchantId: C2406013
     key: 0b1449d71fe6a8fc03681ce6bf08bb6e082fdcd68f5acef8e899da915ba9ee73
+  yjdr:
+    merchantId: C2407008
+    key: 3898c5588bec12bfac695fc66fe8b0cc4bb3d8917ab42405033b2b21419d38a0
   putOutOrderUrl: https://open.flashfulfillment.vn/open/returnWarehouseAdd
   outOrderDetailUrl: https://open.flashfulfillment.vn/return_warehouse/outBoundOrderDetail
   inOrderDetailUrl: https://open.flashfulfillment.vn/Inbound/getInBoundDetail
