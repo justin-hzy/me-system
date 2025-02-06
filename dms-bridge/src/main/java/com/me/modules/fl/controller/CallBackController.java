@@ -957,9 +957,15 @@ public class CallBackController {
                     workflowRequestTableFields3.put("fieldName","rkrq");
                     workflowRequestTableFields3.put("fieldValue",todayString);
 
+                    String batch = purchaseInItem.getBatch();
+                    JSONObject workflowRequestTableFields4 = new JSONObject();
+                    workflowRequestTableFields4.put("fieldName","pc");
+                    workflowRequestTableFields4.put("fieldValue",batch);
+
                     workflowRequestTableFieldsArr.add(workflowRequestTableFields1);
                     workflowRequestTableFieldsArr.add(workflowRequestTableFields2);
                     workflowRequestTableFieldsArr.add(workflowRequestTableFields3);
+                    workflowRequestTableFieldsArr.add(workflowRequestTableFields4);
 
                     workflowRequestTableRecords.put("workflowRequestTableFields",workflowRequestTableFieldsArr);
                     workflowRequestTableRecords.put("recordOrder",recordOrder);
