@@ -77,6 +77,14 @@ public class MaBangTransServiceImpl implements MaBangTransService {
 
                         String shopId = element.getString("shopId");
                         String shopName = element.getString("shopName");
+
+                        //如果店铺名称等于VNLazadaPOP 去掉订单头部 2021894296 的内容
+                        if("VNLazadaPOP".equals(shopName)){
+                            if (platformOrderId.contains("2021894296")){
+                                platformOrderId = platformOrderId.replace("2021894296","");
+                            }
+                        }
+
                         String orderStatus = element.getString("orderStatus");
                         String voucherPriceOrigin = element.getString("voucherPriceOrigin");
                         String subsidyAmountOrigin = element.getString("subsidyAmountOrigin");
