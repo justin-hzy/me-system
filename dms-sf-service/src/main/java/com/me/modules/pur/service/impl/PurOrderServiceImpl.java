@@ -350,7 +350,7 @@ public class PurOrderServiceImpl implements PurOrderService {
                         log.info("订单回传异常，数据进入中间表,requestId="+ thRefund.getRequestId()+",提交失败");
                     }
                 }else {
-                    log.info(thRefund.getErpOrder()+"----------"+"暂未出库");
+                    log.info(thRefund.getErpOrder()+"----------"+"暂未入库");
                 }
             }
         }
