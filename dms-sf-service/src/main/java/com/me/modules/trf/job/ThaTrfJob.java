@@ -1,40 +1,42 @@
-package com.me.trf;
+package com.me.modules.trf.job;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.me.common.aop.Mdc;
 import com.me.common.config.DmsConfig;
-import com.me.common.config.SfConfig;
 import com.me.modules.pur.service.PurOrderService;
 import com.me.modules.refund.entity.ThRefund;
 import com.me.modules.sale.entity.ThSaleOrder;
 import com.me.modules.sale.service.SaleOrderService;
 import com.me.modules.trf.entity.ThTrfOrder;
 import com.me.modules.trf.service.ThTrfOrderService;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
 import java.util.List;
 
-@SpringBootTest
+@Configuration
+@EnableScheduling
 @Slf4j
-public class TrfOrderTest {
+@AllArgsConstructor
+public class ThaTrfJob {
 
-    @Autowired
     ThTrfOrderService thTrfOrderService;
 
-    @Autowired
     PurOrderService purOrderService;
 
-    @Autowired
     private SaleOrderService saleOrderService;
 
-    @Autowired
     private DmsConfig dmsConfig;
 
-    @Test
+    @Mdc
+    @Scheduled(cron = "0 0 9-21/1 * * ?")
     void queryConsOutDtl() throws IOException {
         /*dbxzpd : 调拨类型*/
         QueryWrapper<ThTrfOrder> queryWrapper = new QueryWrapper<>();
@@ -53,7 +55,8 @@ public class TrfOrderTest {
         }
     }
 
-    @Test
+    @Mdc
+    @Scheduled(cron = "0 0 9-21/1 * * ?")
     void queryConsInDtl() throws IOException {
         /*dbxzpd : 调拨类型*/
         QueryWrapper<ThTrfOrder> queryWrapper = new QueryWrapper<>();
@@ -72,7 +75,8 @@ public class TrfOrderTest {
         }
     }
 
-    @Test
+    @Mdc
+    @Scheduled(cron = "0 0 9-21/1 * * ?")
     void queryTrfOutDtl() throws IOException{
         /*dbxzpd : 调拨类型*/
         QueryWrapper<ThTrfOrder> queryWrapper = new QueryWrapper<>();
@@ -91,7 +95,8 @@ public class TrfOrderTest {
         }
     }
 
-    @Test
+    @Mdc
+    @Scheduled(cron = "0 0 9-21/1 * * ?")
     void queryTrfInDtl() throws IOException{
         /*dbxzpd : 调拨类型*/
         QueryWrapper<ThTrfOrder> queryWrapper = new QueryWrapper<>();
