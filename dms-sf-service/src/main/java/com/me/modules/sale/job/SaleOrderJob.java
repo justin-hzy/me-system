@@ -1,6 +1,7 @@
 package com.me.modules.sale.job;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.me.common.aop.Mdc;
 import com.me.modules.sale.entity.ThSaleOrder;
 import com.me.modules.sale.service.SaleOrderService;
 import com.me.modules.sale.service.ThSaleOrderService;
@@ -23,6 +24,7 @@ public class SaleOrderJob {
 
     private ThSaleOrderService thSaleOrderService;
 
+    @Mdc
     @Scheduled(cron = "0 0 9-21/1 * * ?")
     void querySaleOrderDtl() throws IOException {
 

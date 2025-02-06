@@ -1,6 +1,7 @@
 package com.me.modules.refund.job;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.me.common.aop.Mdc;
 import com.me.modules.pur.service.PurOrderService;
 import com.me.modules.refund.entity.ThRefund;
 import com.me.modules.refund.service.ThRefundService;
@@ -23,6 +24,7 @@ public class RefundJob {
 
     private ThRefundService thRefundService;
 
+    @Mdc
     @Scheduled(cron = "0 0 9-21/1 * * ?")
     void queryRefundDtl() throws IOException {
 
