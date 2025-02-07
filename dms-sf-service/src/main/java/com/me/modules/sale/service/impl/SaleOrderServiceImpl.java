@@ -382,6 +382,19 @@ public class SaleOrderServiceImpl implements SaleOrderService {
 
         String head = apiRes.getString("Head");
 
-        return null;
+        JSONObject resultJson = new JSONObject();
+        String note = "";
+
+        if ("OK".equals(head)){
+            note = "取消成功";
+            resultJson.put("isSf",1);
+            resultJson.put("note",note);
+            return JsonResult.ok("200",note,resultJson);
+        }else {
+            note = "取消不成功";
+            resultJson.put("isSf",1);
+            resultJson.put("note",note);
+            return JsonResult.ok("200",note,resultJson);
+        }
     }
 }
