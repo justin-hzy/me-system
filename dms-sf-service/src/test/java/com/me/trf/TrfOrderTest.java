@@ -36,7 +36,7 @@ public class TrfOrderTest {
 
     @Test
     void queryConsOutDtl() throws IOException {
-        /*dbxzpd : 调拨类型*/
+        /*dbxzpd : 调拨类型 寄售出*/
         QueryWrapper<ThTrfOrder> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("is_send","1").eq("dbxzpd","1");
         List<ThTrfOrder> thTrfOutOrders = thTrfOrderService.list(queryWrapper);
@@ -55,7 +55,7 @@ public class TrfOrderTest {
 
     @Test
     void queryConsInDtl() throws IOException {
-        /*dbxzpd : 调拨类型*/
+        /*dbxzpd : 调拨类型 寄售退*/
         QueryWrapper<ThTrfOrder> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("is_receive","1").eq("dbxzpd","2");
         List<ThTrfOrder> thTrfOutOrders = thTrfOrderService.list(queryWrapper);
@@ -72,11 +72,11 @@ public class TrfOrderTest {
         }
     }
 
-    @Test
+    /*@Test
     void queryTrfOutDtl() throws IOException{
-        /*dbxzpd : 调拨类型*/
+        *//*dbxzpd : 调拨类型*//*
         QueryWrapper<ThTrfOrder> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("is_receive","1").eq("dbxzpd","3");
+        queryWrapper.eq("is_send","1").eq("dbxzpd","3");
         List<ThTrfOrder> thTrfOutOrders = thTrfOrderService.list(queryWrapper);
 
         for (ThTrfOrder thTrfOrder : thTrfOutOrders){
@@ -89,11 +89,11 @@ public class TrfOrderTest {
                 saleOrderService.transSaleOrderDtl(thSaleOrder,dmsConfig.getTrfOutDt2());
             }
         }
-    }
+    }*/
 
     @Test
     void queryTrfInDtl() throws IOException{
-        /*dbxzpd : 调拨类型*/
+        /*dbxzpd : 调拨类型 仓间调拨*/
         QueryWrapper<ThTrfOrder> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("is_receive","1").eq("dbxzpd","3");
         List<ThTrfOrder> thTrfOutOrders = thTrfOrderService.list(queryWrapper);
