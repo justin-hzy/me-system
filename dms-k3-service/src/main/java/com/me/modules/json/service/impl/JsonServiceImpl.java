@@ -210,10 +210,10 @@ public class JsonServiceImpl implements JsonService {
             salOutFEntityJson.setFStockId(fStockIdJson);
 
             salOutFEntityJson.setFTAXPRICE(saleFEntity.getFtaxprice());
+            //明细数据的订单单号跟第三方单号保持一致
+            salOutFEntityJson.setFSoorDerno(fthirdbillno);
 
-            salOutFEntityJson.setFSoorDerno(saleFEntity.getFsoorderno());
-
-
+            //原始子订单号，用于财务对账，更明细
             salOutFEntityJson.setF_DSG_srcoid(saleFEntity.getFdsgsrcoid());
 
             //默认批次效期、生产日期、效期
