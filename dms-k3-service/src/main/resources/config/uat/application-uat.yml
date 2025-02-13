@@ -5,7 +5,7 @@ server:
 
 spring:
   application:
-    name: dmsBridge
+    name: dmsK3Service
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://39.108.136.182:33306/ecology?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
@@ -87,14 +87,14 @@ fl:
 #金蝶 暂时是用生成环境
 k3:
   hk:
-    appId: '294117_xY9v08CKyomfSWUo0ZTKzwxHTJwX1soH'
-    dCID: '672146be582422'
-    appSecret: '3bded10db07d49e8be546f1b7d9932f9'
+    appId: 303170_WZ1AWavG3qC+xb/vx64q7dwEyvwX1qqO
+    dCID: 67ad958ce54ab7
+    appSecret: c32ea17260bd4ea1a3c359990f71e1cf
   tw:
-    appId: '294137_1+eC2xvo4pnW45WH7Z7NVzyE6uQ/4ALu'
-    appSecret: '3191e6db61d84fb59413b456bdbc73e8'
+    appId: 294137_1+eC2xvo4pnW45WH7Z7NVzyE6uQ/4ALu
     dCID: '6721823e582426'
-  userName: 'admin1'
+    appSecret: 3191e6db61d84fb59413b456bdbc73e8
+  userName: admin1
   lCID: 2052
   serverUrl: http://kd.za-cosmetics.com/k3Cloud/
   produceDate: 2020-01-01
