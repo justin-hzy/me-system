@@ -330,6 +330,11 @@ public class PurOrderServiceImpl implements PurOrderService {
                     JSONObject mainData1 = new JSONObject();
                     mainData1.put("fieldName","is_receive");
                     mainData1.put("fieldValue","0");
+
+                    JSONObject mainData2 = new JSONObject();
+                    mainData2.put("fieldName","receive_date");
+                    mainData2.put("fieldValue",completeTime );
+
                     mainDataArr.add(mainData1);
 
                     json.put("mainData",mainDataArr);

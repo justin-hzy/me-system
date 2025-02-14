@@ -35,8 +35,8 @@ public class ThaTrfJob {
 
     private DmsConfig dmsConfig;
 
-    /*@Mdc
-    @Scheduled(cron = "0 0 9-21/1 * * ?")*/
+    @Mdc
+    @Scheduled(cron = "0 0 9-21/1 * * ?")
     void queryConsOutDtl() throws IOException {
         log.info("执行寄售出货明细查询定时器");
         /*dbxzpd : 调拨类型 寄售出*/
@@ -82,7 +82,7 @@ public class ThaTrfJob {
     /*@Mdc
     @Scheduled(cron = "0 0 9-21/1 * * ?")
     void queryTrfOutDtl() throws IOException{
-        *//*dbxzpd : 调拨类型*//*
+        //dbxzpd : 调拨类型
         QueryWrapper<ThTrfOrder> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("is_receive","1").eq("dbxzpd","3");
         List<ThTrfOrder> thTrfOutOrders = thTrfOrderService.list(queryWrapper);
@@ -103,7 +103,7 @@ public class ThaTrfJob {
     @Scheduled(cron = "0 0 9-21/1 * * ?")
     void queryTrfInDtl() throws IOException{
         log.info("执行调拨入库明细查询定时器");
-        /*dbxzpd : 调拨类型 仓间调拨*/
+        //dbxzpd : 调拨类型 仓间调拨
         QueryWrapper<ThTrfOrder> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("is_receive","1").eq("dbxzpd","3");
         List<ThTrfOrder> thTrfOutOrders = thTrfOrderService.list(queryWrapper);
