@@ -214,6 +214,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
                         DmsUtil.testRegist(dmsConfig.getIp());
                         DmsUtil.testGetoken(dmsConfig.getIp());
                         DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),json.toJSONString());
+                        log.info(thSaleOrder.getErpOrder()+"----------"+"已出库");
                     }catch (Exception e){
                         log.info("订单回传异常，数据进入中间表,requestId="+ thSaleOrder.getRequestId()+",提交失败");
                     }
@@ -339,6 +340,7 @@ public class SaleOrderServiceImpl implements SaleOrderService {
                         DmsUtil.testRegist(dmsConfig.getIp());
                         DmsUtil.testGetoken(dmsConfig.getIp());
                         DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),json.toJSONString());
+                        log.info(thSaleOrder.getErpOrder()+"----------"+"已出库");
                     }catch (Exception e){
                         log.info("订单回传异常，数据进入中间表,requestId="+ thSaleOrder.getRequestId()+",提交失败");
                     }

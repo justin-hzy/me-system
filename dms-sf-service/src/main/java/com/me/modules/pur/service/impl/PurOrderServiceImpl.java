@@ -219,11 +219,12 @@ public class PurOrderServiceImpl implements PurOrderService {
                         DmsUtil.testRegist(dmsConfig.getIp());
                         DmsUtil.testGetoken(dmsConfig.getIp());
                         DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),json.toJSONString());
+                        log.info(thRefund.getErpOrder()+"----------"+"暂已入库");
                     }catch (Exception e){
                         log.info("订单回传异常，数据进入中间表,requestId="+ thRefund.getRequestId()+",提交失败");
                     }
                 }else {
-                    log.info(thRefund.getErpOrder()+"----------"+"暂未出库");
+                    log.info(thRefund.getErpOrder()+"----------"+"暂未入库");
                 }
             }
         }
@@ -351,6 +352,7 @@ public class PurOrderServiceImpl implements PurOrderService {
                         DmsUtil.testRegist(dmsConfig.getIp());
                         DmsUtil.testGetoken(dmsConfig.getIp());
                         DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),json.toJSONString());
+                        log.info(thRefund.getErpOrder()+"----------"+"暂已入库");
                     }catch (Exception e){
                         log.info("订单回传异常，数据进入中间表,requestId="+ thRefund.getRequestId()+",提交失败");
                     }
