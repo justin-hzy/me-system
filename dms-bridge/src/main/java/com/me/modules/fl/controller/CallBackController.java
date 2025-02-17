@@ -1231,10 +1231,11 @@ public class CallBackController {
 
                 List<ProcessItem> items = dto.getItems();
 
-                Map<String,Integer> resMap = new HashMap<>();
+                //取消汇总逻辑
+                //Map<String,Integer> resMap = new HashMap<>();
 
                 //汇总回传数据
-                for(ProcessItem item : items){
+                /*for(ProcessItem item : items){
                     String sku = item.getSku();
                     Integer receivedPcs = item.getReceived_pcs();
 
@@ -1247,7 +1248,7 @@ public class CallBackController {
                     }else {
                         resMap.put(sku,receivedPcs);
                     }
-                }
+                }*/
 
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("requestId",requestId);
@@ -1272,8 +1273,14 @@ public class CallBackController {
                 JSONArray detailDataArr = new JSONArray();
                 JSONObject detailData = new JSONObject();
 
-                for (String sku : resMap.keySet()){
-                    Integer receivedPcs = resMap.get(sku);
+                for (ProcessItem item : items){
+
+                    Integer receivedPcs = item.getReceived_pcs();
+
+                    String sku = item.getSku();
+
+                    String batch = item.getBatch();
+                    String expirationDate = item.getExpiration_date();
 
                     JSONObject workflowRequestTableRecords0 = new JSONObject();
                     JSONArray workflowRequestTableFieldsArr0 = new JSONArray();
@@ -1288,8 +1295,18 @@ public class CallBackController {
                     workflowRequestTableFields0_2.put("fieldName","fhcrksl");
                     workflowRequestTableFields0_2.put("fieldValue",receivedPcs);
 
+                    JSONObject workflowRequestTableFields0_3 = new JSONObject();
+                    workflowRequestTableFields0_3.put("fieldName","pc");
+                    workflowRequestTableFields0_3.put("fieldValue",batch);
+
+                    JSONObject workflowRequestTableFields0_4 = new JSONObject();
+                    workflowRequestTableFields0_4.put("fieldName","xq");
+                    workflowRequestTableFields0_4.put("fieldValue",expirationDate);
+
                     workflowRequestTableFieldsArr0.add(workflowRequestTableFields0_1);
                     workflowRequestTableFieldsArr0.add(workflowRequestTableFields0_2);
+                    workflowRequestTableFieldsArr0.add(workflowRequestTableFields0_3);
+                    workflowRequestTableFieldsArr0.add(workflowRequestTableFields0_4);
 
                     workflowRequestTableRecords0.put("workflowRequestTableFields",workflowRequestTableFieldsArr0);
                     workflowRequestTableRecords0.put("recordOrder",recordOrder);
