@@ -559,7 +559,7 @@ public class JsonServiceImpl implements JsonService {
             fInStockEntryJson.setFLot(flotJson);
             fInStockEntryJson.setFExpiryDate(k3Config.getFExpiryDate());
             fInStockEntryJson.setFProduceDate(k3Config.getFProduceDate());
-
+            fInStockEntryJson.setFPOORDERNO(fthirdbillno);
             FInStockEntry.add(fInStockEntryJson);
         }
         purchaseModelJson.setFInStockEntry(FInStockEntry);

@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.kingdee.bos.webapi.entity.IdentifyInfo;
 import com.kingdee.bos.webapi.entity.RepoError;
 import com.kingdee.bos.webapi.entity.RepoRet;
+import com.kingdee.bos.webapi.entity.RepoStatus;
 import com.kingdee.bos.webapi.sdk.K3CloudApi;
 import com.me.common.config.K3Config;
 import com.me.modules.assembly.dto.PutAssemblyDto;
@@ -90,7 +91,14 @@ public class TranServiceImpl implements TranService {
 
             return resJson.toJSONString();
         } else {
-            log.info("接口返回结果: " + gson.toJson(repoRet.getResult().getResponseStatus()));
+            RepoStatus repoStatus = repoRet.getResult().getResponseStatus();
+            log.info("接口返回结果: " + gson.toJson(repoStatus));
+            List<RepoError> errors = repoStatus.getErrors();
+            String message = errors.get(0).getMessage();
+
+            JSONObject messageJson = JSONObject.parseObject(message);
+            log.info(messageJson.toJSONString());
+
             JSONObject resJson = new JSONObject();
             resJson.put("code",500);
             saveErrorLog(repoRet.getResult().getResponseStatus().getErrors(),dto.getFbillno());
