@@ -52,7 +52,7 @@ public class PriceController {
         dto.setFormId("PUR_PriceCategory");
         dto.setFieldKeys("FMaterialId.FNumber,FTaxPrice,FTaxRate");
 
-        String FilterString = " Fnumber = 'CGJM000032' and FMaterialId.FNumber in ("+skuStr+")";
+        String FilterString = " Fnumber = 'CGJM000033' and FMaterialId.FNumber in ("+skuStr+")";
 
         dto.setFilterString(FilterString);
 
