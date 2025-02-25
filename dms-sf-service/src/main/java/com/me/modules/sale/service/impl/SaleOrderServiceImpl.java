@@ -198,7 +198,11 @@ public class SaleOrderServiceImpl implements SaleOrderService {
                     JSONObject mainData1 = new JSONObject();
                     mainData1.put("fieldName","is_send");
                     mainData1.put("fieldValue","0");
-                    mainDataArr.add(mainData1);
+
+                    JSONObject mainData2 = new JSONObject();
+                    mainData2.put("fieldName","send_date");
+                    mainData2.put("fieldValue",completeTime);
+                    mainDataArr.add(mainData2);
 
                     json.put("mainData",mainDataArr);
 
