@@ -54,6 +54,8 @@ dms:
   order:
     outOrderDtl2: formtable_main_351_dt2
     inOrderDtl2: formtable_main_352_dt2
+    inTrfOrderDtl3: formtable_main_359_dt3
+    outTrfOrderDtl2: formtable_main_359_dt2
 
 
 flash:

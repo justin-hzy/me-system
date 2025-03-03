@@ -52,8 +52,10 @@ dms:
   ip: http://39.108.136.182:8080/
   url: /api/workflow/paService/submitRequest
   order:
-    outOrderDtl2: formtable_main_345_dt2
-    inOrderDtl2: formtable_main_350_dt2
+    outOrderDtl2: formtable_main_351_dt2
+    inOrderDtl2: formtable_main_352_dt2
+    inTrfOrderDtl3: formtable_main_359_dt3
+    outTrfOrderDtl2: formtable_main_359_dt2
 
 
 

@@ -125,7 +125,12 @@ public class TransServiceImpl implements TransService {
             JSONObject mainData1 = new JSONObject();
             mainData1.put("fieldName","is_send");
             mainData1.put("fieldValue","0");
+
+            JSONObject mainData2 = new JSONObject();
+            mainData2.put("fieldName","send_date");
+            mainData2.put("fieldValue",completeTime);
             mainDataArr.add(mainData1);
+            mainDataArr.add(mainData2);
 
             jsonObject.put("mainData",mainDataArr);
 
@@ -160,6 +165,8 @@ public class TransServiceImpl implements TransService {
             key = flashConfig.getKey1();
         }else if ("ME02".equals(storeCode)){
             key = flashConfig.getKey2();
+        }else if("YJDR".equals(storeCode)){
+            key = flashConfig.getKey3();
         }
 
         String sign = flashHttpService.generateSign(commonParam,key,param.toJSONString());
@@ -252,6 +259,356 @@ public class TransServiceImpl implements TransService {
                 DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());
             }catch (Exception e){
                 log.info("订单回传异常，数据进入中间表,requestId="+ flashInOrder.getRequestId()+",提交失败");
+            }
+        }
+    }
+
+    @Override
+    public void transInOrderList(FlashInOrder flashInOrder, String tableName) throws IOException {
+        String orderSn = flashInOrder.getOrderSn();
+        JSONObject param = jsonService.createTransInOrderDtlJson(flashInOrder);
+
+        String storeCode = flashInOrder.getStoreCode();
+
+        Map<String,String> commonParam = flashHttpService.createCommonParam(storeCode);
+        String key = "";
+        if("ME01".equals(storeCode)){
+            key = flashConfig.getKey1();
+        }else if ("ME02".equals(storeCode)){
+            key = flashConfig.getKey2();
+        }else if("YJDR".equals(storeCode)){
+            key = flashConfig.getKey3();
+        }
+
+        String sign = flashHttpService.generateSign(commonParam,key,param.toJSONString());
+
+        log.info("sign="+sign);
+
+        String inOrderDetailUrl = flashConfig.getInOrderDetailUrl();
+
+        inOrderDetailUrl = flashHttpService.joinUrl(commonParam,sign,inOrderDetailUrl);
+        log.info("inOrderDetailUrl="+inOrderDetailUrl);
+
+        JSONObject respJson = flashHttpService.doAction(inOrderDetailUrl,param);
+
+        JSONArray dataJsonArr = respJson.getJSONArray("data");
+
+
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("requestId", Integer.valueOf(flashInOrder.getRequestId()));
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String completeTime = dateFormat.format(new Date());
+
+
+        for (int i = 0;i<dataJsonArr.size();i++){
+            JSONObject dataJsonObj = dataJsonArr.getJSONObject(i);
+            log.info(dataJsonObj.getString("completeTime"));
+
+            JSONArray detailDataArr = new JSONArray();
+            JSONObject detailData = new JSONObject();
+            JSONArray workflowRequestTableRecordsArr = new JSONArray();
+
+            JSONArray goodsListJsonArr = dataJsonObj.getJSONArray("goodsList");
+            for (int j = 0;j<goodsListJsonArr.size();j++){
+                JSONObject goodJson = goodsListJsonArr.getJSONObject(j);
+                String barCode = goodJson.getString("barCode");
+                String inNum = goodJson.getString("inNum");
+
+                JSONObject workflowRequestTableRecords = new JSONObject();
+                Integer recordOrder = 0;
+
+                JSONArray workflowRequestTableFieldsArr = new JSONArray();
+
+                JSONObject workflowRequestTableFields1 = new JSONObject();
+                workflowRequestTableFields1.put("fieldName","po");
+                workflowRequestTableFields1.put("fieldValue",orderSn);
+
+                JSONObject workflowRequestTableFields2 = new JSONObject();
+                workflowRequestTableFields2.put("fieldName","bar_code");
+                workflowRequestTableFields2.put("fieldValue",barCode);
+
+                JSONObject workflowRequestTableFields3 = new JSONObject();
+                workflowRequestTableFields3.put("fieldName","entry_qty");
+                workflowRequestTableFields3.put("fieldValue",inNum);
+
+                JSONObject workflowRequestTableFields4 = new JSONObject();
+                workflowRequestTableFields4.put("fieldName","entry_date");
+                workflowRequestTableFields4.put("fieldValue",completeTime);
+
+                workflowRequestTableFieldsArr.add(workflowRequestTableFields1);
+                workflowRequestTableFieldsArr.add(workflowRequestTableFields2);
+                workflowRequestTableFieldsArr.add(workflowRequestTableFields3);
+                workflowRequestTableFieldsArr.add(workflowRequestTableFields4);
+
+                workflowRequestTableRecords.put("workflowRequestTableFields",workflowRequestTableFieldsArr);
+                workflowRequestTableRecords.put("recordOrder",recordOrder);
+
+                workflowRequestTableRecordsArr.add(workflowRequestTableRecords);
+            }
+
+            detailData.put("workflowRequestTableRecords",workflowRequestTableRecordsArr);
+            detailData.put("tableDBName",tableName);
+            detailDataArr.add(detailData);
+
+            JSONArray mainDataArr = new JSONArray();
+            JSONObject mainData1 = new JSONObject();
+            mainData1.put("fieldName","is_receive");
+            mainData1.put("fieldValue","0");
+            mainDataArr.add(mainData1);
+
+            jsonObject.put("mainData",mainDataArr);
+
+            jsonObject.put("detailData",detailDataArr);
+
+            log.info(jsonObject.toJSONString());
+
+            try{
+                DmsUtil.testRegist(dmsConfig.getIp());
+                DmsUtil.testGetoken(dmsConfig.getIp());
+                DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());
+            }catch (Exception e){
+                log.info("订单回传异常，数据进入中间表,requestId="+ flashInOrder.getRequestId()+",提交失败");
+            }
+        }
+    }
+
+    @Override
+    public void transInTrfOrderList(FlashInOrder flashInOrder, String tableName) throws IOException {
+        String orderSn = flashInOrder.getOrderSn();
+        JSONObject param = jsonService.createTransInOrderDtlJson(flashInOrder);
+
+        String storeCode = flashInOrder.getStoreCode();
+
+        Map<String,String> commonParam = flashHttpService.createCommonParam(storeCode);
+        String key = "";
+        if("ME01".equals(storeCode)){
+            key = flashConfig.getKey1();
+        }else if ("ME02".equals(storeCode)){
+            key = flashConfig.getKey2();
+        }else if("YJDR".equals(storeCode)){
+            key = flashConfig.getKey3();
+        }
+
+        String sign = flashHttpService.generateSign(commonParam,key,param.toJSONString());
+
+        log.info("sign="+sign);
+
+        String inOrderDetailUrl = flashConfig.getInOrderDetailUrl();
+
+        inOrderDetailUrl = flashHttpService.joinUrl(commonParam,sign,inOrderDetailUrl);
+        log.info("inOrderDetailUrl="+inOrderDetailUrl);
+
+        JSONObject respJson = flashHttpService.doAction(inOrderDetailUrl,param);
+
+        JSONArray dataJsonArr = respJson.getJSONArray("data");
+
+
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("requestId", Integer.valueOf(flashInOrder.getRequestId()));
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String completeTime = dateFormat.format(new Date());
+
+
+        for (int i = 0;i<dataJsonArr.size();i++){
+            JSONObject dataJsonObj = dataJsonArr.getJSONObject(i);
+            log.info(dataJsonObj.getString("completeTime"));
+
+            JSONArray detailDataArr = new JSONArray();
+            JSONObject detailData = new JSONObject();
+            JSONArray workflowRequestTableRecordsArr = new JSONArray();
+
+            JSONArray goodsListJsonArr = dataJsonObj.getJSONArray("goodsList");
+            for (int j = 0;j<goodsListJsonArr.size();j++){
+                JSONObject goodJson = goodsListJsonArr.getJSONObject(j);
+                String barCode = goodJson.getString("barCode");
+                String inNum = goodJson.getString("inNum");
+
+                JSONObject workflowRequestTableRecords = new JSONObject();
+                Integer recordOrder = 0;
+
+                JSONArray workflowRequestTableFieldsArr = new JSONArray();
+
+                JSONObject workflowRequestTableFields1 = new JSONObject();
+                workflowRequestTableFields1.put("fieldName","po");
+                workflowRequestTableFields1.put("fieldValue",orderSn);
+
+                JSONObject workflowRequestTableFields2 = new JSONObject();
+                workflowRequestTableFields2.put("fieldName","sku_no");
+                workflowRequestTableFields2.put("fieldValue",barCode);
+
+                JSONObject workflowRequestTableFields3 = new JSONObject();
+                workflowRequestTableFields3.put("fieldName","actual_qty");
+                workflowRequestTableFields3.put("fieldValue",inNum);
+
+                JSONObject workflowRequestTableFields4 = new JSONObject();
+                workflowRequestTableFields4.put("fieldName","receive_date");
+                workflowRequestTableFields4.put("fieldValue",completeTime);
+
+                workflowRequestTableFieldsArr.add(workflowRequestTableFields1);
+                workflowRequestTableFieldsArr.add(workflowRequestTableFields2);
+                workflowRequestTableFieldsArr.add(workflowRequestTableFields3);
+                workflowRequestTableFieldsArr.add(workflowRequestTableFields4);
+
+                workflowRequestTableRecords.put("workflowRequestTableFields",workflowRequestTableFieldsArr);
+                workflowRequestTableRecords.put("recordOrder",recordOrder);
+
+                workflowRequestTableRecordsArr.add(workflowRequestTableRecords);
+            }
+
+            detailData.put("workflowRequestTableRecords",workflowRequestTableRecordsArr);
+            detailData.put("tableDBName",tableName);
+            detailDataArr.add(detailData);
+
+            JSONArray mainDataArr = new JSONArray();
+            JSONObject mainData1 = new JSONObject();
+            mainData1.put("fieldName","is_receive");
+            mainData1.put("fieldValue","0");
+
+            JSONObject mainData2 = new JSONObject();
+            mainData2.put("fieldName","receive_date");
+            mainData2.put("fieldValue",completeTime);
+
+            mainDataArr.add(mainData1);
+            mainDataArr.add(mainData2);
+
+            jsonObject.put("mainData",mainDataArr);
+
+            jsonObject.put("detailData",detailDataArr);
+
+            log.info(jsonObject.toJSONString());
+
+            try{
+                DmsUtil.testRegist(dmsConfig.getIp());
+                DmsUtil.testGetoken(dmsConfig.getIp());
+                DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());
+            }catch (Exception e){
+                log.info("订单回传异常，数据进入中间表,requestId="+ flashInOrder.getRequestId()+",提交失败");
+            }
+        }
+    }
+
+    @Override
+    public void transOutTrfOrderList(FlashOutOrder flashOutOrder, String tableName) throws IOException {
+        String orderSn = flashOutOrder.getOrderSn();
+        JSONObject param = jsonService.createTransOutOrderDtlJson(orderSn);
+
+        String storeCode = flashOutOrder.getStoreCode();
+
+        Map<String,String> commonParam = flashHttpService.createCommonParam(storeCode);
+        String key = "";
+        if("ME01".equals(storeCode)){
+            key = flashConfig.getKey1();
+        }else if ("ME02".equals(storeCode)){
+            key = flashConfig.getKey2();
+        }else if("YJDR".equals(storeCode)){
+            key = flashConfig.getKey3();
+        }
+
+        String sign = flashHttpService.generateSign(commonParam,key,param.toJSONString());
+
+        log.info("sign="+sign);
+
+        String outOrderDetailUrl = flashConfig.getOutOrderDetailUrl();
+
+        outOrderDetailUrl = flashHttpService.joinUrl(commonParam,sign,outOrderDetailUrl);
+        log.info("inOrderDetailUrl="+outOrderDetailUrl);
+
+        JSONObject respJson = flashHttpService.doAction(outOrderDetailUrl,param);
+
+        JSONArray dataJsonArr = respJson.getJSONArray("data");
+
+
+        JSONObject jsonObject = new JSONObject();
+
+        jsonObject.put("requestId", Integer.valueOf(flashOutOrder.getRequestId()));
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String completeTime = dateFormat.format(new Date());
+
+
+        for (int i = 0;i<dataJsonArr.size();i++){
+            JSONObject dataJsonObj = dataJsonArr.getJSONObject(i);
+
+            log.info("completeTime="+completeTime);
+            JSONArray goodsJsonArr = dataJsonObj.getJSONArray("goods");
+
+            JSONArray detailDataArr = new JSONArray();
+            JSONObject detailData = new JSONObject();
+
+            JSONArray workflowRequestTableRecordsArr = new JSONArray();
+
+            for (int j = 0;j<goodsJsonArr.size();j++){
+                JSONObject goodJson = goodsJsonArr.getJSONObject(j);
+                String barCode = goodJson.getString("barCode");
+                String outNum = goodJson.getString("outNum");
+
+                JSONObject workflowRequestTableRecords = new JSONObject();
+                Integer recordOrder = 0;
+
+                JSONArray workflowRequestTableFieldsArr = new JSONArray();
+
+                JSONObject workflowRequestTableFields1 = new JSONObject();
+
+                workflowRequestTableFields1.put("fieldName","erp_order");
+                workflowRequestTableFields1.put("fieldValue",orderSn);
+
+                JSONObject workflowRequestTableFields2 = new JSONObject();
+                workflowRequestTableFields2.put("fieldName","sku_no");
+                workflowRequestTableFields2.put("fieldValue",barCode);
+
+                JSONObject workflowRequestTableFields3 = new JSONObject();
+                workflowRequestTableFields3.put("fieldName","actual_qty");
+                workflowRequestTableFields3.put("fieldValue",outNum);
+
+                JSONObject workflowRequestTableFields4 = new JSONObject();
+                workflowRequestTableFields4.put("fieldName","send_date");
+                workflowRequestTableFields4.put("fieldValue",completeTime);
+
+                workflowRequestTableFieldsArr.add(workflowRequestTableFields1);
+                workflowRequestTableFieldsArr.add(workflowRequestTableFields2);
+                workflowRequestTableFieldsArr.add(workflowRequestTableFields3);
+                workflowRequestTableFieldsArr.add(workflowRequestTableFields4);
+
+                workflowRequestTableRecords.put("workflowRequestTableFields",workflowRequestTableFieldsArr);
+                workflowRequestTableRecords.put("recordOrder",recordOrder);
+
+                workflowRequestTableRecordsArr.add(workflowRequestTableRecords);
+            }
+
+            detailData.put("workflowRequestTableRecords",workflowRequestTableRecordsArr);
+            detailData.put("tableDBName",tableName);
+
+            JSONArray mainDataArr = new JSONArray();
+            JSONObject mainData1 = new JSONObject();
+            mainData1.put("fieldName","is_send");
+            mainData1.put("fieldValue","0");
+
+            JSONObject mainData2 = new JSONObject();
+            mainData2.put("fieldName","send_date");
+            mainData2.put("fieldValue",completeTime);
+            mainDataArr.add(mainData1);
+            mainDataArr.add(mainData2);
+
+            jsonObject.put("mainData",mainDataArr);
+
+
+            detailDataArr.add(detailData);
+
+
+            jsonObject.put("detailData",detailDataArr);
+
+            log.info(jsonObject.toJSONString());
+
+            try{
+                DmsUtil.testRegist(dmsConfig.getIp());
+                DmsUtil.testGetoken(dmsConfig.getIp());
+                DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());
+            }catch (Exception e){
+                log.info("订单回传异常，数据进入中间表,requestId="+ flashOutOrder.getRequestId()+",提交失败");
             }
         }
     }

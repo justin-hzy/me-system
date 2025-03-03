@@ -12,7 +12,7 @@ public interface JsonService {
 
     JSONObject createPutInOrderJson(PutInOrderDto dto);
 
-    JSONObject createTransOutOrderDtlJson(String  orderSn);
+    JSONObject createTransOutOrderDtlJson(String orderSn);
 
     JSONObject createTransInOrderDtlJson(FlashInOrder flashInOrder);
 

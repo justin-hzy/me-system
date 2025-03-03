@@ -22,5 +22,11 @@ public class DmsConfig {
     @Value("${dms.order.inOrderDtl2}")
     private String inOrderDtl2;
 
+    @Value("${dms.order.inTrfOrderDtl3}")
+    private String inTrfOderDt3;
+
+    @Value("${dms.order.outTrfOrderDtl2}")
+    private String outTrfOrderDtl2;
+
 
 }
