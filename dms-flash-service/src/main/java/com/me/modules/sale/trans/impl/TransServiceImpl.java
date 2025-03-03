@@ -199,67 +199,75 @@ public class TransServiceImpl implements TransService {
             JSONObject detailData = new JSONObject();
             JSONArray workflowRequestTableRecordsArr = new JSONArray();
 
-            JSONArray goodsListJsonArr = dataJsonObj.getJSONArray("goodsList");
-            for (int j = 0;j<goodsListJsonArr.size();j++){
-                JSONObject goodJson = goodsListJsonArr.getJSONObject(j);
-                String barCode = goodJson.getString("barCode");
-                String inNum = goodJson.getString("inNum");
+            String status = dataJsonObj.getString("status");
 
-                JSONObject workflowRequestTableRecords = new JSONObject();
-                Integer recordOrder = 0;
+            if("50".equals(status)){
+                JSONArray goodsListJsonArr = dataJsonObj.getJSONArray("goodsList");
+                for (int j = 0;j<goodsListJsonArr.size();j++){
+                    JSONObject goodJson = goodsListJsonArr.getJSONObject(j);
+                    String barCode = goodJson.getString("barCode");
+                    String inNum = goodJson.getString("inNum");
 
-                JSONArray workflowRequestTableFieldsArr = new JSONArray();
+                    JSONObject workflowRequestTableRecords = new JSONObject();
+                    Integer recordOrder = 0;
 
-                JSONObject workflowRequestTableFields1 = new JSONObject();
-                workflowRequestTableFields1.put("fieldName","po");
-                workflowRequestTableFields1.put("fieldValue",orderSn);
+                    JSONArray workflowRequestTableFieldsArr = new JSONArray();
 
-                JSONObject workflowRequestTableFields2 = new JSONObject();
-                workflowRequestTableFields2.put("fieldName","bar_code");
-                workflowRequestTableFields2.put("fieldValue",barCode);
+                    JSONObject workflowRequestTableFields1 = new JSONObject();
+                    workflowRequestTableFields1.put("fieldName","po");
+                    workflowRequestTableFields1.put("fieldValue",orderSn);
 
-                JSONObject workflowRequestTableFields3 = new JSONObject();
-                workflowRequestTableFields3.put("fieldName","entry_qty");
-                workflowRequestTableFields3.put("fieldValue",inNum);
+                    JSONObject workflowRequestTableFields2 = new JSONObject();
+                    workflowRequestTableFields2.put("fieldName","bar_code");
+                    workflowRequestTableFields2.put("fieldValue",barCode);
 
-                JSONObject workflowRequestTableFields4 = new JSONObject();
-                workflowRequestTableFields4.put("fieldName","entry_date");
-                workflowRequestTableFields4.put("fieldValue",completeTime);
+                    JSONObject workflowRequestTableFields3 = new JSONObject();
+                    workflowRequestTableFields3.put("fieldName","entry_qty");
+                    workflowRequestTableFields3.put("fieldValue",inNum);
 
-                workflowRequestTableFieldsArr.add(workflowRequestTableFields1);
-                workflowRequestTableFieldsArr.add(workflowRequestTableFields2);
-                workflowRequestTableFieldsArr.add(workflowRequestTableFields3);
-                workflowRequestTableFieldsArr.add(workflowRequestTableFields4);
+                    JSONObject workflowRequestTableFields4 = new JSONObject();
+                    workflowRequestTableFields4.put("fieldName","entry_date");
+                    workflowRequestTableFields4.put("fieldValue",completeTime);
 
-                workflowRequestTableRecords.put("workflowRequestTableFields",workflowRequestTableFieldsArr);
-                workflowRequestTableRecords.put("recordOrder",recordOrder);
+                    workflowRequestTableFieldsArr.add(workflowRequestTableFields1);
+                    workflowRequestTableFieldsArr.add(workflowRequestTableFields2);
+                    workflowRequestTableFieldsArr.add(workflowRequestTableFields3);
+                    workflowRequestTableFieldsArr.add(workflowRequestTableFields4);
 
-                workflowRequestTableRecordsArr.add(workflowRequestTableRecords);
-            }
+                    workflowRequestTableRecords.put("workflowRequestTableFields",workflowRequestTableFieldsArr);
+                    workflowRequestTableRecords.put("recordOrder",recordOrder);
 
-            detailData.put("workflowRequestTableRecords",workflowRequestTableRecordsArr);
-            detailData.put("tableDBName",dmsConfig.getInOrderDtl2());
-            detailDataArr.add(detailData);
+                    workflowRequestTableRecordsArr.add(workflowRequestTableRecords);
+                }
 
-            JSONArray mainDataArr = new JSONArray();
-            JSONObject mainData1 = new JSONObject();
-            mainData1.put("fieldName","is_receive");
-            mainData1.put("fieldValue","0");
-            mainDataArr.add(mainData1);
+                detailData.put("workflowRequestTableRecords",workflowRequestTableRecordsArr);
+                detailData.put("tableDBName",dmsConfig.getInOrderDtl2());
+                detailDataArr.add(detailData);
 
-            jsonObject.put("mainData",mainDataArr);
+                JSONArray mainDataArr = new JSONArray();
+                JSONObject mainData1 = new JSONObject();
+                mainData1.put("fieldName","is_receive");
+                mainData1.put("fieldValue","0");
+                mainDataArr.add(mainData1);
 
-            jsonObject.put("detailData",detailDataArr);
+                jsonObject.put("mainData",mainDataArr);
 
-            log.info(jsonObject.toJSONString());
+                jsonObject.put("detailData",detailDataArr);
 
-            try{
-                DmsUtil.testRegist(dmsConfig.getIp());
+                log.info(jsonObject.toJSONString());
+
+                try{
+                /*DmsUtil.testRegist(dmsConfig.getIp());
                 DmsUtil.testGetoken(dmsConfig.getIp());
-                DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());
-            }catch (Exception e){
-                log.info("订单回传异常，数据进入中间表,requestId="+ flashInOrder.getRequestId()+",提交失败");
+                DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());*/
+                }catch (Exception e){
+                    log.info("订单回传异常，数据进入中间表,requestId="+ flashInOrder.getRequestId()+",提交失败");
+                }
+            }else {
+                log.info("退货单="+orderSn+"未完成退货");
             }
+
+
         }
     }
 

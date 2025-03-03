@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 @Data
-@TableName("formtable_main_350")
+@TableName("formtable_main_352")
 public class FlashInOrder {
 
     @TableField("order_sn")
