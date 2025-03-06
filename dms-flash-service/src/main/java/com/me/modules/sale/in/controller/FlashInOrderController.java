@@ -21,8 +21,8 @@ public class FlashInOrderController {
     @PostMapping("/order/putFlashInOrder")
     public JsonResult putFlashInOrder(@RequestBody PutInOrderDto dto) throws IOException {
 
-        inOrderService.putFlashInOrder(dto);
+        JsonResult jsonResult = inOrderService.putFlashInOrder(dto);
 
-        return JsonResult.ok();
+        return jsonResult;
     }
 }

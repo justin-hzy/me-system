@@ -1,0 +1,56 @@
+{
+  "shippings": [],
+  "products": [
+    {
+      "quantity": "6",
+      "product_storage_type": "A1",
+      "shipped_quantity": "6",
+      "sku": "4531632457529"
+    },
+    {
+      "quantity": "3",
+      "product_storage_type": "A1",
+      "shipped_quantity": "3",
+      "sku": "4531632457505"
+    },
+    {
+      "quantity": "2",
+      "product_storage_type": "A1",
+      "shipped_quantity": "2",
+      "sku": "4711401211570"
+    },
+    {
+      "quantity": "3",
+      "product_storage_type": "A1",
+      "shipped_quantity": "3",
+      "sku": "4711401210801"
+    },
+    {
+      "quantity": "2",
+      "product_storage_type": "A1",
+      "shipped_quantity": "2",
+      "sku": "4711401210818"
+    },
+    {
+      "quantity": "2",
+      "product_storage_type": "A1",
+      "shipped_quantity": "2",
+      "sku": "4531632460062"
+    },
+    {
+      "quantity": "2",
+      "product_storage_type": "A1",
+      "shipped_quantity": "2",
+      "sku": "4711401211242"
+    },
+    {
+      "quantity": "2",
+      "product_storage_type": "A1",
+      "shipped_quantity": "2",
+      "sku": "4711401211426"
+    }
+  ],
+  "internal_name": "",
+  "name": "3241073073660",
+  "status": "done"
+}

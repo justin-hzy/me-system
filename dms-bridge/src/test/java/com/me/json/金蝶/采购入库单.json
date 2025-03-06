@@ -1,0 +1,345 @@
+{
+  "NeedUpDateFields": [],
+  "NeedReturnFields": [],
+  "IsDeleteEntry": "true",
+  "SubSystemId": "21",
+  "IsVerifyBaseDataField": "true",
+  "IsAutoSubmitAndAudit": "true",
+  "IsEntryBatchFill": "True",
+  "InterationFlags": "STK_InvCheckDetailMessage",
+  "IsAutoAdjustField": "true",
+  "Model": {
+    "FBillTypeID": {
+      "FNumber": "RKD01_SYS"
+    },
+    "FBillNo": "TW_TW25904352",
+    "FDate": "2024-12-02",
+    "FInStockFin": {
+      "FTHIRDBILLNO": "TW_TW25904352",
+      "FSettleCurrId": {
+        "FNumber": "PRE005"
+      },
+      "FIsIncludedTax": "false"
+    },
+    "FStockOrgId": {
+      "FNumber": "ZT026"
+    },
+    "FPurchaseOrgId": {
+      "FNumber": "ZT026"
+    },
+    "FSupplierId": {
+      "FNumber": "ZT021"
+    },
+    "FDemandOrgId": {
+      "FNumber": "ZT026"
+    },
+    "FInStockEntry": [
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632408248"
+        },
+        "FRealQty": "16",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "105.0000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632422084"
+        },
+        "FRealQty": "40",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "133.0000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632422107"
+        },
+        "FRealQty": "44",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "133.0000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632422602"
+        },
+        "FRealQty": "27",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "122.5000000000",nG
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632422619"
+        },
+        "FRealQty": "34",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "122.5000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632422626"
+        },
+        "FRealQty": "29",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "122.5000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632457505"
+        },
+        "FRealQty": "193",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "105.0000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632457512"
+        },
+        "FRealQty": "144",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "105.0000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632457529"
+        },
+        "FRealQty": "949",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "105.0000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632457536"
+        },
+        "FRealQty": "71",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "105.0000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632460055"
+        },
+        "FRealQty": "5",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "133.0000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632460062"
+        },
+        "FRealQty": "24",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "133.0000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632460079"
+        },
+        "FRealQty": "25",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "133.0000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632460086"
+        },
+        "FRealQty": "20",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "133.0000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632460093"
+        },
+        "FRealQty": "29",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "115.5000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632460123"
+        },
+        "FRealQty": "321",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "49.0000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      },
+      {
+        "FEntryID": "0",
+        "FMaterialId": {
+          "FNumber": "4531632502182"
+        },
+        "FRealQty": "58",
+        "FStockId": {
+          "FNumber": "A1"
+        },
+        "FTAXPRICE": "112.0000000000",
+        "FNOTE": "",
+        "FENTRYTAXRATE": "0",
+        "FLot": {
+          "FNumber": "1"
+        },
+        "FProduceDate": "2020-01-01",
+        "FExpiryDate": "2030-01-01"
+      }
+    ]
+  }
+}

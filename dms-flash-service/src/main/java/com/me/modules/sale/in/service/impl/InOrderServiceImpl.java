@@ -49,8 +49,8 @@ public class InOrderServiceImpl implements InOrderService {
         String url = flashHttpService.joinUrl(commonParam,sign,flashConfig.getPutInOrderUrl());
         log.info(url);
 
-        flashHttpService.doAction(url,putInOrderJson);
+        JSONObject respJson = flashHttpService.doAction(url,putInOrderJson);
 
-        return JsonResult.ok();
+        return JsonResult.ok(respJson);
     }
 }
