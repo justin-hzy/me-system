@@ -39,7 +39,7 @@ public class K3TwLockJob {
     private DmsLockSwitchService dmsLockSwitchService;
 
     @Mdc
-    @Scheduled(cron = "0 * 9-21 * * *")
+    @Scheduled(cron = "*/45 * * * * *")
     void getTwLock(){
         log.info("执行getTwLock(台湾)定时任务,查看定时任务是否可以用");
         QueryWrapper<DmsLockSwitch> dmsLockSwitchQuery = new QueryWrapper<DmsLockSwitch>();
@@ -51,23 +51,29 @@ public class K3TwLockJob {
         String isOpen = dmsLockSwitch.getIsOpen();
         if ("1".equals(isOpen)){
             log.info("开关已打开，执行提交出程序");
-            QueryWrapper<DmsTwLock> dmsTwLockQuery = new QueryWrapper<>();
-            // lockType:0 台湾 isLock:1 已占用锁
-            dmsTwLockQuery.lambda().eq(DmsTwLock::getLockType,"0").eq(DmsTwLock::getIsLock,"1") ;
-            List<DmsTwLock> dmsTwLocks =  dmsTwLockService.list(dmsTwLockQuery);
-            if(CollUtil.isEmpty(dmsTwLocks)){
-                QueryWrapper<DmsTwQueue> dmsTwQueueQuery = new QueryWrapper<>();
-                dmsTwQueueQuery.lambda()
-                        .eq(DmsTwQueue::getIsFinish,"0")
-                        .eq(DmsTwQueue::getIsLock,"0")
-                        .or()
-                        .eq(DmsTwQueue::getIsLock,"2")
-                        .orderBy(true,true,DmsTwQueue::getType)
-                        .orderBy(true,true,DmsTwQueue::getCreateTime);
-                List<DmsTwQueue> dmsTwQueues = dmsTwQueueService.list(dmsTwQueueQuery);
-                if(CollUtil.isNotEmpty(dmsTwQueues)){
+            QueryWrapper<DmsTwQueue> dmsTwQueueQuery = new QueryWrapper<>();
+            dmsTwQueueQuery.lambda()
+                    .eq(DmsTwQueue::getIsFinish,"0")
+                    .eq(DmsTwQueue::getIsLock,"0")
+                    .or()
+                    .eq(DmsTwQueue::getIsLock,"2")
+                    .orderBy(true,true,DmsTwQueue::getType)
+                    .orderBy(true,true,DmsTwQueue::getCreateTime);
+            List<DmsTwQueue> dmsTwQueues = dmsTwQueueService.list(dmsTwQueueQuery);
+            if(CollUtil.isNotEmpty(dmsTwQueues)){
 
-                    DmsTwQueue dmsTwQueue = dmsTwQueues.get(0);
+                DmsTwQueue dmsTwQueue = dmsTwQueues.get(0);
+
+                //获取仓库字段
+                String warehouse = dmsTwQueue.getWarehouse();
+
+
+                QueryWrapper<DmsTwLock> dmsTwLockQuery = new QueryWrapper<>();
+                // lockType:0 台湾 isLock:1 已占用锁
+                dmsTwLockQuery.lambda().eq(DmsTwLock::getLockType,"0").eq(DmsTwLock::getIsLock,"1").eq(DmsTwLock::getWarehouse,warehouse) ;
+                List<DmsTwLock> dmsTwLocks =  dmsTwLockService.list(dmsTwLockQuery);
+                if(CollUtil.isEmpty(dmsTwLocks)){
+                    log.info("目前锁未被人占用，处于可用状态");
                     Integer requestId = dmsTwQueue.getRequestId();
                     String processCode = dmsTwQueue.getProcessCode();
 
@@ -152,11 +158,37 @@ public class K3TwLockJob {
                         dmsTwQueueService.update(updateWrapper);
                     }
                 }else {
-                    log.info("队列没数据，结束getLock定时任务");
+                    log.info("目前锁被用了，不提交流程");
                 }
+
             }else {
-                log.info("目前锁被用了，不提交流程");
+                log.info("队列没数据，结束getLock定时任务");
             }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         }else {
             log.info("开关已关闭，提交程序不可用");
         }
