@@ -17,6 +17,9 @@ public class DmsTwQueue {
     @TableField("type")
     private String type;
 
+    @TableField("warehouse")
+    private String warehouse;
+
     //0:未同步,1:占用锁成功同步中,2:同步成功,3:同步失败,4:占用所失败
     @TableField("is_lock")
     private String isLock;

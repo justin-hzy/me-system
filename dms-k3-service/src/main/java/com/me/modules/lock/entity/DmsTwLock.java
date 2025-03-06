@@ -17,6 +17,9 @@ public class DmsTwLock {
     @TableField("lock_type")
     private String lockType;
 
+    @TableField("warehouse")
+    private String warehouse;
+
     @TableField("create_time")
     private String createTime;
 
