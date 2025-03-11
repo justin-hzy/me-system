@@ -11,6 +11,10 @@ spring:
     url: jdbc:mysql://39.108.136.182:33306/ecology?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
     username: ecology
     password: ecology123
+  task:
+    scheduling:
+      pool:
+        size: 30
 
 # ====================Log4j2=========================
 logging:
