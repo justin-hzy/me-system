@@ -357,12 +357,14 @@ public class JsonServiceImpl implements JsonService {
 
 
 
-            String fOrderNo = reSaleFEntity.getForderno();
-            if (StrUtil.isNotEmpty(fOrderNo)) {
-                salInFEntityJson.setFOrderNo(fOrderNo);
-            } else {
-                salInFEntityJson.setFOrderNo("");
-            }
+//            String fOrderNo = reSaleFEntity.getForderno();
+//            if (StrUtil.isNotEmpty(fOrderNo)) {
+//                salInFEntityJson.setFOrderNo(fOrderNo);
+//            } else {
+//                salInFEntityJson.setFOrderNo("");
+//            }
+
+            salInFEntityJson.setFOrderNo(fthirdBillNo);
 
 
             String fDsgSrcoid1 = reSaleFEntity.getFdsgsrcoid1();
