@@ -21,6 +21,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -51,9 +52,20 @@ public class K3TwLockJob {
         String isOpen = dmsLockSwitch.getIsOpen();
         if ("1".equals(isOpen)){
             log.info("开关已打开，执行提交出程序");
+
+            // 获取当前年月的对象
+            YearMonth currentYearMonth = YearMonth.now();
+            // 计算上个月的年月的对象
+            YearMonth lastMonthYearMonth = currentYearMonth.minusMonths(1);
+            // 格式化日期为"yyyy-MM"格式
+            DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM");
+            String lastMonthStr = lastMonthYearMonth.format(formatter2);
+            System.out.println("上个月是: " + lastMonthStr);
+
             QueryWrapper<DmsTwQueue> dmsTwQueueQuery = new QueryWrapper<>();
             dmsTwQueueQuery.lambda()
                     .eq(DmsTwQueue::getIsFinish,"0")
+                    .likeRight(DmsTwQueue::getCreateTime,lastMonthStr)
                     .eq(DmsTwQueue::getIsLock,"0")
                     .or()
                     .eq(DmsTwQueue::getIsLock,"2")
