@@ -259,6 +259,12 @@ public class TransServiceImpl implements TransService {
                 mainData1.put("fieldValue","0");
                 mainDataArr.add(mainData1);
 
+                JSONObject mainData2 = new JSONObject();
+                mainData2.put("fieldName","entry_date");
+                mainData2.put("fieldValue",completeTime);
+                mainDataArr.add(mainData2);
+
+
                 jsonObject.put("mainData",mainDataArr);
 
                 jsonObject.put("detailData",detailDataArr);
@@ -266,9 +272,9 @@ public class TransServiceImpl implements TransService {
                 log.info(jsonObject.toJSONString());
 
                 try{
-                /*DmsUtil.testRegist(dmsConfig.getIp());
+                DmsUtil.testRegist(dmsConfig.getIp());
                 DmsUtil.testGetoken(dmsConfig.getIp());
-                DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());*/
+                DmsUtil.testRestful(dmsConfig.getIp(),dmsConfig.getUrl(),jsonObject.toJSONString());
                 }catch (Exception e){
                     log.info("订单回传异常，数据进入中间表,requestId="+ flashInOrder.getRequestId()+",提交失败");
                 }
