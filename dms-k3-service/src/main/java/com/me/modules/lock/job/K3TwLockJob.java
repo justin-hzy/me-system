@@ -82,7 +82,10 @@ public class K3TwLockJob {
 
                 QueryWrapper<DmsTwLock> dmsTwLockQuery = new QueryWrapper<>();
                 // lockType:0 台湾 isLock:1 已占用锁
-                dmsTwLockQuery.lambda().eq(DmsTwLock::getLockType,"0").eq(DmsTwLock::getIsLock,"1").eq(DmsTwLock::getWarehouse,warehouse) ;
+                dmsTwLockQuery.lambda().eq(DmsTwLock::getLockType,"0")
+                        .eq(DmsTwLock::getIsLock,"1")
+//                        .eq(DmsTwLock::getWarehouse,warehouse)
+                ;
                 List<DmsTwLock> dmsTwLocks =  dmsTwLockService.list(dmsTwLockQuery);
                 if(CollUtil.isEmpty(dmsTwLocks)){
                     log.info("目前锁未被人占用，处于可用状态");
