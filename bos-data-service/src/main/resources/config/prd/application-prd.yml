@@ -1,11 +1,11 @@
 server:
   port: 8083
   servlet:
-    context-path: /bosBridge
+    context-path: /bosDataService
 
 spring:
   application:
-    name: bosSystem
+    name: bosDataService
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
     # jdbc:oracle:thin:@120.24.183.69:1521/ORCL jdbc:oracle:thin:@120.79.31.191:1521/ORCL
