@@ -2,9 +2,9 @@ package com.me.trf;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.me.common.config.DmsConfig;
-import com.me.modules.sale.in.entity.FlashInOrder;
-import com.me.modules.sale.out.entity.FlashOutOrder;
-import com.me.modules.sale.trans.TransService;
+import com.me.modules.order.in.entity.FlashInOrder;
+import com.me.modules.order.out.entity.FlashOutOrder;
+import com.me.modules.order.trans.TransService;
 import com.me.modules.trf.entity.TrfInOrder;
 import com.me.modules.trf.entity.TrfOutOrder;
 import com.me.modules.trf.service.TrfInOrderService;

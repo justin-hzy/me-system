@@ -1,9 +1,9 @@
 package com.me.pur;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.me.modules.sale.in.entity.FlashInOrder;
-import com.me.modules.sale.in.service.FlashInOrderService;
-import com.me.modules.sale.trans.TransService;
+import com.me.modules.order.in.entity.FlashInOrder;
+import com.me.modules.order.in.service.FlashInOrderService;
+import com.me.modules.order.trans.TransService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
