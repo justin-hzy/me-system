@@ -8,7 +8,6 @@
     <modules>
         <module>data-synchronous</module>
         <module>excel-tools</module>
-        <module>kol-queue</module>
         <module>bos-bridge</module>
         <module>weaver-system</module>
         <module>kingdee-system</module>
@@ -22,7 +21,7 @@
         <module>nascent-data-job</module>
         <module>dms-flash-service</module>
         <module>dms-sf-service</module>
-        <module>guandata-service</module>
+        <module>bos-data-service</module>
     </modules>
     <groupId>com.me</groupId>
     <artifactId>me-system</artifactId>
@@ -66,6 +65,7 @@
         <sqlsver.version>7.4.1.jre8</sqlsver.version>
         <easyexcel.verision>2.2.6</easyexcel.verision>
         <commons-text.version>1.4</commons-text.version>
+        <sqlserver.version>12.8.1.jre11</sqlserver.version>
     </properties>
 
 
@@ -448,6 +448,13 @@
                 <artifactId>commons-text</artifactId>
                 <version>${commons-text.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.microsoft.sqlserver</groupId>
+                <artifactId>mssql-jdbc</artifactId>
+                <version>${sqlserver.version}</version> <!-- 请检查最新版本 -->
+            </dependency>
+
         </dependencies>
 
 
