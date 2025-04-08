@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.me.modules.bos.member.mapper.BosMemberMapper">
+    <select id="queryBosMember" resultType="com.me.modules.bos.member.dto.QueryBosMemberDto">
+        select STORE.CODE, VIP.CARDNO, VIP.NASOUID
+        from C_VIP VIP
+                 INNER JOIN C_STORE STORE ON VIP.C_STORE_ID = STORE.ID
+        where VIP.NASOUID IS NULL
+          AND STORE.CODE LIKE 'POS%'
+          and VIP.INTEGRAL > 0
+    </select>
+</mapper>
