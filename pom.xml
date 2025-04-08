@@ -431,11 +431,7 @@
                 <version>${cn.izern.sequence.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.microsoft.sqlserver</groupId>
-                <artifactId>mssql-jdbc</artifactId>
-                <version>${sqlsver.version}</version>
-            </dependency>
+
 
             <dependency>
                 <groupId>com.alibaba</groupId>
@@ -449,11 +445,7 @@
                 <version>${commons-text.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>com.microsoft.sqlserver</groupId>
-                <artifactId>mssql-jdbc</artifactId>
-                <version>${sqlserver.version}</version> <!-- 请检查最新版本 -->
-            </dependency>
+
 
         </dependencies>
 
