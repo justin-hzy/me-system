@@ -8,8 +8,8 @@ spring:
     name: bosDataService
   datasource:
     driver-class-name: oracle.jdbc.OracleDriver
-    # jdbc:oracle:thin:@120.24.183.69:1521/ORCL jdbc:oracle:thin:@120.79.31.191:1521/ORCL
-    url: jdbc:oracle:thin:@120.79.31.191:1521/ORCL
+    # jdbc:oracle:thin:@120.24.183.69:1521/ORCL:测试 jdbc:oracle:thin:@120.79.31.191:1521/ORCL:外网生产  172.16.116.22:内网生产
+    url: jdbc:oracle:thin:@172.16.116.22:1521/ORCL
     username: bosnds3
     password: abc123
 # ====================Log4j2=========================
