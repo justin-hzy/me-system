@@ -202,10 +202,17 @@ public class CallBackController {
                     workflowRequestTableFields4.put("fieldName","hpbh");
                     workflowRequestTableFields4.put("fieldValue",sku);
 
+
+                    JSONObject workflowRequestTableFields5 = new JSONObject();
+                    String productStorageType = products.get(i).getProduct_storage_type();
+                    workflowRequestTableFields5.put("fieldName","product_storage_type");
+                    workflowRequestTableFields5.put("fieldValue",productStorageType);
+
                     workflowRequestTableFieldsArr.add(workflowRequestTableFields1);
                     workflowRequestTableFieldsArr.add(workflowRequestTableFields2);
                     workflowRequestTableFieldsArr.add(workflowRequestTableFields3);
                     workflowRequestTableFieldsArr.add(workflowRequestTableFields4);
+                    workflowRequestTableFieldsArr.add(workflowRequestTableFields5);
 
                     workflowRequestTableRecords.put("workflowRequestTableFields",workflowRequestTableFieldsArr);
                     workflowRequestTableRecords.put("recordOrder",recordOrder);
