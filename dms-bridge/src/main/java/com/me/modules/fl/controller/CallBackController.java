@@ -423,7 +423,7 @@ public class CallBackController {
                 int id = flReOrderSubMain.getId();
                 List<ReturnOrderItem> items = dto.getItems();
 
-                Map<String,Integer> resMap = new HashMap<>();
+                Map<String,ReturnOrderItem> resMap = new HashMap<>();
 
                 //汇总退货数量
                 for(ReturnOrderItem item : items){
@@ -434,14 +434,21 @@ public class CallBackController {
 
 
                     if(resMap.containsKey(sku)){
-                        Integer currentReceive = resMap.get(sku);
+                        ReturnOrderItem obj = resMap.get(sku);
+
+
+                        Integer currentReceive = Integer.valueOf(obj.getReceived_pcs());
 
                         currentReceive = currentReceive + receivedNum;
 
-                        resMap.put(sku,currentReceive);
+
+                        obj.setReceived_pcs(String.valueOf(currentReceive));
+
+                        resMap.put(sku,obj);
 
                     }else {
-                        resMap.put(sku,receivedNum);
+
+                        resMap.put(sku,item);
                     }
                 }
 
@@ -454,7 +461,11 @@ public class CallBackController {
                     String hptxm = flReOrderSubDtl1.getHptxm();
 
                     if (!resMap.containsKey(hptxm)){
-                        resMap.put(hptxm,0);
+                        String storageType = resMap.get(0).getStorage_type();
+                        ReturnOrderItem obj = new ReturnOrderItem();
+                        obj.setSku(hptxm);
+                        obj.setReceived_pcs("0");
+                        resMap.put(hptxm,obj);
                     }
                 }
 
@@ -466,7 +477,14 @@ public class CallBackController {
                 JSONObject detailData = new JSONObject();
 
                 for (String key : resMap.keySet()){
-                    Integer receivedNum = resMap.get(key);
+
+                    ReturnOrderItem item = resMap.get(key);
+
+
+
+                    String receivedNum = item.getReceived_pcs();
+                    String storageType = item.getStorage_type();
+
                     String sku = key;
 
                     JSONObject workflowRequestTableRecords = new JSONObject();
@@ -500,10 +518,15 @@ public class CallBackController {
                     workflowRequestTableFields4.put("fieldName","khddh");
                     workflowRequestTableFields4.put("fieldValue",title);
 
+                    JSONObject workflowRequestTableFields5 = new JSONObject();
+                    workflowRequestTableFields5.put("fieldName","storage_type");
+                    workflowRequestTableFields5.put("fieldValue",storageType);
+
                     workflowRequestTableFieldsArr.add(workflowRequestTableFields1);
                     workflowRequestTableFieldsArr.add(workflowRequestTableFields2);
                     workflowRequestTableFieldsArr.add(workflowRequestTableFields3);
                     workflowRequestTableFieldsArr.add(workflowRequestTableFields4);
+                    workflowRequestTableFieldsArr.add(workflowRequestTableFields5);
 
                     workflowRequestTableRecords.put("workflowRequestTableFields",workflowRequestTableFieldsArr);
                     workflowRequestTableRecords.put("recordOrder",recordOrder);
