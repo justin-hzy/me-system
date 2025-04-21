@@ -4,7 +4,7 @@
     <Properties>
         <!-- [路径配置] -->
         <Property name="log_path">/www/wwwlogs/java/springboot</Property>
-        <Property name="project_name">weaverSystem</Property>
+        <Property name="project_name">dmsService</Property>
     </Properties>
     <Appenders>
         <!-- 输出到控制台 -->
