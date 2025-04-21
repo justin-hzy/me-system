@@ -9,7 +9,7 @@
         <module>data-synchronous</module>
         <module>excel-tools</module>
         <module>bos-bridge</module>
-        <module>weaver-system</module>
+        <module>dms-service</module>
         <module>kingdee-system</module>
         <module>cbs-bridge</module>
         <module>b2c-bridge</module>

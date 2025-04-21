@@ -1,11 +1,11 @@
 server:
   port: 8084
   servlet:
-    context-path: /weaverSystem
+    context-path: /dmsService
 
 spring:
   application:
-    name: weaverSystem
+    name: dmsService
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://39.108.136.182:33306/ecology?characterEncoding=UTF-8&autoReconnect=true&useSSL=false&serverTimezone=UTC&allowMultiQueries=true
